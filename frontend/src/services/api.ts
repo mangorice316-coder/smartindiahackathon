@@ -483,8 +483,33 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mode })
-    });
+    }, 15000);
     if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to switch operating mode`);
+    return res.json();
+  },
+
+  async syncLiveWeather(): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/weather/sync-live`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    }, 15000);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to synchronize live Open-Meteo telemetry`);
+    return res.json();
+  },
+
+  async queryDisasterAssistant(query: string): Promise<{
+    query: string;
+    answer: string;
+    citations: string[];
+    recommended_view: string;
+    timestamp: string;
+  }> {
+    const res = await fetchWithTimeout(`${API_BASE}/analytics/assistant/query`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    }, 10000);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to query Disaster Intelligence Assistant`);
     return res.json();
   },
 

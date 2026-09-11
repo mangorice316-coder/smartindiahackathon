@@ -36,16 +36,33 @@ class OpenMeteoWeatherAdapter(WeatherDataProvider):
                 current = data.get("current", {})
                 hourly = data.get("hourly", {})
                 precip_series = hourly.get("precipitation", [])
+                times = hourly.get("time", [])
+                current_time = current.get("time", "")
+                cur_idx = -1
+                if current_time and times:
+                    cur_hour = current_time[:13] + ":00"
+                    if cur_hour in times:
+                        cur_idx = times.index(cur_hour)
 
-                # Calculate 1h, 24h, and 72h antecedent from the series if available
+                if cur_idx == -1:
+                    cur_idx = min(len(precip_series), 72) if precip_series else 0
+
+                # Calculate 1h, 24h, and 72h antecedent from actual past hours
                 intensity_1h = float(current.get("precipitation", 0.0))
                 
-                # Estimate 24h sum from recent hourly readings
-                accum_24h = sum(precip_series[-24:]) if len(precip_series) >= 24 else intensity_1h * 12.0
-                antecedent_72h = sum(precip_series[-72:]) if len(precip_series) >= 72 else accum_24h * 2.2
+                past_24h_series = precip_series[max(0, cur_idx - 24):cur_idx] if cur_idx > 0 else precip_series[:24]
+                accum_24h = sum(past_24h_series) if past_24h_series else intensity_1h * 12.0
+
+                past_72h_series = precip_series[max(0, cur_idx - 72):cur_idx] if cur_idx > 0 else precip_series[:72]
+                antecedent_72h = sum(past_72h_series) if past_72h_series else accum_24h * 2.2
 
                 soil_moisture_series = hourly.get("soil_moisture_0_to_1cm", [])
-                curr_moisture = float(soil_moisture_series[-1]) if soil_moisture_series else 0.50
+                if soil_moisture_series and cur_idx < len(soil_moisture_series):
+                    curr_moisture = float(soil_moisture_series[cur_idx])
+                elif soil_moisture_series:
+                    curr_moisture = float(soil_moisture_series[-1])
+                else:
+                    curr_moisture = 0.50
 
                 return {
                     "source": "OPEN_METEO_LIVE",

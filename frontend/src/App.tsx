@@ -15,6 +15,7 @@ import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
 import { LoadingState, ErrorState } from './components/common/LoadingState';
 import { JudgeDemoController } from './components/demo/JudgeDemoController';
+import { DisasterAssistantDrawer } from './components/assistant/DisasterAssistantDrawer';
 import { api } from './services/api';
 import {
   DashboardOverview,
@@ -47,6 +48,8 @@ export const App: React.FC = () => {
   const [dataMode, setDataMode] = useState<'DEMO' | 'REAL'>('DEMO');
   const [systemStatus, setSystemStatus] = useState<string>('OPERATIONAL');
   const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(true);
+  const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
+  const [isSyncingLive, setIsSyncingLive] = useState<boolean>(false);
 
   // Core Datasets
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
@@ -345,6 +348,20 @@ export const App: React.FC = () => {
     setThresholds(newThresholds);
   };
 
+  const handleSyncLive = async () => {
+    setIsSyncingLive(true);
+    try {
+      if (isBackendConnected) {
+        await api.syncLiveWeather();
+        await loadAllData();
+      }
+    } catch (err) {
+      console.error('Failed to sync live weather:', err);
+    } finally {
+      setIsSyncingLive(false);
+    }
+  };
+
   const activeAlertCount = alerts.filter((a) => a.status === 'ACTIVE').length;
   const pendingInspectionCount = inspections.filter((i) => i.status === 'PENDING' || i.status === 'DISPATCHED').length;
 
@@ -358,6 +375,9 @@ export const App: React.FC = () => {
         onResetDemo={handleResetDemo}
         systemStatus={systemStatus}
         onOpenJudgeDemo={() => setIsJudgeDemoOpen(true)}
+        onSyncLive={handleSyncLive}
+        isSyncing={isSyncingLive}
+        onOpenAssistant={() => setIsAssistantOpen(true)}
       />
 
       {/* Main EOC Work Area */}
@@ -531,6 +551,13 @@ export const App: React.FC = () => {
             });
           }
         }}
+      />
+
+      {/* Grounded AI Disaster Intelligence Assistant Drawer */}
+      <DisasterAssistantDrawer
+        isOpen={isAssistantOpen}
+        onClose={() => setIsAssistantOpen(false)}
+        onNavigateView={(v) => setCurrentView(v)}
       />
     </div>
   );

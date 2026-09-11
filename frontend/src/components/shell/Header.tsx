@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, RefreshCw, Radio, UserCheck, Lock, Sparkles } from 'lucide-react';
+import { Shield, AlertTriangle, RefreshCw, Radio, UserCheck, Lock, Sparkles, Bot } from 'lucide-react';
 import { api } from '../../services/api';
 
 interface HeaderProps {
@@ -10,6 +10,9 @@ interface HeaderProps {
   systemStatus: string;
   onRoleChange?: (role: string) => void;
   onOpenJudgeDemo?: () => void;
+  onSyncLive?: () => void;
+  isSyncing?: boolean;
+  onOpenAssistant?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +23,9 @@ export const Header: React.FC<HeaderProps> = ({
   systemStatus,
   onRoleChange,
   onOpenJudgeDemo,
+  onSyncLive,
+  isSyncing = false,
+  onOpenAssistant,
 }) => {
   const [currentRole, setCurrentRole] = useState<string>(() => api.getAuthRole());
   const [isSwitching, setIsSwitching] = useState<boolean>(false);
@@ -129,6 +135,31 @@ export const Header: React.FC<HeaderProps> = ({
             {dataMode === 'DEMO' ? 'DEMO / SYNTHETIC' : 'LIVE TELEMETRY'}
           </button>
         </div>
+
+        {/* Live Weather Sync Button (Visible in REAL mode) */}
+        {dataMode === 'REAL' && onSyncLive && (
+          <button
+            onClick={onSyncLive}
+            disabled={isSyncing}
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/70 text-emerald-300 text-xs font-mono rounded shadow transition-all hover:scale-105 disabled:opacity-50"
+            title="Fetch authentic real-time observations from Open-Meteo REST API"
+          >
+            <RefreshCw size={12} className={isSyncing ? 'animate-spin text-emerald-400' : 'text-emerald-400'} />
+            <span>{isSyncing ? 'SYNCING...' : 'SYNC LIVE'}</span>
+          </button>
+        )}
+
+        {/* Grounded AI Disaster Intelligence Assistant Trigger */}
+        {onOpenAssistant && (
+          <button
+            onClick={onOpenAssistant}
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-mono rounded border border-cyan-800/60 transition-colors shadow-sm"
+            title="Open grounded AI Disaster Intelligence Assistant"
+          >
+            <Bot size={13} className="text-cyan-400" />
+            <span>AI ASSISTANT</span>
+          </button>
+        )}
 
         {/* Active Emergency Alerts Ticker */}
         {activeAlertCount > 0 && (
