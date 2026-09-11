@@ -47,7 +47,7 @@ export const App: React.FC = () => {
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null);
   const [dataMode, setDataMode] = useState<'DEMO' | 'REAL'>('DEMO');
   const [systemStatus, setSystemStatus] = useState<string>('OPERATIONAL');
-  const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(true);
+  const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
   const [isSyncingLive, setIsSyncingLive] = useState<boolean>(false);
 

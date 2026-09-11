@@ -93,18 +93,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => onSelectView(item.id)}
-                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-200 ease-spring relative overflow-hidden ${
+                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono font-medium transition-colors ${
                       isActive
-                        ? 'bg-gradient-to-r from-cyan-500/15 via-cyan-500/5 to-transparent text-cyan-200 border-l-2 border-cyan-400 font-semibold shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] border-l-2 border-transparent'
+                        ? 'bg-[#121929] text-cyan-300 border-l-2 border-cyan-400 font-semibold'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border-l-2 border-transparent'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 relative z-10">
+                    <div className="flex items-center gap-2.5">
                       <span
-                        className={`transition-colors duration-200 ${
-                          isActive
-                            ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]'
-                            : 'text-slate-500 group-hover:text-slate-300'
+                        className={`transition-colors ${
+                          isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-slate-300'
                         }`}
                       >
                         {item.icon}
@@ -114,10 +112,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                     {item.badge !== undefined && item.badge > 0 && (
                       <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono tracking-wider shadow-sm transition-transform group-hover:scale-105 ${
+                        className={`px-1.5 py-0.2 rounded text-[10px] font-bold font-mono tracking-wider ${
                           item.id === 'alerts'
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]'
-                            : 'bg-white/10 text-slate-200 border border-white/10'
+                            ? 'bg-red-950/80 text-red-300 border border-red-800/80'
+                            : 'bg-slate-800 text-slate-300 border border-slate-700'
                         }`}
                       >
                         {item.badge}
@@ -131,20 +129,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </div>
 
-      {/* Safety Notice Footer Card (Doppelrand Style) */}
-      <div className="mt-3 p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent">
-        <div className="p-3 bg-gradient-to-b from-[#0c121e] to-[#080d16] rounded-[calc(0.75rem-1px)] text-[10px] font-sans text-slate-400 space-y-1.5 shadow-inner">
-          <div className="font-mono font-bold text-slate-300 uppercase text-[9px] flex items-center justify-between">
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              <span>DECISION SUPPORT</span>
-            </span>
-            <ShieldCheck size={12} className="text-cyan-400" />
-          </div>
-          <p className="leading-tight text-slate-400 text-[10px]">
-            Infinite-slope limit equilibrium &amp; ML probability estimation. Physics verified.
-          </p>
+      {/* Decision Support Compliance Footer */}
+      <div className="mt-3 p-2.5 rounded-lg bg-[#0d121f] border border-slate-800/80 text-[10px] font-mono text-slate-400 space-y-1">
+        <div className="font-bold text-slate-300 uppercase text-[9px] flex items-center justify-between">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span>DECISION SUPPORT</span>
+          </span>
+          <ShieldCheck size={12} className="text-cyan-400" />
         </div>
+        <p className="leading-tight text-slate-500 font-sans text-[10px]">
+          Coupled limit equilibrium &amp; ML probability. Deterministic ground verification required.
+        </p>
       </div>
     </aside>
   );

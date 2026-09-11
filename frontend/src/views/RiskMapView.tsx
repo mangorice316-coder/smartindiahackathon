@@ -497,278 +497,156 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full space-y-2 overflow-hidden select-none">
-      {/* ========================================================================= */}
-      {/* 1. TOP HEADER BANNER (LANDSLIDE RISK INTELLIGENCE CENTER)                 */}
-      {/* ========================================================================= */}
-      <div className="bg-[#0b1329] border border-slate-800 rounded-lg px-4 py-2 flex flex-wrap items-center justify-between gap-3 shadow-md shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="p-1.5 bg-red-950/90 border border-red-600/80 rounded text-red-400 shadow">
-            <ShieldAlert size={18} className="animate-pulse text-red-500" />
-          </div>
-          <div>
-            <h1 className="font-display font-extrabold text-sm tracking-wider text-slate-100 uppercase">
-              LANDSLIDE RISK INTELLIGENCE CENTER
-            </h1>
-            <div className="flex items-center gap-2.5 mt-0.5 font-mono text-xs text-slate-400">
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                dataMode === 'REAL'
-                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-700'
-                  : 'bg-amber-950 text-amber-300 border border-amber-700'
-              }`}>
-                {dataMode === 'REAL' ? 'LIVE' : 'DEMO'}
-              </span>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-300">Data: <strong className="text-emerald-400">8 min ago</strong></span>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-300">Model: <strong className="text-purple-300">v1.3</strong></span>
-              <span className="text-slate-600 hidden sm:inline">|</span>
-              <span className="text-slate-400 hidden sm:inline">NDMA / SDMA Tactical Feed</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Action / Status Toast Banner */}
-        {actionNotice && (
-          <div className="bg-cyan-950/90 border border-cyan-500 text-cyan-200 text-xs font-mono px-3 py-1 rounded flex items-center gap-2 shadow-lg animate-fade-in">
-            <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />
-            <span className="truncate max-w-md">{actionNotice}</span>
-          </div>
-        )}
-
-        {/* Quick Search & Reset Bar */}
-        <div className="flex items-center gap-2 font-mono text-xs">
+    <div className="flex flex-col h-full space-y-2.5 overflow-hidden select-none">
+      {/* 1. Sleek Single-Row Command Bar */}
+      <div className="bg-[#0d121f] border border-slate-800/80 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-3 shadow-sm shrink-0">
+        {/* Left: Search & Filter Tabs */}
+        <div className="flex items-center gap-2.5">
           <div className="relative">
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
-              placeholder="Search Catchment..."
+              placeholder="Search catchment..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-slate-900 border border-slate-700 rounded pl-7 pr-2.5 py-1 text-xs text-slate-200 placeholder:text-slate-500 font-sans focus:outline-none focus:border-cyan-400 w-44"
+              className="bg-slate-900/90 border border-slate-700/80 rounded-lg pl-7 pr-2.5 py-1 text-xs text-slate-200 placeholder:text-slate-500 font-sans focus:outline-none focus:border-cyan-400 w-44"
             />
           </div>
-          {selectedCategory && (
+
+          <div className="flex items-center gap-1 font-mono text-xs">
             <button
               onClick={() => setSelectedCategory('')}
-              className="flex items-center gap-1 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded border border-slate-700"
-            >
-              <X size={12} />
-              <span>Clear Filter</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 2. THE KILLER DEMO: RAIN 🌧️ ESCALATION ENGINE (LIVE COMPUTED LOOP)        */}
-      {/* ========================================================================= */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950/60 border border-cyan-700/60 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-3 font-mono text-xs shadow-lg shrink-0">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 text-sky-400 font-extrabold uppercase tracking-wider text-xs">
-            <CloudRain size={16} className="text-sky-400 animate-bounce" />
-            <span>RAIN 🌧️ ESCALATION:</span>
-          </div>
-
-          {/* 4 Interactive Multiplier Buttons matching user spec: Current -> HIGH, +25% -> HIGH, +50% -> CRITICAL, +100% -> CRITICAL */}
-          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded border border-slate-800">
-            <button
-              onClick={() => handleRainEscalation(1.0, 'Current')}
-              disabled={isSimulating}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all flex items-center gap-1.5 ${
-                rainMultiplier === 1.0
-                  ? 'bg-cyan-500 text-slate-950 font-extrabold shadow-md'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                selectedCategory === ''
+                  ? 'bg-slate-700 text-white font-semibold'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>Current</span>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-orange-950 text-orange-300 border border-orange-700">
-                &rarr; HIGH
-              </span>
+              All ({locations.length})
             </button>
+            <button
+              onClick={() => setSelectedCategory(selectedCategory === 'CRITICAL' ? '' : 'CRITICAL')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
+                selectedCategory === 'CRITICAL'
+                  ? 'bg-red-950 text-red-300 border border-red-700 font-bold'
+                  : 'text-slate-400 hover:text-red-300'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+              <span>Critical ({categoryCounts.critical})</span>
+            </button>
+            <button
+              onClick={() => setSelectedCategory(selectedCategory === 'HIGH' ? '' : 'HIGH')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
+                selectedCategory === 'HIGH'
+                  ? 'bg-orange-950 text-orange-300 border border-orange-700 font-bold'
+                  : 'text-slate-400 hover:text-orange-300'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+              <span>High ({categoryCounts.high})</span>
+            </button>
+            <button
+              onClick={() => setSelectedCategory(selectedCategory === 'MODERATE' ? '' : 'MODERATE')}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
+                selectedCategory === 'MODERATE'
+                  ? 'bg-amber-950 text-amber-300 border border-amber-700 font-bold'
+                  : 'text-slate-400 hover:text-amber-300'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span>Mod ({categoryCounts.moderate})</span>
+            </button>
+          </div>
+        </div>
 
+        {/* Action / Feedback Status Toast */}
+        {actionNotice && (
+          <div className="bg-cyan-950/90 border border-cyan-500/80 text-cyan-200 text-xs font-mono px-3 py-1 rounded-lg flex items-center gap-2 shadow-lg">
+            <CheckCircle2 size={13} className="text-cyan-400 shrink-0" />
+            <span className="truncate max-w-sm">{actionNotice}</span>
+          </div>
+        )}
+
+        {/* Right: Rain Stress Multipliers & Primary Operations */}
+        <div className="flex items-center gap-2.5 font-mono text-xs">
+          <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 p-1 rounded-lg">
+            <span className="text-[10px] text-slate-500 uppercase px-1">Rain:</span>
+            <button
+              onClick={() => handleRainEscalation(1.0, 'Baseline')}
+              disabled={isSimulating}
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+                rainMultiplier === 1.0
+                  ? 'bg-cyan-500 text-slate-950 font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              1.0x
+            </button>
             <button
               onClick={() => handleRainEscalation(1.25, '+25%')}
               disabled={isSimulating}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                 rainMultiplier === 1.25
-                  ? 'bg-cyan-500 text-slate-950 font-extrabold shadow-md'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  ? 'bg-cyan-500 text-slate-950 font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>+25%</span>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-orange-950 text-orange-300 border border-orange-700">
-                &rarr; HIGH
-              </span>
+              +25%
             </button>
-
             <button
               onClick={() => handleRainEscalation(1.5, '+50%')}
               disabled={isSimulating}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                 rainMultiplier === 1.5
-                  ? 'bg-red-600 text-white font-black shadow-md shadow-red-950 ring-2 ring-red-400 animate-pulse'
-                  : 'text-red-300 hover:text-white hover:bg-red-950/60'
+                  ? 'bg-red-600 text-white font-bold'
+                  : 'text-slate-400 hover:text-red-300'
               }`}
             >
-              <span>+50%</span>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-red-950 text-red-200 border border-red-600 font-black">
-                &rarr; CRITICAL
-              </span>
+              +50%
             </button>
-
             <button
               onClick={() => handleRainEscalation(2.0, '+100%')}
               disabled={isSimulating}
-              className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                 rainMultiplier === 2.0
-                  ? 'bg-red-700 text-white font-black shadow-md shadow-red-950 ring-2 ring-red-400 animate-pulse'
-                  : 'text-red-400 hover:text-white hover:bg-red-950/60'
+                  ? 'bg-red-700 text-white font-bold'
+                  : 'text-slate-400 hover:text-red-300'
               }`}
             >
-              <span>+100%</span>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-red-950 text-red-200 border border-red-600 font-black">
-                &rarr; CRITICAL
-              </span>
+              +100%
             </button>
           </div>
-        </div>
 
-        {/* Dynamic Computed Escalation Consequence Indicator */}
-        <div className="flex flex-wrap items-center gap-2.5 text-[11px]">
-          {rainMultiplier >= 1.5 ? (
-            <div className="flex items-center gap-2 text-amber-200 bg-red-950/80 border border-red-600 px-3 py-1 rounded shadow-md">
-              <AlertTriangle size={14} className="text-red-400 animate-bounce" />
-              <span>
-                <strong className="text-white uppercase tracking-wider">New high-risk areas:</strong>{' '}
-                <strong className="text-amber-300">3 additional villages exposed</strong> •{' '}
-                <strong className="text-amber-300">2 roads affected</strong> •{' '}
-                <strong className="text-red-300">1 bridge in risk zone</strong>
-              </span>
-            </div>
-          ) : rainMultiplier === 1.25 ? (
-            <div className="flex items-center gap-2 text-amber-300 bg-amber-950/60 border border-amber-800 px-2.5 py-1 rounded">
-              <Activity size={13} className="text-amber-400" />
-              <span>Escalating saturation: +1 additional village exposed • 1 road affected</span>
-            </div>
-          ) : (
-            <span className="text-slate-400">Baseline observation • 0 additional simulated risk</span>
-          )}
-
-          {/* Direct Trigger Buttons for the complete decision loop */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={handleCreateAlert}
-              className="px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-black text-[11px] flex items-center gap-1 shadow-md shadow-red-950 uppercase tracking-wider hover:scale-105 transition-all"
+              className="px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"
             >
-              <AlertCircle size={13} />
-              <span>CREATE PRIORITY ALERT</span>
+              <AlertCircle size={12} />
+              <span>CAP Alert</span>
             </button>
             <button
               onClick={handleDispatchInspection}
-              className="px-3 py-1 rounded bg-orange-600 hover:bg-orange-500 text-white font-black text-[11px] flex items-center gap-1 shadow-md shadow-orange-950 uppercase tracking-wider hover:scale-105 transition-all"
+              className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors flex items-center gap-1"
             >
-              <Send size={13} />
-              <span>ASSIGN FIELD INSPECTION</span>
+              <Send size={12} />
+              <span>Deploy Squad</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 3. MAIN 2-COLUMN SECTION: LEFT SUMMARY COUNTS + RIGHT GIS MAP             */}
-      {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 flex-1 min-h-[340px] overflow-hidden">
-        {/* LEFT COLUMN: KPI STACK (CRITICAL 12, HIGH 38, MODERATE 71, LOW 124, ALERTS 7) */}
-        <div className="lg:col-span-4 xl:col-span-3 flex flex-col bg-[#101726] border border-slate-800 rounded-lg overflow-hidden shrink-0">
-          <div className="p-2.5 space-y-1.5 bg-slate-900/80 border-b border-slate-800 font-mono">
-            {/* CRITICAL */}
-            <button
-              onClick={() => setSelectedCategory(selectedCategory === 'CRITICAL' ? '' : 'CRITICAL')}
-              className={`w-full flex items-center justify-between p-2 rounded border transition-all text-left ${
-                selectedCategory === 'CRITICAL'
-                  ? 'bg-red-900/90 border-red-500 ring-2 ring-red-500/50 shadow-md'
-                  : 'bg-red-950/70 border-red-800/80 hover:bg-red-900/60'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-sm shadow-red-500" />
-                <span className="font-extrabold text-xs tracking-wider text-red-200 uppercase">CRITICAL</span>
-              </div>
-              <span className="font-black text-base text-red-200">{categoryCounts.critical}</span>
-            </button>
-
-            {/* HIGH */}
-            <button
-              onClick={() => setSelectedCategory(selectedCategory === 'HIGH' ? '' : 'HIGH')}
-              className={`w-full flex items-center justify-between p-2 rounded border transition-all text-left ${
-                selectedCategory === 'HIGH'
-                  ? 'bg-orange-900/90 border-orange-500 ring-2 ring-orange-500/50 shadow-md'
-                  : 'bg-orange-950/60 border-orange-800/80 hover:bg-orange-900/50'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                <span className="font-extrabold text-xs tracking-wider text-orange-200 uppercase">HIGH</span>
-              </div>
-              <span className="font-black text-base text-orange-200">{categoryCounts.high}</span>
-            </button>
-
-            {/* MODERATE */}
-            <button
-              onClick={() => setSelectedCategory(selectedCategory === 'MODERATE' ? '' : 'MODERATE')}
-              className={`w-full flex items-center justify-between p-2 rounded border transition-all text-left ${
-                selectedCategory === 'MODERATE'
-                  ? 'bg-amber-900/90 border-amber-500 ring-2 ring-amber-500/50 shadow-md'
-                  : 'bg-amber-950/60 border-amber-800/80 hover:bg-amber-900/50'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                <span className="font-extrabold text-xs tracking-wider text-amber-200 uppercase">MODERATE</span>
-              </div>
-              <span className="font-black text-base text-amber-200">{categoryCounts.moderate}</span>
-            </button>
-
-            {/* LOW */}
-            <button
-              onClick={() => setSelectedCategory(selectedCategory === 'LOW' ? '' : 'LOW')}
-              className={`w-full flex items-center justify-between p-2 rounded border transition-all text-left ${
-                selectedCategory === 'LOW'
-                  ? 'bg-emerald-900/90 border-emerald-500 ring-2 ring-emerald-500/50 shadow-md'
-                  : 'bg-emerald-950/60 border-emerald-800/80 hover:bg-emerald-900/50'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span className="font-extrabold text-xs tracking-wider text-emerald-200 uppercase">LOW</span>
-              </div>
-              <span className="font-black text-base text-emerald-200">{categoryCounts.low}</span>
-            </button>
-
-            {/* ALERTS */}
-            <div
-              onClick={() => onNavigate?.('alerts')}
-              className="flex items-center justify-between p-2 rounded bg-red-950/90 border border-red-600 text-red-100 cursor-pointer hover:bg-red-900/80 transition-colors shadow-sm"
-              title="Click to view full OASIS CAP v1.2 Alerts feed"
-            >
-              <div className="flex items-center gap-2">
-                <AlertTriangle size={15} className="text-red-400 animate-bounce" />
-                <span className="font-extrabold text-xs tracking-wider uppercase">ALERTS</span>
-              </div>
-              <span className="font-black text-base px-2 py-0.5 rounded bg-red-600 text-white shadow">
-                {categoryCounts.alerts}
-              </span>
-            </div>
+      {/* 2. Main GIS & Hotspots Split Container */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 flex-1 min-h-0 overflow-hidden">
+        {/* Left Column: Prioritized Catchment List */}
+        <div className="lg:col-span-4 xl:col-span-3 flex flex-col bg-[#0d121f] border border-slate-800/80 rounded-xl overflow-hidden shrink-0">
+          <div className="flex items-center justify-between px-3.5 py-2 bg-slate-900/60 border-b border-slate-800/80 text-xs font-mono">
+            <span className="font-semibold text-slate-300">PRIORITIZED SECTORS</span>
+            <span className="text-[11px] text-slate-500">{filteredHotspots.length} Sectors</span>
           </div>
 
-          {/* Prioritized Sectors List */}
-          <div className="flex items-center justify-between px-3 py-1.5 bg-slate-950 border-b border-slate-800/80 text-[10px] font-mono text-slate-400">
-            <span>PRIORITIZED HOTSPOTS</span>
-            <span>{filteredHotspots.length} Sectors</span>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-1.5 space-y-1">
+          <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
             {filteredHotspots.map((item) => {
               const isSelected = activeLocationId === item.location_id;
               const displayScore = isSelected && simulatedScore ? simulatedScore : item.risk_score;
@@ -778,26 +656,26 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
                 <div
                   key={item.location_id}
                   onClick={() => handleSelectHotspot(item)}
-                  className={`p-2 rounded border transition-all cursor-pointer font-mono ${
+                  className={`p-2.5 rounded-lg border transition-colors cursor-pointer font-mono ${
                     isSelected
-                      ? 'bg-slate-800 border-cyan-400 shadow-md ring-1 ring-cyan-400/50'
-                      : 'bg-slate-900/60 border-slate-800/80 hover:bg-slate-850 hover:border-slate-700'
+                      ? 'bg-cyan-950/30 border-cyan-500/80 text-cyan-200'
+                      : 'bg-slate-900/40 border-slate-800/60 hover:bg-slate-800/50 text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 truncate">
-                      <span className={`w-4 h-4 rounded flex items-center justify-center text-[9px] font-bold shrink-0 ${
+                      <span className={`w-4 h-4 rounded text-[9px] font-bold flex items-center justify-center shrink-0 ${
                         displayCategory === 'CRITICAL'
-                          ? 'bg-red-500 text-black'
+                          ? 'bg-red-950 text-red-300 border border-red-700'
                           : displayCategory === 'HIGH'
-                          ? 'bg-orange-500 text-black'
+                          ? 'bg-orange-950 text-orange-300 border border-orange-700'
                           : 'bg-slate-800 text-slate-300'
                       }`}>
                         #{item.rank}
                       </span>
-                      <span className="font-sans font-bold text-xs text-slate-200 truncate">{item.name}</span>
+                      <span className="font-sans font-medium text-xs text-slate-200 truncate">{item.name}</span>
                     </div>
-                    <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
                       displayCategory === 'CRITICAL'
                         ? 'bg-red-950 text-red-300 border border-red-700'
                         : displayCategory === 'HIGH'
@@ -807,8 +685,8 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
                       {displayScore}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[9px] text-slate-400 mt-1 pt-1 border-t border-slate-800/60">
-                    <span>24h: <strong className="text-sky-400">{item.rainfall_24h_mm} mm</strong></span>
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1.5 pt-1 border-t border-slate-800/40">
+                    <span>24h: <strong className="text-sky-400">{item.rainfall_24h_mm}mm</strong></span>
                     <span>Fs: <strong className={item.geotechnical_fs < 1.0 ? 'text-red-400' : 'text-emerald-400'}>{item.geotechnical_fs}</strong></span>
                     <span>{item.district}</span>
                   </div>
@@ -818,32 +696,32 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: GIS RISK MAP WITH CLEAN ON-MAP LEGEND */}
-        <div className="lg:col-span-8 xl:col-span-9 relative flex flex-col bg-[#111827] border border-slate-800 rounded-lg overflow-hidden min-h-[340px]">
-          {/* Floating On-Map Legend matching user specification */}
-          <div className="absolute top-3 right-3 z-[1000] bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-lg p-2.5 shadow-xl font-mono text-xs pointer-events-auto">
-            <div className="text-[10px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">
-              RISK SEVERITY
+        {/* Right Column: Full-Featured GIS Map */}
+        <div className="lg:col-span-8 xl:col-span-9 relative flex flex-col bg-[#0b0f19] border border-slate-800/80 rounded-xl overflow-hidden min-h-0">
+          {/* Floating On-Map Legend */}
+          <div className="absolute top-3 right-3 z-[1000] bg-[#0d121f]/90 backdrop-blur-md border border-slate-800 rounded-lg p-2 shadow-lg font-mono text-[11px] pointer-events-auto">
+            <div className="text-[9px] uppercase font-bold text-slate-500 mb-1 tracking-wider">
+              HAZARD SEVERITY
             </div>
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-slate-200">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500" />
-                <span className="font-bold text-red-400">Critical</span>
+              <div className="flex items-center gap-1.5 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                <span>Critical</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(70-100)</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-200">
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                <span className="font-bold text-orange-400">High</span>
+              <div className="flex items-center gap-1.5 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-orange-500" />
+                <span>High</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(50-70)</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-200">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                <span className="font-bold text-amber-400">Moderate</span>
+              <div className="flex items-center gap-1.5 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span>Moderate</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(30-50)</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-200">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span className="font-bold text-emerald-400">Low</span>
+              <div className="flex items-center gap-1.5 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span>Low</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(0-30)</span>
               </div>
             </div>
@@ -867,174 +745,49 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 4. PERSISTENT BOTTOM DOCK: SELECTED LOCATION, WHY?, EXPOSURE, ACTIONS     */}
-      {/* ========================================================================= */}
-      <div className="bg-[#0c1427] border border-slate-800 rounded-lg p-3 shadow-2xl font-mono text-xs shrink-0">
-        {/* Header line: Location Name & Big Risk Score Badge */}
-        <div className="flex flex-wrap items-center justify-between pb-2 border-b border-slate-800 gap-2">
-          <div className="flex items-center gap-2.5">
-            <span className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-              SELECTED LOCATION:
-            </span>
-            <span className="font-sans font-extrabold text-sm text-slate-100">
-              {selectedLoc.name}
-            </span>
-            <span className="text-slate-400 text-xs">
-              ({selectedLoc.district}, {selectedLoc.state})
-            </span>
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="text-cyan-400 hover:text-cyan-300 text-[11px] underline flex items-center gap-0.5 ml-2"
-              title="Open full geotechnical parameters and proximity dossier"
-            >
-              <span>Full Dossier</span>
-              <ChevronRight size={12} />
-            </button>
+      {/* 3. Sleek Docked Sector Dossier Bar (Only 52px tall, zero obstruction!) */}
+      <div className="bg-[#0d121f] border border-slate-800/80 rounded-xl px-4 py-2 shadow-sm font-mono text-xs shrink-0 flex flex-wrap items-center justify-between gap-3">
+        {/* Left: Selected Catchment Info */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-slate-500 uppercase tracking-wider">SELECTED:</span>
+            <span className="font-sans font-bold text-sm text-slate-100">{selectedLoc.name}</span>
+            <span className="text-slate-400 text-xs">({selectedLoc.district})</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-slate-400 text-xs">
-              Risk: <strong className="text-red-400 text-sm">{effectiveRiskScore}</strong>
-            </span>
-            <span className={`px-2 py-0.5 rounded text-xs font-extrabold uppercase border ${
-              effectiveRiskCategory === 'CRITICAL'
-                ? 'bg-red-950 text-red-300 border-red-600 shadow-sm shadow-red-950 animate-pulse'
-                : effectiveRiskCategory === 'HIGH'
-                ? 'bg-orange-950 text-orange-300 border-orange-600'
-                : 'bg-amber-950 text-amber-300 border-amber-600'
-            }`}>
-              ▲! {effectiveRiskCategory}
-            </span>
-            <span className="text-slate-600">|</span>
-            <span className="text-slate-400 text-xs">
-              Fs: <strong className={effectiveFs < 1.0 ? 'text-red-400' : 'text-amber-400'}>{effectiveFs.toFixed(2)}</strong> ({effectiveFs < 1.0 ? 'UNSTABLE' : 'WATCH'})
-            </span>
+          <RiskBadge category={effectiveRiskCategory} score={effectiveRiskScore} />
+
+          <div className="text-xs text-slate-300 hidden md:inline">
+            Fs: <strong className={effectiveFs < 1.0 ? 'text-red-400' : 'text-emerald-400'}>{effectiveFs.toFixed(2)}</strong> ({effectiveFs < 1.0 ? 'UNSTABLE' : 'WATCH'})
           </div>
         </div>
 
-        {/* 3 Columns: WHY? / EXPOSURE / ACTIONS */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2.5">
-          {/* COL 1: WHY? Explainability Blocks */}
-          <div className="md:col-span-5 bg-slate-950/70 p-2.5 rounded border border-slate-850">
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-bold text-cyan-400 text-[11px] uppercase tracking-wider flex items-center gap-1">
-                <Sparkles size={12} />
-                <span>WHY?</span>
-              </span>
-              <button
-                onClick={() => setXaiModalOpen(true)}
-                className="text-[10px] text-slate-400 hover:text-cyan-300 underline"
-              >
-                Deep Saabas XAI &rarr;
-              </button>
-            </div>
+        {/* Center: Quick Exposure Buffer Counts */}
+        <div className="flex items-center gap-3 text-xs text-slate-300 hidden sm:flex">
+          <span className="text-slate-400">Exposure:</span>
+          <span>Villages: <strong className="text-slate-100">{exposureCounts.villages}</strong></span>
+          <span>Roads: <strong className="text-slate-100">{exposureCounts.roads}</strong></span>
+          <span>Bridges: <strong className="text-red-400">{exposureCounts.bridges}</strong></span>
+          <span>Pop: <strong className="text-cyan-400">{exposureCounts.population.toLocaleString()}</strong></span>
+        </div>
 
-            <div className="space-y-0.5">
-              {renderMeter(
-                'Rainfall accumulation',
-                rainMultiplier >= 1.5 ? 10 : rainMultiplier === 1.25 ? 8 : 7,
-                rainMultiplier >= 1.5 ? '480mm / 72h' : rainMultiplier === 1.25 ? '380mm' : '320mm',
-                'text-sky-400'
-              )}
-              {renderMeter('Slope', 8, '36.5° steep', 'text-amber-400')}
-              {renderMeter(
-                'Soil susceptibility',
-                rainMultiplier >= 1.5 ? 9 : 6,
-                rainMultiplier >= 1.5 ? '94% sat ratio' : '88% sat ratio',
-                'text-orange-400'
-              )}
-              {renderMeter('History', 4, 'GSI 2020 scar', 'text-purple-400')}
-            </div>
-          </div>
+        {/* Right: Operational Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setXaiModalOpen(true)}
+            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+          >
+            <Sparkles size={12} />
+            <span>XAI Attribution</span>
+          </button>
 
-          {/* COL 2: EXPOSURE Lifeline Counts (Exact Match: Villages: 4   Roads: 8   Bridges: 2   Schools: 3) */}
-          <div className="md:col-span-4 bg-slate-950/70 p-2.5 rounded border border-slate-850 flex flex-col justify-between">
-            <div>
-              <div className="text-[11px] font-bold text-orange-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Building2 size={12} />
-                  <span>EXPOSURE (2,500m BUFFER)</span>
-                </span>
-                {exposureCounts.addedVillages > 0 && (
-                  <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.2 rounded border border-red-800">
-                    +{exposureCounts.addedVillages} Villages Escalated
-                  </span>
-                )}
-              </div>
-
-              {/* Exact user layout: Villages: 4   Roads: 8   Bridges: 2   Schools: 3 */}
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="flex items-center justify-between p-1.5 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Villages:</span>
-                  <span className="font-bold text-slate-100 text-sm">
-                    {exposureCounts.villages}
-                    {exposureCounts.addedVillages > 0 && (
-                      <span className="text-[10px] text-red-400 font-bold ml-1">(+{exposureCounts.addedVillages})</span>
-                    )}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-1.5 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Roads:</span>
-                  <span className="font-bold text-slate-100 text-sm">
-                    {exposureCounts.roads}
-                    {exposureCounts.addedRoads > 0 && (
-                      <span className="text-[10px] text-red-400 font-bold ml-1">(+{exposureCounts.addedRoads})</span>
-                    )}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-1.5 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Bridges:</span>
-                  <span className="font-bold text-red-400 text-sm">
-                    {exposureCounts.bridges}
-                    {exposureCounts.addedBridges > 0 && (
-                      <span className="text-[10px] text-red-400 font-bold ml-1">(+{exposureCounts.addedBridges})</span>
-                    )}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-1.5 rounded bg-slate-900/80 border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Schools:</span>
-                  <span className="font-bold text-amber-400 text-sm">{exposureCounts.schools}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-[10px] text-slate-400 pt-1.5 border-t border-slate-800/80 flex items-center justify-between">
-              <span>Population at Risk: <strong className="text-slate-200">{exposureCounts.population.toLocaleString()}</strong></span>
-              <span className="text-red-400 font-bold">1 Bridge in Risk Zone</span>
-            </div>
-          </div>
-
-          {/* COL 3: ACTION BUTTONS [CREATE ALERT] [FIELD INSPECTION] [SIMULATE RAINFALL] */}
-          <div className="md:col-span-3 flex flex-col justify-between gap-1.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              OPERATIONAL ACTIONS
-            </span>
-
-            <button
-              onClick={handleCreateAlert}
-              className="w-full py-2 px-3 bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs rounded border border-red-400/60 shadow-md shadow-red-950 transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide hover:scale-[1.02]"
-            >
-              <AlertCircle size={14} />
-              <span>[CREATE ALERT]</span>
-            </button>
-
-            <button
-              onClick={handleDispatchInspection}
-              className="w-full py-2 px-3 bg-orange-600 hover:bg-orange-500 text-white font-extrabold text-xs rounded border border-orange-400/60 shadow-md shadow-orange-950 transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide hover:scale-[1.02]"
-            >
-              <Send size={13} />
-              <span>[FIELD INSPECTION]</span>
-            </button>
-
-            <button
-              onClick={handleSimulateRainfall}
-              className="w-full py-2 px-3 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-extrabold text-xs rounded border border-cyan-300/60 shadow-md shadow-cyan-950 transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide hover:scale-[1.02]"
-            >
-              <Play size={13} />
-              <span>[SIMULATE RAINFALL]</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="px-3 py-1 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-200 border border-cyan-700/80 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+          >
+            <span>Full Geotech Dossier</span>
+            <ChevronRight size={12} />
+          </button>
         </div>
       </div>
 
