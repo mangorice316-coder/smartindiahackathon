@@ -500,26 +500,26 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
   return (
     <div className="flex flex-col h-full space-y-2.5 overflow-hidden select-none">
       {/* 1. Sleek Single-Row Command Bar */}
-      <div className="bg-[#0d121f] border border-slate-800/80 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-3 shadow-sm shrink-0">
+      <div className="bg-[#080d19]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] rounded-2xl px-3.5 py-2 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
         {/* Left: Search & Filter Tabs */}
         <div className="flex items-center gap-2.5">
           <div className="relative">
-            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
               placeholder="Search catchment..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-slate-900/90 border border-slate-700/80 rounded-lg pl-7 pr-2.5 py-1 text-xs text-slate-200 placeholder:text-slate-500 font-sans focus:outline-none focus:border-cyan-400 w-44"
+              className="bg-[#0b101c]/90 border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 font-sans focus:outline-none focus:border-cyan-400/80 focus:ring-1 focus:ring-cyan-500/20 w-44 transition-all"
             />
           </div>
 
-          <div className="flex items-center gap-1 font-mono text-xs">
+          <div className="flex items-center gap-1 font-mono text-xs bg-[#0b101c]/60 p-1 rounded-xl border border-white/[0.05]">
             <button
               onClick={() => setSelectedCategory('')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                 selectedCategory === ''
-                  ? 'bg-slate-700 text-white font-semibold'
+                  ? 'bg-white/[0.1] text-white font-semibold shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -527,35 +527,35 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
             </button>
             <button
               onClick={() => setSelectedCategory(selectedCategory === 'CRITICAL' ? '' : 'CRITICAL')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 transition-all ${
                 selectedCategory === 'CRITICAL'
-                  ? 'bg-red-950 text-red-300 border border-red-700 font-bold'
-                  : 'text-slate-400 hover:text-red-300'
+                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold shadow-[0_0_12px_rgba(244,63,94,0.25)]'
+                  : 'text-slate-400 hover:text-rose-300'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
               <span>Critical ({categoryCounts.critical})</span>
             </button>
             <button
               onClick={() => setSelectedCategory(selectedCategory === 'HIGH' ? '' : 'HIGH')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 transition-all ${
                 selectedCategory === 'HIGH'
-                  ? 'bg-orange-950 text-orange-300 border border-orange-700 font-bold'
-                  : 'text-slate-400 hover:text-orange-300'
-              }`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-              <span>High ({categoryCounts.high})</span>
-            </button>
-            <button
-              onClick={() => setSelectedCategory(selectedCategory === 'MODERATE' ? '' : 'MODERATE')}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium flex items-center gap-1.5 transition-colors ${
-                selectedCategory === 'MODERATE'
-                  ? 'bg-amber-950 text-amber-300 border border-amber-700 font-bold'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shadow-[0_0_12px_rgba(245,158,11,0.25)]'
                   : 'text-slate-400 hover:text-amber-300'
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span>High ({categoryCounts.high})</span>
+            </button>
+            <button
+              onClick={() => setSelectedCategory(selectedCategory === 'MODERATE' ? '' : 'MODERATE')}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1.5 transition-all ${
+                selectedCategory === 'MODERATE'
+                  ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 font-bold shadow-[0_0_12px_rgba(234,179,8,0.25)]'
+                  : 'text-slate-400 hover:text-yellow-300'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
               <span>Mod ({categoryCounts.moderate})</span>
             </button>
           </div>
@@ -563,7 +563,7 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
 
         {/* Action / Feedback Status Toast */}
         {actionNotice && (
-          <div className="bg-cyan-950/90 border border-cyan-500/80 text-cyan-200 text-xs font-mono px-3 py-1 rounded-lg flex items-center gap-2 shadow-lg">
+          <div className="bg-cyan-950/80 border border-cyan-500/50 text-cyan-200 text-xs font-mono px-3 py-1 rounded-xl flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             <CheckCircle2 size={13} className="text-cyan-400 shrink-0" />
             <span className="truncate max-w-sm">{actionNotice}</span>
           </div>
@@ -571,14 +571,14 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
 
         {/* Right: Rain Stress Multipliers & Primary Operations */}
         <div className="flex items-center gap-2.5 font-mono text-xs">
-          <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 p-1 rounded-lg">
-            <span className="text-[10px] text-slate-500 uppercase px-1">Rain:</span>
+          <div className="flex items-center gap-1 bg-[#0b101c]/80 border border-white/[0.06] p-1 rounded-xl">
+            <span className="text-[10px] text-slate-500 uppercase px-1.5 font-semibold">Rain:</span>
             <button
               onClick={() => handleRainEscalation(1.0, 'Baseline')}
               disabled={isSimulating}
-              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
                 rainMultiplier === 1.0
-                  ? 'bg-cyan-500 text-slate-950 font-bold'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.4)]'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -587,9 +587,9 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
             <button
               onClick={() => handleRainEscalation(1.25, '+25%')}
               disabled={isSimulating}
-              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
                 rainMultiplier === 1.25
-                  ? 'bg-cyan-500 text-slate-950 font-bold'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.4)]'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -598,10 +598,10 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
             <button
               onClick={() => handleRainEscalation(1.5, '+50%')}
               disabled={isSimulating}
-              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
                 rainMultiplier === 1.5
-                  ? 'bg-red-600 text-white font-bold'
-                  : 'text-slate-400 hover:text-red-300'
+                  ? 'bg-rose-500 text-white font-bold shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                  : 'text-slate-400 hover:text-rose-300'
               }`}
             >
               +50%
@@ -609,9 +609,9 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
             <button
               onClick={() => handleRainEscalation(2.0, '+100%')}
               disabled={isSimulating}
-              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all ${
                 rainMultiplier === 2.0
-                  ? 'bg-red-700 text-white font-bold'
+                  ? 'bg-red-600 text-white font-bold shadow-[0_0_15px_rgba(220,38,38,0.5)]'
                   : 'text-slate-400 hover:text-red-300'
               }`}
             >
@@ -622,7 +622,7 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('open-live-gps-modal'))}
-              className="px-2.5 py-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 border border-emerald-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"
+              className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 font-semibold text-xs transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
               title="Inspect real-time conditions and landslide risk for any GPS coordinates on Earth"
             >
               <Compass size={12} className="text-emerald-400" />
@@ -630,14 +630,14 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
             </button>
             <button
               onClick={handleCreateAlert}
-              className="px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-semibold text-xs transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(225,29,72,0.35)]"
             >
               <AlertCircle size={12} />
               <span>CAP Alert</span>
             </button>
             <button
               onClick={handleDispatchInspection}
-              className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors flex items-center gap-1"
+              className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 font-semibold text-xs border border-white/[0.1] transition-all flex items-center gap-1.5 shadow-sm"
             >
               <Send size={12} />
               <span>Deploy Squad</span>
@@ -649,10 +649,10 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
       {/* 2. Main GIS & Hotspots Split Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 flex-1 min-h-0 overflow-hidden">
         {/* Left Column: Prioritized Catchment List */}
-        <div className="lg:col-span-4 xl:col-span-3 flex flex-col bg-[#0d121f] border border-slate-800/80 rounded-xl overflow-hidden shrink-0">
-          <div className="flex items-center justify-between px-3.5 py-2 bg-slate-900/60 border-b border-slate-800/80 text-xs font-mono">
-            <span className="font-semibold text-slate-300">PRIORITIZED SECTORS</span>
-            <span className="text-[11px] text-slate-500">{filteredHotspots.length} Sectors</span>
+        <div className="lg:col-span-4 xl:col-span-3 flex flex-col bg-[#080d19]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.06)] rounded-2xl overflow-hidden shrink-0">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0b101c]/80 border-b border-white/[0.06] text-xs font-mono">
+            <span className="font-semibold text-slate-200 tracking-wider text-[11px]">PRIORITIZED SECTORS</span>
+            <span className="text-[10px] text-slate-400 bg-white/[0.05] px-2 py-0.5 rounded-full border border-white/[0.05]">{filteredHotspots.length} Sectors</span>
           </div>
 
           <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
@@ -665,39 +665,39 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
                 <div
                   key={item.location_id}
                   onClick={() => handleSelectHotspot(item)}
-                  className={`p-2.5 rounded-lg border transition-colors cursor-pointer font-mono ${
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer font-mono ${
                     isSelected
-                      ? 'bg-cyan-950/30 border-cyan-500/80 text-cyan-200'
-                      : 'bg-slate-900/40 border-slate-800/60 hover:bg-slate-800/50 text-slate-300'
+                      ? 'bg-gradient-to-r from-cyan-950/40 via-[#0b1325] to-[#080d19] border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-cyan-200'
+                      : 'bg-[#0b101c]/50 border-white/[0.05] hover:bg-white/[0.04] hover:border-white/[0.1] text-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <span className={`w-4 h-4 rounded text-[9px] font-bold flex items-center justify-center shrink-0 ${
+                    <div className="flex items-center gap-2 truncate">
+                      <span className={`w-5 h-5 rounded-lg text-[9px] font-bold flex items-center justify-center shrink-0 shadow-sm ${
                         displayCategory === 'CRITICAL'
-                          ? 'bg-red-950 text-red-300 border border-red-700'
+                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                           : displayCategory === 'HIGH'
-                          ? 'bg-orange-950 text-orange-300 border border-orange-700'
-                          : 'bg-slate-800 text-slate-300'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          : 'bg-white/[0.08] text-slate-300 border border-white/[0.08]'
                       }`}>
                         #{item.rank}
                       </span>
-                      <span className="font-sans font-medium text-xs text-slate-200 truncate">{item.name}</span>
+                      <span className="font-sans font-semibold text-xs text-slate-100 truncate">{item.name}</span>
                     </div>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                       displayCategory === 'CRITICAL'
-                        ? 'bg-red-950 text-red-300 border border-red-700'
+                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                         : displayCategory === 'HIGH'
-                        ? 'bg-orange-950 text-orange-300 border border-orange-700'
-                        : 'bg-amber-950 text-amber-300 border border-amber-700'
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40'
                     }`}>
                       {displayScore}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1.5 pt-1 border-t border-slate-800/40">
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 pt-1.5 border-t border-white/[0.04]">
                     <span>24h: <strong className="text-sky-400">{item.rainfall_24h_mm}mm</strong></span>
-                    <span>Fs: <strong className={item.geotechnical_fs < 1.0 ? 'text-red-400' : 'text-emerald-400'}>{item.geotechnical_fs}</strong></span>
-                    <span>{item.district}</span>
+                    <span>Fs: <strong className={item.geotechnical_fs < 1.0 ? 'text-rose-400 font-bold' : 'text-emerald-400'}>{item.geotechnical_fs}</strong></span>
+                    <span className="truncate max-w-[80px] text-right">{item.district}</span>
                   </div>
                 </div>
               );
@@ -706,30 +706,30 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
         </div>
 
         {/* Right Column: Full-Featured GIS Map */}
-        <div className="lg:col-span-8 xl:col-span-9 relative flex flex-col bg-[#0b0f19] border border-slate-800/80 rounded-xl overflow-hidden min-h-0">
+        <div className="lg:col-span-8 xl:col-span-9 relative flex flex-col bg-[#070b14] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] rounded-2xl overflow-hidden min-h-0">
           {/* Floating On-Map Legend */}
-          <div className="absolute top-3 right-3 z-[1000] bg-[#0d121f]/90 backdrop-blur-md border border-slate-800 rounded-lg p-2 shadow-lg font-mono text-[11px] pointer-events-auto">
-            <div className="text-[9px] uppercase font-bold text-slate-500 mb-1 tracking-wider">
+          <div className="absolute top-3 right-3 z-[1000] bg-[#080d19]/90 backdrop-blur-md border border-white/[0.1] rounded-xl p-2.5 shadow-2xl font-mono text-[11px] pointer-events-auto">
+            <div className="text-[9px] uppercase font-bold text-slate-400 mb-1.5 tracking-wider">
               HAZARD SEVERITY
             </div>
             <div className="space-y-1">
-              <div className="flex items-center gap-1.5 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-red-500" />
+              <div className="flex items-center gap-2 text-slate-200">
+                <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
                 <span>Critical</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(70-100)</span>
               </div>
-              <div className="flex items-center gap-1.5 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-orange-500" />
+              <div className="flex items-center gap-2 text-slate-200">
+                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
                 <span>High</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(50-70)</span>
               </div>
-              <div className="flex items-center gap-1.5 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <div className="flex items-center gap-2 text-slate-200">
+                <span className="w-2 h-2 rounded-full bg-yellow-400" />
                 <span>Moderate</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(30-50)</span>
               </div>
-              <div className="flex items-center gap-1.5 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <div className="flex items-center gap-2 text-slate-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 <span>Low</span>
                 <span className="text-[10px] text-slate-500 font-sans ml-auto pl-2">(0-30)</span>
               </div>
@@ -755,11 +755,11 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
       </div>
 
       {/* 3. Sleek Docked Sector Dossier Bar (Only 52px tall, zero obstruction!) */}
-      <div className="bg-[#0d121f] border border-slate-800/80 rounded-xl px-4 py-2 shadow-sm font-mono text-xs shrink-0 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-[#080d19]/90 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] rounded-2xl px-4 py-2 font-mono text-xs shrink-0 flex flex-wrap items-center justify-between gap-3">
         {/* Left: Selected Catchment Info */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 uppercase tracking-wider">SELECTED:</span>
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">SELECTED:</span>
             <span className="font-sans font-bold text-sm text-slate-100">{selectedLoc.name}</span>
             <span className="text-slate-400 text-xs">({selectedLoc.district})</span>
           </div>
@@ -767,7 +767,7 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
           <RiskBadge category={effectiveRiskCategory} score={effectiveRiskScore} />
 
           <div className="text-xs text-slate-300 hidden md:inline">
-            Fs: <strong className={effectiveFs < 1.0 ? 'text-red-400' : 'text-emerald-400'}>{effectiveFs.toFixed(2)}</strong> ({effectiveFs < 1.0 ? 'UNSTABLE' : 'WATCH'})
+            Fs: <strong className={effectiveFs < 1.0 ? 'text-rose-400 font-bold' : 'text-emerald-400'}>{effectiveFs.toFixed(2)}</strong> ({effectiveFs < 1.0 ? 'UNSTABLE' : 'WATCH'})
           </div>
         </div>
 
@@ -776,7 +776,7 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
           <span className="text-slate-400">Exposure:</span>
           <span>Villages: <strong className="text-slate-100">{exposureCounts.villages}</strong></span>
           <span>Roads: <strong className="text-slate-100">{exposureCounts.roads}</strong></span>
-          <span>Bridges: <strong className="text-red-400">{exposureCounts.bridges}</strong></span>
+          <span>Bridges: <strong className="text-rose-400">{exposureCounts.bridges}</strong></span>
           <span>Pop: <strong className="text-cyan-400">{exposureCounts.population.toLocaleString()}</strong></span>
         </div>
 
@@ -784,15 +784,15 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setXaiModalOpen(true)}
-            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+            className="px-3 py-1.5 bg-white/[0.06] hover:bg-white/[0.1] text-cyan-300 border border-white/[0.1] rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm"
           >
-            <Sparkles size={12} />
+            <Sparkles size={12} className="text-cyan-400" />
             <span>XAI Attribution</span>
           </button>
 
           <button
             onClick={() => setDrawerOpen(true)}
-            className="px-3 py-1 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-200 border border-cyan-700/80 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+            className="px-3.5 py-1.5 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border border-cyan-500/30 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)]"
           >
             <span>Full Geotech Dossier</span>
             <ChevronRight size={12} />
@@ -806,51 +806,53 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
 
       {/* OASIS CAP v1.2 Alert Dispatch Modal */}
       {alertActionModalOpen && (
-        <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0f172a] border border-red-700 rounded-lg max-w-lg w-full p-5 font-mono text-xs shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <div className="flex items-center gap-2 text-red-400 font-bold">
-                <AlertCircle size={16} />
-                <span>OASIS CAP v1.2 EARLY WARNING DISPATCH</span>
+        <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#090e1a]/95 backdrop-blur-2xl border border-rose-500/30 rounded-2xl max-w-lg w-full p-6 font-mono text-xs shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_30px_rgba(244,63,94,0.15)] space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2.5 text-rose-400 font-bold">
+                <div className="p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20">
+                  <AlertCircle size={16} />
+                </div>
+                <span className="tracking-wide">OASIS CAP v1.2 EARLY WARNING DISPATCH</span>
               </div>
-              <button onClick={() => setAlertActionModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setAlertActionModalOpen(false)} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.05] transition-colors">
                 <X size={16} />
               </button>
             </div>
 
-            <div className="bg-slate-950 p-3 rounded border border-slate-800 space-y-2 text-[11px]">
+            <div className="bg-[#060911]/90 p-4 rounded-xl border border-white/[0.06] space-y-2.5 text-[11px]">
               <div>
-                <span className="text-slate-500">IDENTIFIER:</span>
-                <span className="text-slate-200 font-bold ml-1">IN-KL-WAY-2026-0082</span>
+                <span className="text-slate-500 font-semibold">IDENTIFIER:</span>
+                <span className="text-slate-200 font-bold ml-1.5">IN-KL-WAY-2026-0082</span>
               </div>
               <div>
-                <span className="text-slate-500">EVENT:</span>
-                <span className="text-red-400 font-bold ml-1">CRITICAL Landslide Impending Shear Failure</span>
+                <span className="text-slate-500 font-semibold">EVENT:</span>
+                <span className="text-rose-400 font-bold ml-1.5">CRITICAL Landslide Impending Shear Failure</span>
               </div>
               <div>
-                <span className="text-slate-500">TARGET AREA:</span>
-                <span className="text-slate-200 ml-1">{selectedLoc.name}, {selectedLoc.district} (Circle: {selectedLoc.latitude},{selectedLoc.longitude}, 2.5km)</span>
+                <span className="text-slate-500 font-semibold">TARGET AREA:</span>
+                <span className="text-slate-200 ml-1.5">{selectedLoc.name}, {selectedLoc.district} (Circle: {selectedLoc.latitude},{selectedLoc.longitude}, 2.5km)</span>
               </div>
               <div>
-                <span className="text-slate-500">IMPACTED LIFELINES:</span>
-                <span className="text-amber-300 ml-1">3 additional villages exposed (Attamala, Mundakkai Upper, Tea Valley), 2 roads affected (SH-59), 1 bridge in risk zone (Chooralmala River Crossing).</span>
+                <span className="text-slate-500 font-semibold">IMPACTED LIFELINES:</span>
+                <span className="text-amber-300 ml-1.5">3 additional villages exposed (Attamala, Mundakkai Upper, Tea Valley), 2 roads affected (SH-59), 1 bridge in risk zone (Chooralmala River Crossing).</span>
               </div>
               <div>
-                <span className="text-slate-500">DIRECTIVE:</span>
-                <span className="text-emerald-300 ml-1">Immediate mandatory evacuation of lower slope terraces. Divert traffic from SH-59 link bridge.</span>
+                <span className="text-slate-500 font-semibold">DIRECTIVE:</span>
+                <span className="text-emerald-300 ml-1.5">Immediate mandatory evacuation of lower slope terraces. Divert traffic from SH-59 link bridge.</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-white/[0.08]">
               <button
                 onClick={() => setAlertActionModalOpen(false)}
-                className="px-3 py-1.5 rounded bg-slate-800 text-slate-300 hover:bg-slate-700"
+                className="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmAlertDispatch}
-                className="px-4 py-1.5 rounded bg-red-600 hover:bg-red-500 text-white font-bold flex items-center gap-1.5 shadow"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(225,29,72,0.4)] transition-all"
               >
                 <Send size={13} />
                 <span>Broadcast to SDMA / State EOC</span>
@@ -862,47 +864,49 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
 
       {/* Field Inspection Dispatch Modal */}
       {inspectionActionModalOpen && (
-        <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0f172a] border border-orange-600 rounded-lg max-w-lg w-full p-5 font-mono text-xs shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <div className="flex items-center gap-2 text-orange-400 font-bold">
-                <Send size={16} />
-                <span>DISPATCH FIELD INSPECTION TASK</span>
+        <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#090e1a]/95 backdrop-blur-2xl border border-amber-500/30 rounded-2xl max-w-lg w-full p-6 font-mono text-xs shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_30px_rgba(245,158,11,0.15)] space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2.5 text-amber-400 font-bold">
+                <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <Send size={16} />
+                </div>
+                <span className="tracking-wide">DISPATCH FIELD INSPECTION TASK</span>
               </div>
-              <button onClick={() => setInspectionActionModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setInspectionActionModalOpen(false)} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.05] transition-colors">
                 <X size={16} />
               </button>
             </div>
 
-            <div className="bg-slate-950 p-3 rounded border border-slate-800 space-y-2 text-[11px]">
+            <div className="bg-[#060911]/90 p-4 rounded-xl border border-white/[0.06] space-y-2.5 text-[11px]">
               <div>
-                <span className="text-slate-500">URGENCY:</span>
-                <span className="text-red-400 font-bold ml-1">P1_IMMEDIATE (Priority Score: 88.5)</span>
+                <span className="text-slate-500 font-semibold">URGENCY:</span>
+                <span className="text-rose-400 font-bold ml-1.5">P1_IMMEDIATE (Priority Score: 88.5)</span>
               </div>
               <div>
-                <span className="text-slate-500">TARGET CATCHMENT:</span>
-                <span className="text-slate-200 ml-1">{selectedLoc.name} ({selectedLoc.district})</span>
+                <span className="text-slate-500 font-semibold">TARGET CATCHMENT:</span>
+                <span className="text-slate-200 ml-1.5">{selectedLoc.name} ({selectedLoc.district})</span>
               </div>
               <div>
-                <span className="text-slate-500">ASSIGNED SQUAD:</span>
-                <span className="text-cyan-300 ml-1">Quick Response Geotech Squad Alpha (PWD / QRT-1)</span>
+                <span className="text-slate-500 font-semibold">ASSIGNED SQUAD:</span>
+                <span className="text-cyan-300 ml-1.5">Quick Response Geotech Squad Alpha (PWD / QRT-1)</span>
               </div>
               <div>
-                <span className="text-slate-500">FIELD MANDATE:</span>
-                <span className="text-slate-300 ml-1">Survey crown cracks, tension fissures, and seepage at toe. Inspect Chooralmala bridge abutments for scour.</span>
+                <span className="text-slate-500 font-semibold">FIELD MANDATE:</span>
+                <span className="text-slate-300 ml-1.5">Survey crown cracks, tension fissures, and seepage at toe. Inspect Chooralmala bridge abutments for scour.</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-white/[0.08]">
               <button
                 onClick={() => setInspectionActionModalOpen(false)}
-                className="px-3 py-1.5 rounded bg-slate-800 text-slate-300 hover:bg-slate-700"
+                className="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-300 transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmInspectionDispatch}
-                className="px-4 py-1.5 rounded bg-orange-600 hover:bg-orange-500 text-white font-bold flex items-center gap-1.5 shadow"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all"
               >
                 <CheckCircle2 size={13} />
                 <span>Confirm Deployment</span>

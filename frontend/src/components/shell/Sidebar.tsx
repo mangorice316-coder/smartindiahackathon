@@ -78,11 +78,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-60 bg-[#060912]/95 backdrop-blur-xl border-r border-white/[0.08] flex flex-col justify-between shrink-0 p-3 select-none shadow-2xl relative z-20">
-      <div className="space-y-4 overflow-y-auto pr-0.5">
+    <aside className="w-64 bg-[#06080e]/95 backdrop-blur-2xl border-r border-white/[0.07] flex flex-col justify-between shrink-0 p-3.5 select-none shadow-2xl relative z-20">
+      <div className="space-y-5 overflow-y-auto pr-1">
         {sections.map((section, idx) => (
-          <div key={idx} className="space-y-1">
-            <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-[0.18em] text-slate-500 font-bold">
+          <div key={idx} className="space-y-1.5">
+            <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-[0.2em] text-slate-500 font-bold">
               {section.title}
             </div>
 
@@ -93,29 +93,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => onSelectView(item.id)}
-                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono font-medium transition-colors ${
+                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono transition-all duration-200 ${
                       isActive
-                        ? 'bg-[#121929] text-cyan-300 border-l-2 border-cyan-400 font-semibold'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border-l-2 border-transparent'
+                        ? 'bg-gradient-to-r from-cyan-500/15 via-cyan-500/5 to-transparent text-cyan-300 font-semibold border-l-2 border-cyan-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] border-l-2 border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
                       <span
                         className={`transition-colors ${
-                          isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-slate-300'
+                          isActive ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' : 'text-slate-500 group-hover:text-slate-300'
                         }`}
                       >
                         {item.icon}
                       </span>
-                      <span className="tracking-wide">{item.label}</span>
+                      <span className="tracking-wide text-xs">{item.label}</span>
                     </div>
 
                     {item.badge !== undefined && item.badge > 0 && (
                       <span
-                        className={`px-1.5 py-0.2 rounded text-[10px] font-bold font-mono tracking-wider ${
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono tracking-wider ${
                           item.id === 'alerts'
-                            ? 'bg-red-950/80 text-red-300 border border-red-800/80'
-                            : 'bg-slate-800 text-slate-300 border border-slate-700'
+                            ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-[0_0_10px_rgba(239,68,68,0.3)]'
+                            : 'bg-white/[0.06] text-slate-300 border border-white/[0.1]'
                         }`}
                       >
                         {item.badge}
@@ -129,18 +129,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </div>
 
-      {/* Decision Support Compliance Footer */}
-      <div className="mt-3 p-2.5 rounded-lg bg-[#0d121f] border border-slate-800/80 text-[10px] font-mono text-slate-400 space-y-1">
-        <div className="font-bold text-slate-300 uppercase text-[9px] flex items-center justify-between">
+      {/* Aerospace C2 Subsystems Telemetry Footer */}
+      <div className="mt-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.07] text-[10px] font-mono text-slate-400 space-y-2 shadow-inner">
+        <div className="font-bold text-white uppercase text-[9px] tracking-wider flex items-center justify-between border-b border-white/[0.06] pb-1.5">
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            <span>DECISION SUPPORT</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>SUBSYSTEM STATUS</span>
           </span>
-          <ShieldCheck size={12} className="text-cyan-400" />
+          <ShieldCheck size={12} className="text-emerald-400" />
         </div>
-        <p className="leading-tight text-slate-500 font-sans text-[10px]">
-          Coupled limit equilibrium &amp; ML probability. Deterministic ground verification required.
-        </p>
+        <div className="space-y-1 text-[10px]">
+          <div className="flex items-center justify-between text-slate-400">
+            <span>PHYSICS</span>
+            <span className="text-emerald-400 font-bold">Fs LIMIT EQUILIBRIUM</span>
+          </div>
+          <div className="flex items-center justify-between text-slate-400">
+            <span>AI ENGINE</span>
+            <span className="text-cyan-400 font-bold">GBDT (0.912 AUC)</span>
+          </div>
+          <div className="flex items-center justify-between text-slate-400">
+            <span>WEATHER STREAM</span>
+            <span className="text-emerald-400 font-bold">OPEN-METEO LIVE</span>
+          </div>
+        </div>
       </div>
     </aside>
   );

@@ -449,43 +449,7 @@ export const App: React.FC = () => {
         />
 
         {/* Dynamic View Display Container */}
-        <main className="flex-1 overflow-y-auto p-4 bg-[#0b0f19]">
-          {/* 100% Real-Time Live Telemetry Status Strip */}
-          {dataMode === 'REAL' && isBackendConnected && !isLoading && (
-            <div className="mb-3 px-3.5 py-2 rounded-xl bg-[#0a1424] border border-emerald-800/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-300 shadow-sm">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-emerald-400 font-bold tracking-tight uppercase text-[11px]">
-                  100% Real-Time Meteorology Active:
-                </span>
-                <span className="text-slate-300 text-[11px] hidden sm:inline">
-                  Open-Meteo REST Ingestion (ECMWF/GFS numerical feed) • Geotechnical Fs &amp; ML recalculated on live values
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-slate-400 text-[11px]">
-                  {secondsSinceSync < 5 ? 'Updated just now' : `Updated ${secondsSinceSync}s ago`}
-                </span>
-                <button
-                  onClick={handleSyncLive}
-                  disabled={isSyncingLive}
-                  className="px-2.5 py-1 rounded bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/70 flex items-center gap-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50"
-                  title="Force instant fetch of latest Open-Meteo readings"
-                >
-                  <RefreshCw size={11} className={isSyncingLive ? 'animate-spin' : ''} />
-                  <span>{isSyncingLive ? 'Syncing...' : 'Sync Now'}</span>
-                </button>
-                <button
-                  onClick={() => setIsLiveGpsModalOpen(true)}
-                  className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 flex items-center gap-1.5 text-[11px] font-semibold transition-colors"
-                  title="Inspect real-time conditions and landslide risk for any GPS coordinates on Earth"
-                >
-                  <Compass size={11} className="text-cyan-400" />
-                  <span>Inspect Any GPS</span>
-                </button>
-              </div>
-            </div>
-          )}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#06080e]/95 relative z-10">
 
           {/* Offline / Backend Fallback Banner if operating offline */}
           {!isBackendConnected && !isLoading && (

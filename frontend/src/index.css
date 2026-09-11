@@ -4,39 +4,40 @@
 
 @layer base {
   html, body {
-    @apply h-full w-full bg-[#070b14] text-[#f8fafc] overflow-hidden antialiased;
+    @apply h-full w-full bg-[#06080e] text-[#f8fafc] overflow-hidden antialiased;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
 
-  /* Micro-mesh subtle background gradient */
+  /* Executive Ambient Mesh Illumination */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background: 
-      radial-gradient(circle at 15% 10%, rgba(0, 229, 255, 0.04) 0%, transparent 40%),
-      radial-gradient(circle at 85% 85%, rgba(239, 68, 68, 0.04) 0%, transparent 45%),
-      radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.02) 0%, transparent 60%);
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(6, 182, 212, 0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 85% 10%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(239, 68, 68, 0.04) 0%, transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.015) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
 
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #070b14;
+    background: rgba(6, 8, 14, 0.6);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1e293b;
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00e5ff;
+    background: rgba(6, 182, 212, 0.5);
   }
 }
 
@@ -45,14 +46,14 @@
   transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.glass-panel {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.8) 0%, rgba(11, 15, 25, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+.glass-card {
+  background: linear-gradient(180deg, rgba(14, 19, 31, 0.85) 0%, rgba(8, 12, 20, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-.doppelrand-outer {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.005) 100%);
+.doppelrand-shell {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.01) 100%);
   padding: 1px;
 }
 

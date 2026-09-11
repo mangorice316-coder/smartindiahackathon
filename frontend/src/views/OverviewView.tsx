@@ -146,39 +146,42 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   return (
     <div className="space-y-4 max-w-[1600px] mx-auto">
       {/* ========================================================================= */}
-      {/* 1. TOP SITUATION BAR                                                      */}
+      {/* 1. TOP SITUATION COMMAND BAR                                              */}
       {/* ========================================================================= */}
-      <div className="bg-[#0d121f] border border-slate-800/80 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="font-display font-bold text-base text-slate-100 tracking-tight">
-              Operational Situation Overview
-            </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-950 text-red-300 border border-red-800 flex items-center gap-1">
-              <Flame size={11} className="text-red-400" />
-              STAGE 3 ESCALATING
-            </span>
+      <div className="p-[1px] rounded-2xl bg-gradient-to-r from-red-500/30 via-white/[0.08] to-cyan-500/20 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+        <div className="rounded-[calc(1rem-1px)] bg-gradient-to-r from-[#14080e]/95 via-[#080d18]/95 to-[#06121a]/95 p-5 flex flex-wrap items-center justify-between gap-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h2 className="font-display font-bold text-lg text-white tracking-tight">
+                Operational Situation Briefing
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider bg-red-500/15 text-red-400 border border-red-500/40 flex items-center gap-1.5 shadow-[0_0_12px_rgba(239,68,68,0.3)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping" />
+                <Flame size={11} className="text-red-400" />
+                STAGE 3 ESCALATING
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 font-sans mt-1 leading-relaxed max-w-3xl">
+              Wayanad &amp; Himalayan Foothill Basins • Severe monsoon squall driving elevated pore pressures &amp; shallow slope instability across monitored sub-catchments.
+            </p>
           </div>
-          <p className="text-xs text-slate-400 font-sans mt-0.5">
-            Wayanad &amp; Himalayan Foothill Basins • Severe monsoon squall driving elevated pore pressures &amp; shallow slope instability
-          </p>
-        </div>
 
-        <div className="flex items-center gap-2 font-mono text-xs">
-          <button
-            onClick={() => onNavigate('simulation')}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 rounded-lg transition-colors flex items-center gap-1.5"
-          >
-            <span>Run Simulation</span>
-            <ChevronRight size={13} />
-          </button>
-          <button
-            onClick={() => onNavigate('alerts')}
-            className="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
-          >
-            <span>Dispatch CAP Alerts</span>
-            <ArrowRight size={13} />
-          </button>
+          <div className="flex items-center gap-2.5 font-mono text-xs">
+            <button
+              onClick={() => onNavigate('simulation')}
+              className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/50 rounded-xl transition-all flex items-center gap-2 shadow-[0_0_12px_rgba(6,182,212,0.1)] active:scale-[0.98]"
+            >
+              <span>Rainfall Simulator</span>
+              <ChevronRight size={13} className="text-cyan-400" />
+            </button>
+            <button
+              onClick={() => onNavigate('alerts')}
+              className="px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)] active:scale-[0.98]"
+            >
+              <span>Dispatch CAP Directives</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -298,60 +301,60 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
               {/* Factor 1 */}
-              <div className="p-3 bg-slate-900/60 border border-slate-800/80 rounded-lg space-y-1.5 flex flex-col justify-between">
+              <div className="p-3.5 bg-white/[0.02] border border-white/[0.07] hover:border-sky-500/30 rounded-xl space-y-2 flex flex-col justify-between transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                 <div>
                   <div className="flex items-center justify-between text-sky-400 font-bold mb-1">
                     <span className="flex items-center gap-1.5">
                       <CloudRain size={13} />
                       <span>ANTECEDENT RAIN</span>
                     </span>
-                    <span className="text-[10px] text-sky-300">API_72 &gt; 180mm</span>
+                    <span className="text-[10px] text-sky-300 font-mono">API_72 &gt; 180mm</span>
                   </div>
                   <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
                     72-hour precipitation has saturated the saprolite mantle, dissipating negative suction stress and raising the perched water table.
                   </p>
                 </div>
-                <div className="text-[10px] text-slate-400 pt-1.5 border-t border-slate-800 flex justify-between">
+                <div className="text-[10px] text-slate-400 pt-2 border-t border-white/[0.06] flex justify-between">
                   <span>Impact:</span>
                   <strong className="text-red-400">+28.4% to Total Risk</strong>
                 </div>
               </div>
 
               {/* Factor 2 */}
-              <div className="p-3 bg-slate-900/60 border border-slate-800/80 rounded-lg space-y-1.5 flex flex-col justify-between">
+              <div className="p-3.5 bg-white/[0.02] border border-white/[0.07] hover:border-orange-500/30 rounded-xl space-y-2 flex flex-col justify-between transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                 <div>
                   <div className="flex items-center justify-between text-orange-400 font-bold mb-1">
                     <span className="flex items-center gap-1.5">
                       <Compass size={13} />
                       <span>TERRAIN GRADIENT</span>
                     </span>
-                    <span className="text-[10px] text-orange-300">Slope: 36.5°</span>
+                    <span className="text-[10px] text-orange-300 font-mono">Slope: 36.5°</span>
                   </div>
                   <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
                     Topographic slope angle (36.5°) significantly exceeds the internal friction angle of weathered colluvial soil (phi' = 28.0°).
                   </p>
                 </div>
-                <div className="text-[10px] text-slate-400 pt-1.5 border-t border-slate-800 flex justify-between">
+                <div className="text-[10px] text-slate-400 pt-2 border-t border-white/[0.06] flex justify-between">
                   <span>Shear Force:</span>
                   <strong className="text-orange-400">+18.2% Gravitational</strong>
                 </div>
               </div>
 
               {/* Factor 3 */}
-              <div className="p-3 bg-slate-900/60 border border-slate-800/80 rounded-lg space-y-1.5 flex flex-col justify-between">
+              <div className="p-3.5 bg-white/[0.02] border border-white/[0.07] hover:border-red-500/30 rounded-xl space-y-2 flex flex-col justify-between transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                 <div>
-                  <div className="flex items-center justify-between text-purple-400 font-bold mb-1">
+                  <div className="flex items-center justify-between text-rose-400 font-bold mb-1">
                     <span className="flex items-center gap-1.5">
                       <Layers size={13} />
                       <span>LIMIT EQUILIBRIUM</span>
                     </span>
-                    <span className="text-[10px] text-red-400 font-bold">Fs = 0.88</span>
+                    <span className="text-[10px] text-red-400 font-bold font-mono">Fs = 0.88</span>
                   </div>
                   <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
                     Infinite-slope mechanics prove Fs &lt; 1.0 under positive pore pressures (ru = 0.52). Driving gravitational force exceeds resisting shear.
                   </p>
                 </div>
-                <div className="text-[10px] text-slate-400 pt-1.5 border-t border-slate-800 flex justify-between">
+                <div className="text-[10px] text-slate-400 pt-2 border-t border-white/[0.06] flex justify-between">
                   <span>Stability:</span>
                   <strong className="text-red-400 uppercase">Structurally Unstable</strong>
                 </div>
@@ -369,61 +372,61 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             action={
               <button
                 onClick={() => onNavigate('infrastructure')}
-                className="text-xs text-cyan-400 hover:text-cyan-300 font-mono font-medium flex items-center gap-1"
+                className="text-xs text-cyan-400 hover:text-cyan-300 font-mono font-medium flex items-center gap-1 transition-colors"
               >
                 <span>View All</span>
                 <ChevronRight size={13} />
               </button>
             }
           >
-            <div className="space-y-2 font-mono text-xs">
-              <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-red-950 text-red-400 border border-red-800 rounded">
-                    <Building2 size={13} />
+            <div className="space-y-2.5 font-mono text-xs">
+              <div className="p-3 bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.12] rounded-xl flex items-center justify-between transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-red-500/15 text-red-400 border border-red-500/30 flex items-center justify-center shrink-0">
+                    <Building2 size={15} />
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-200">Community Health Centre</div>
-                    <div className="text-[10px] text-slate-400 font-sans">Tier 1 Lifeline • Chooralmala</div>
+                    <div className="font-semibold text-white">Community Health Centre</div>
+                    <div className="text-[11px] text-slate-400 font-sans">Tier 1 Lifeline • Chooralmala</div>
                   </div>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-950 text-red-300 border border-red-800">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/15 text-red-300 border border-red-500/30">
                   850m Buffer
                 </span>
               </div>
 
-              <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-purple-950 text-purple-400 border border-purple-800 rounded">
-                    <Layers size={13} />
+              <div className="p-3 bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.12] rounded-xl flex items-center justify-between transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
+                    <Layers size={15} />
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-200">Chooralmala Bailey Bridge</div>
-                    <div className="text-[10px] text-slate-400 font-sans">Sole Evacuation Corridor</div>
+                    <div className="font-semibold text-white">Chooralmala Bailey Bridge</div>
+                    <div className="text-[11px] text-slate-400 font-sans">Sole Evacuation Corridor</div>
                   </div>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-950 text-red-300 border border-red-800">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/15 text-red-300 border border-red-500/30">
                   Critical
                 </span>
               </div>
 
-              <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-amber-950 text-amber-400 border border-amber-800 rounded">
-                    <Compass size={13} />
+              <div className="p-3 bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.12] rounded-xl flex items-center justify-between transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+                    <Compass size={15} />
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-200">State Highway 59 (Pass)</div>
-                    <div className="text-[10px] text-slate-400 font-sans">Tier 2 Arterial • Heavy Transit</div>
+                    <div className="font-semibold text-white">State Highway 59 (Pass)</div>
+                    <div className="text-[11px] text-slate-400 font-sans">Tier 2 Arterial • Heavy Transit</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
                     Partial Halt
                   </span>
                   <button
                     onClick={() => window.dispatchEvent(new CustomEvent('open-road-modal'))}
-                    className="px-2 py-0.5 rounded text-[10px] font-mono text-cyan-400 hover:text-cyan-200 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-800/80 transition-colors"
+                    className="px-2 py-0.5 rounded-md text-[10px] font-mono text-cyan-400 hover:text-cyan-200 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-colors"
                     title="Inspect cut-slope stability, culvert clogging risk and safety factor"
                   >
                     Cut-Slope AI

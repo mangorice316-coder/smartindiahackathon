@@ -50,15 +50,15 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
   return (
     <div className="space-y-4 font-mono select-none">
       {/* Informational & Action Banner */}
-      <div className="p-3.5 bg-[#0a1220] border border-slate-800 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20">
-            <CloudRain size={16} />
+      <div className="p-4 bg-[#080d19]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-xl border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+            <CloudRain size={18} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-white uppercase">Atmospheric &amp; Hydrological Real-Time Telemetry</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1">
+              <span className="font-bold text-white uppercase tracking-wider text-xs">Atmospheric &amp; Hydrological Real-Time Telemetry</span>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 OPEN-METEO REST API
               </span>
@@ -72,7 +72,7 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-live-gps-modal'))}
-            className="px-3 py-1.5 rounded-lg bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700 flex items-center gap-1.5 text-xs font-semibold transition-colors"
+            className="px-3.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 flex items-center gap-2 text-xs font-semibold transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)]"
             title="Inspect real-time conditions and compute landslide risk for any custom GPS coordinates"
           >
             <Compass size={13} className="text-emerald-400" />
@@ -81,7 +81,7 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
           <button
             onClick={fetchAllLiveWeather}
             disabled={isRefreshing}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 text-xs font-semibold transition-colors disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 border border-white/[0.1] flex items-center gap-2 text-xs font-semibold transition-all shadow-sm disabled:opacity-50"
             title="Refresh current meteorological readings"
           >
             <RefreshCw size={13} className={isRefreshing ? 'animate-spin' : ''} />
@@ -121,7 +121,7 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
                       detail: { lat: loc.latitude, lon: loc.longitude }
                     }));
                   }}
-                  className="text-[10px] text-cyan-400 hover:text-cyan-300 font-mono font-medium flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800"
+                  className="text-[10px] text-cyan-400 hover:text-cyan-300 font-mono font-medium flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.08] px-2.5 py-1 rounded-lg border border-white/[0.08] transition-all"
                   title="Open live geotechnical and ML analysis for this site"
                 >
                   <Compass size={11} />
@@ -132,18 +132,18 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
               <div className="space-y-3 font-mono text-xs">
                 {/* 4-KPI Meteorological Grid */}
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2.5 bg-slate-900/80 rounded border border-slate-800">
+                  <div className="p-3 bg-[#060912]/80 rounded-xl border border-white/[0.05]">
                     <div className="flex items-center gap-1.5 text-slate-400 text-[10px] uppercase">
                       <CloudRain size={12} className="text-cyan-400" />
                       <span>24h Rainfall</span>
                     </div>
-                    <div className={`text-xl font-bold mt-1 ${isHeavy ? 'text-red-400' : 'text-slate-100'}`}>
+                    <div className={`text-xl font-bold mt-1 ${isHeavy ? 'text-rose-400' : 'text-slate-100'}`}>
                       {rain24h.toFixed(1)} <span className="text-xs text-slate-400 font-normal">mm</span>
                     </div>
                     <div className="text-[9px] text-slate-500 mt-0.5">Rate: {rain1h.toFixed(1)} mm/h</div>
                   </div>
 
-                  <div className="p-2.5 bg-slate-900/80 rounded border border-slate-800">
+                  <div className="p-3 bg-[#060912]/80 rounded-xl border border-white/[0.05]">
                     <div className="flex items-center gap-1.5 text-slate-400 text-[10px] uppercase">
                       <Activity size={12} className="text-amber-400" />
                       <span>72h Antecedent</span>
@@ -158,16 +158,16 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
                 {/* Soil Moisture Saturation Bar */}
                 <div className="space-y-1.5 pt-1">
                   <div className="flex justify-between text-[11px]">
-                    <span className="text-slate-400 flex items-center gap-1">
+                    <span className="text-slate-400 flex items-center gap-1.5">
                       <Droplets size={12} className="text-cyan-400" />
                       Volumetric Soil Saturation
                     </span>
                     <span className="font-bold text-slate-200">{(moisture * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-[#060912] rounded-full h-2 overflow-hidden border border-white/[0.05]">
                     <div
                       className={`h-full transition-all duration-500 rounded-full ${
-                        moisture > 0.85 ? 'bg-red-500' : moisture > 0.70 ? 'bg-amber-500' : 'bg-emerald-500'
+                        moisture > 0.85 ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]' : moisture > 0.70 ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
                       }`}
                       style={{ width: `${Math.min(100, moisture * 100)}%` }}
                     />
@@ -179,7 +179,7 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
                 </div>
 
                 {/* Microclimate Stats */}
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80 text-[10px] text-slate-400">
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/[0.06] text-[10px] text-slate-400">
                   <div className="flex items-center gap-1.5">
                     <Thermometer size={12} className="text-orange-400" />
                     <span>Temp: <strong className="text-slate-200">{temp.toFixed(1)}°C</strong></span>
@@ -191,12 +191,12 @@ export const LiveConditionsView: React.FC<LiveConditionsViewProps> = ({
                 </div>
 
                 {/* Geotechnical Equilibrium & Model Output */}
-                <div className={`p-2.5 rounded-lg border text-[11px] flex items-center justify-between ${
+                <div className={`p-3 rounded-xl border text-[11px] flex items-center justify-between ${
                   fs < 1.0
-                    ? 'bg-red-950/60 border-red-800 text-red-200'
+                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-200 shadow-[0_0_15px_rgba(244,63,94,0.15)]'
                     : fs < 1.3
-                    ? 'bg-amber-950/60 border-amber-800 text-amber-200'
-                    : 'bg-emerald-950/40 border-emerald-800 text-emerald-200'
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
+                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.15)]'
                 }`}>
                   <div>
                     <div className="font-bold">Limit-Equilibrium Fs: {fs.toFixed(2)}</div>

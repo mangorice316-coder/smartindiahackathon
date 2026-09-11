@@ -383,18 +383,20 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
   return (
     <div className="space-y-4">
       {/* 1. Mandatory Scientific Decision Support Banner */}
-      <div className="p-3.5 rounded-lg bg-slate-900/90 border border-cyan-500/30 text-xs font-mono text-slate-300 shadow-md flex items-start gap-3">
-        <Info size={20} className="text-cyan-400 mt-0.5 shrink-0" />
+      <div className="p-4 rounded-2xl bg-[#080d19]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] text-xs font-mono text-slate-300 flex items-start gap-3.5">
+        <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+          <Info size={18} />
+        </div>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-bold text-cyan-300 uppercase tracking-wide">
               Scientific Decision Support Notice (Zero-Mutation Policy)
             </span>
-            <span className="px-1.5 py-0.2 bg-cyan-950 text-cyan-300 rounded text-[10px] border border-cyan-800">
+            <span className="px-2 py-0.5 bg-cyan-500/15 text-cyan-300 rounded-full text-[10px] font-bold border border-cyan-500/30">
               PHYSICS + ML COUPLED
             </span>
           </div>
-          <p className="text-slate-400 text-[11px] leading-relaxed">
+          <p className="text-slate-400 text-[11px] font-sans leading-relaxed">
             What-if simulations evaluate geotechnical slope equilibrium ($F_s$) and active machine learning risk
             inferences against in-memory scenario clones. Historical sensor records and database baselines remain 100%
             immutable. Non-rainfall physical parameters (slope, elevation, soil cohesion, bulk density, internal friction
@@ -409,7 +411,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
         subtitle="Configure hypothetical precipitation surge scenarios and recalculate catchment hazard in real-time"
         action={
           cacheStats && (
-            <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 bg-white/[0.05] px-3 py-1 rounded-xl border border-white/[0.08]">
               <Zap size={12} className="text-amber-400" />
               <span>
                 Cache: {cacheStats.hits} hits / {cacheStats.misses} misses ({cacheStats.size} active)
@@ -420,7 +422,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
                   setCacheStats(null);
                 }}
                 title="Flush scenario LRU cache"
-                className="text-slate-500 hover:text-red-400 transition-colors ml-1"
+                className="text-slate-500 hover:text-rose-400 transition-colors ml-1"
               >
                 <RotateCcw size={10} />
               </button>
@@ -434,17 +436,17 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
             <div className="text-[11px] font-mono font-bold uppercase text-slate-400 mb-2 flex items-center gap-1.5">
               <span>Standard Presets & Return Periods:</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
               {PRESETS.map((p) => {
                 const isActive = multiplier === p.mult && additionalMm === p.extra;
                 return (
                   <button
                     key={p.label}
                     onClick={() => applyPreset(p.mult, p.extra, p.hours, p.name)}
-                    className={`px-2 py-1.5 text-center rounded font-mono text-xs transition-all border ${
+                    className={`px-2.5 py-2 text-center rounded-xl font-mono text-xs transition-all border ${
                       isActive
-                        ? 'bg-cyan-950 text-cyan-200 border-cyan-500 shadow-sm font-bold'
-                        : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-800'
+                        ? 'bg-cyan-500/15 text-cyan-200 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)] font-bold'
+                        : 'bg-[#060912]/70 hover:bg-white/[0.06] text-slate-300 border-white/[0.06]'
                     }`}
                   >
                     <div className="truncate font-semibold">{p.label}</div>
@@ -458,7 +460,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
           {/* Granular Controls */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 font-mono text-xs">
             {/* Multiplier Slider */}
-            <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg space-y-1.5">
+            <div className="p-3.5 bg-[#060912]/80 border border-white/[0.06] rounded-xl space-y-2 shadow-inner">
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">Precipitation Multiplier</span>
                 <span className="text-cyan-400 font-bold text-sm">
@@ -487,10 +489,10 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
             </div>
 
             {/* Direct Additional Rainfall Slider */}
-            <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg space-y-1.5">
+            <div className="p-3.5 bg-[#060912]/80 border border-white/[0.06] rounded-xl space-y-2 shadow-inner">
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">Direct Additional Deluge</span>
-                <span className="text-orange-400 font-bold text-sm">+{additionalMm.toFixed(0)} mm</span>
+                <span className="text-amber-400 font-bold text-sm">+{additionalMm.toFixed(0)} mm</span>
               </div>
               <input
                 type="range"
@@ -503,7 +505,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
                   setAdditionalMm(mm);
                   setScenarioName(`Custom Deluge (${(multiplier * 100).toFixed(0)}% Rainfall / +${mm}mm)`);
                 }}
-                className="w-full accent-orange-400"
+                className="w-full accent-amber-400"
               />
               <div className="flex justify-between text-[10px] text-slate-500">
                 <span>+0 mm</span>
@@ -514,7 +516,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
             </div>
 
             {/* Storm Duration */}
-            <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg space-y-1.5">
+            <div className="p-3.5 bg-[#060912]/80 border border-white/[0.06] rounded-xl space-y-2 shadow-inner">
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">Deluge Duration</span>
                 <span className="text-slate-200 font-bold">{durationHours} Hours</span>
@@ -522,7 +524,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
               <select
                 value={durationHours}
                 onChange={(e) => setDurationHours(Number(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#090d16] border border-white/[0.1] rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
               >
                 <option value={3}>3 Hours (Flash Cloudburst)</option>
                 <option value={6}>6 Hours (Severe Convective Cell)</option>
@@ -535,7 +537,7 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
             </div>
 
             {/* Saturation Override & Scenario Title */}
-            <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg space-y-2">
+            <div className="p-3.5 bg-[#060912]/80 border border-white/[0.06] rounded-xl space-y-2 shadow-inner">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Pore-Water Saturation</span>
                 <label className="flex items-center gap-1.5 cursor-pointer">
@@ -555,21 +557,21 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
                 value={scenarioName}
                 onChange={(e) => setScenarioName(e.target.value)}
                 placeholder="Scenario Label..."
-                className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200"
+                className="w-full bg-[#090d16] border border-white/[0.1] rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
               />
             </div>
           </div>
 
           {/* Action Row */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-800/80">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/[0.06]">
             <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
               {simResult?.active_model_version && (
-                <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="px-2.5 py-1 rounded-lg bg-white/[0.06] text-slate-300 border border-white/[0.08]">
                   Model: {simResult.active_model_version}
                 </span>
               )}
               {simResult?.from_cache && (
-                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                   <Zap size={11} />
                   Instant Cache Hit
                 </span>
@@ -579,9 +581,9 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
             <button
               onClick={handleExecute}
               disabled={isRunning}
-              className="flex items-center gap-2 px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider rounded transition-all shadow-lg shadow-cyan-500/20"
+              className="flex items-center gap-2.5 px-7 py-3 bg-gradient-to-r from-cyan-500 via-cyan-400 to-sky-400 hover:from-cyan-400 hover:to-sky-300 disabled:opacity-50 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] cursor-pointer"
             >
-              <PlaySquare size={14} />
+              <PlaySquare size={15} />
               <span>{isRunning ? 'CALCULATING GEOTECHNICAL SLOPES...' : 'EXECUTE WHAT-IF SIMULATION'}</span>
             </button>
           </div>
@@ -630,13 +632,13 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
       )}
 
       {/* 4. Tab Navigation */}
-      <div className="flex border-b border-slate-800 text-xs font-mono">
+      <div className="flex flex-wrap gap-1.5 p-1 bg-[#080d19]/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl text-xs font-mono shadow-sm">
         <button
           onClick={() => setActiveTab('map_matrix')}
-          className={`px-4 py-2.5 flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-4 py-2 flex items-center gap-2 rounded-xl transition-all ${
             activeTab === 'map_matrix'
-              ? 'border-cyan-400 text-cyan-300 font-bold bg-slate-900/50'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+              : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
           }`}
         >
           <Layers size={14} />
@@ -644,10 +646,10 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
         </button>
         <button
           onClick={() => setActiveTab('timeseries')}
-          className={`px-4 py-2.5 flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-4 py-2 flex items-center gap-2 rounded-xl transition-all ${
             activeTab === 'timeseries'
-              ? 'border-cyan-400 text-cyan-300 font-bold bg-slate-900/50'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+              : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
           }`}
         >
           <BarChart3 size={14} />
@@ -655,10 +657,10 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
         </button>
         <button
           onClick={() => setActiveTab('compare')}
-          className={`px-4 py-2.5 flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-4 py-2 flex items-center gap-2 rounded-xl transition-all ${
             activeTab === 'compare'
-              ? 'border-cyan-400 text-cyan-300 font-bold bg-slate-900/50'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+              : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
           }`}
         >
           <GitCompare size={14} />
@@ -666,10 +668,10 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ onRunSimulation 
         </button>
         <button
           onClick={() => setActiveTab('report')}
-          className={`px-4 py-2.5 flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-4 py-2 flex items-center gap-2 rounded-xl transition-all ${
             activeTab === 'report'
-              ? 'border-cyan-400 text-cyan-300 font-bold bg-slate-900/50'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+              : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
           }`}
         >
           <FileText size={14} />
