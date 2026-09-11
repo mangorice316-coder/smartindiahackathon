@@ -78,11 +78,11 @@ export function Table<T extends Record<string, any>>({
   }
 
   return (
-    <div className="space-y-2">
-      <div className="overflow-x-auto rounded border border-slate-800/80">
+    <div className="space-y-2.5">
+      <div className="overflow-x-auto rounded-xl border border-white/[0.08] bg-[#090d16]/70 backdrop-blur-md shadow-lg">
         <table className="w-full text-left border-collapse font-sans text-xs">
           <thead>
-            <tr className="border-b border-slate-800 bg-slate-900/80 text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+            <tr className="border-b border-white/[0.08] bg-white/[0.02] text-[10px] font-mono text-slate-400 uppercase tracking-[0.14em]">
               {columns.map((col) => {
                 const isSorted = sortKey === col.key;
                 const canSort = col.sortable !== false;
@@ -90,8 +90,8 @@ export function Table<T extends Record<string, any>>({
                   <th
                     key={col.key}
                     onClick={() => canSort && handleHeaderClick(col)}
-                    className={`py-2.5 px-3 font-semibold select-none ${
-                      canSort ? 'cursor-pointer hover:text-slate-200 hover:bg-slate-800/60 transition-colors' : ''
+                    className={`py-3 px-3.5 font-bold select-none transition-colors ${
+                      canSort ? 'cursor-pointer hover:text-cyan-300 hover:bg-white/[0.03]' : ''
                     } ${col.className || ''}`}
                     aria-sort={isSorted ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
@@ -101,12 +101,12 @@ export function Table<T extends Record<string, any>>({
                         <span className="text-slate-500">
                           {isSorted ? (
                             sortDirection === 'asc' ? (
-                              <ChevronUp size={12} className="text-cyan-400" />
+                              <ChevronUp size={12} className="text-cyan-400 animate-bounce" />
                             ) : (
-                              <ChevronDown size={12} className="text-cyan-400" />
+                              <ChevronDown size={12} className="text-cyan-400 animate-bounce" />
                             )
                           ) : (
-                            <ChevronsUpDown size={11} className="opacity-40" />
+                            <ChevronsUpDown size={11} className="opacity-30" />
                           )}
                         </span>
                       )}
@@ -116,17 +116,19 @@ export function Table<T extends Record<string, any>>({
               })}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 bg-[#0e1422]/60">
+          <tbody className="divide-y divide-white/[0.04]">
             {paginatedData.map((item, idx) => (
               <tr
                 key={item.id ? String(item.id) : idx}
                 onClick={() => onRowClick && onRowClick(item)}
-                className={`transition-colors ${
-                  onRowClick ? 'cursor-pointer hover:bg-slate-800/60' : 'hover:bg-slate-800/30'
+                className={`transition-all duration-200 ease-spring ${
+                  onRowClick
+                    ? 'cursor-pointer hover:bg-cyan-950/20 hover:text-cyan-100 hover:shadow-inner'
+                    : 'hover:bg-white/[0.02]'
                 }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key} className={`py-2 px-3 text-slate-200 ${col.className || ''}`}>
+                  <td key={col.key} className={`py-2.5 px-3.5 text-slate-200 ${col.className || ''}`}>
                     {col.render ? col.render(item) : (item as any)[col.key]}
                   </td>
                 ))}
@@ -136,32 +138,33 @@ export function Table<T extends Record<string, any>>({
         </table>
       </div>
 
-      {/* Optional Pagination Footer */}
+      {/* Pagination Footer */}
       {pageSize && totalPages > 1 && (
         <div className="flex items-center justify-between px-2 py-1 text-xs font-mono text-slate-400">
-          <div>
-            Showing {(currentPage - 1) * pageSize + 1} to{' '}
-            {Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length} entries
+          <div className="text-[11px]">
+            Showing <span className="text-slate-200 font-bold">{(currentPage - 1) * pageSize + 1}</span> to{' '}
+            <span className="text-slate-200 font-bold">{Math.min(currentPage * pageSize, sortedData.length)}</span> of{' '}
+            <span className="text-slate-200 font-bold">{sortedData.length}</span> entries
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 rounded-lg bg-white/[0.04] border border-white/10 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               title="Previous Page"
             >
-              <ChevronLeft size={14} />
+              <ChevronLeft size={13} />
             </button>
-            <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-200 font-bold">
+            <span className="px-2.5 py-0.5 rounded-lg bg-slate-900 border border-white/10 text-[11px] text-cyan-300 font-bold shadow-inner">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 rounded-lg bg-white/[0.04] border border-white/10 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               title="Next Page"
             >
-              <ChevronRight size={14} />
+              <ChevronRight size={13} />
             </button>
           </div>
         </div>

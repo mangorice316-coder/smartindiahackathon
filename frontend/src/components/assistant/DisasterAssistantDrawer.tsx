@@ -96,35 +96,35 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-[#070b14]/95 backdrop-blur-2xl border-l border-white/[0.08] shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
       {/* Drawer Header */}
-      <div className="p-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
+      <div className="p-4 border-b border-white/[0.08] bg-[#0c121e]/80 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-red-950/60 border border-red-500/40 text-red-400">
+          <div className="p-2 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-400 shadow-[0_0_12px_rgba(0,229,255,0.2)]">
             <Bot size={18} className="animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-slate-100 text-sm font-mono tracking-tight">DISASTER INTELLIGENCE ASSISTANT</h3>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/50">
+              <h3 className="font-display font-extrabold text-slate-100 text-sm tracking-tight">DISASTER INTELLIGENCE ASSISTANT</h3>
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                 LIVE GROUNDED
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">Operational Decision Support & Geotechnical Physics Q&A</p>
+            <p className="text-[11px] text-slate-400 font-mono mt-0.5">Operational Decision Support &amp; Geotechnical Physics Q&amp;A</p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-white/[0.06] text-slate-400 hover:text-slate-200 transition-colors"
         >
           <X size={18} />
         </button>
       </div>
 
       {/* Suggested Quick Prompt Chips */}
-      <div className="p-3 border-b border-slate-800/70 bg-slate-900/40">
-        <div className="text-[11px] font-mono text-slate-400 mb-2 flex items-center gap-1.5">
-          <Sparkles size={12} className="text-amber-400" />
+      <div className="p-3.5 border-b border-white/[0.06] bg-white/[0.015]">
+        <div className="text-[10px] font-mono text-slate-400 mb-2 flex items-center gap-1.5 font-bold uppercase tracking-wider">
+          <Sparkles size={11} className="text-amber-400" />
           <span>SUGGESTED EVALUATION QUERIES:</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -133,7 +133,7 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
               key={idx}
               onClick={() => handleSendQuery(q)}
               disabled={isLoading}
-              className="px-2.5 py-1 text-[11px] font-mono text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 rounded transition-all text-left truncate max-w-full"
+              className="px-3 py-1 text-[11px] font-mono text-slate-300 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-500/40 rounded-full transition-all text-left truncate max-w-full hover:scale-105"
             >
               {q}
             </button>

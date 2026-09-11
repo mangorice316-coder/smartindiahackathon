@@ -291,73 +291,74 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
 
   return (
     <>
-      {/* Floating Demo Control Dock */}
-      <div className="fixed bottom-4 right-4 z-50 w-full max-w-xl bg-[#0d1322] border-2 border-red-600/80 rounded-xl shadow-2xl shadow-red-950/60 backdrop-blur-md overflow-hidden transition-all duration-200">
-        {/* Header Bar */}
-        <div className="bg-gradient-to-r from-red-950/90 via-slate-900 to-slate-900 px-4 py-2.5 flex items-center justify-between border-b border-red-800/60">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-red-600 rounded text-white animate-pulse">
-              <Sparkles size={14} />
+      {/* Floating Demo Control Dock (Doppelrand Style) */}
+      <div className="fixed bottom-4 right-4 z-50 w-full max-w-xl p-[1.5px] rounded-2xl bg-gradient-to-b from-red-500/60 via-rose-500/30 to-amber-500/40 shadow-[0_0_40px_rgba(239,68,68,0.25)] transition-all duration-300">
+        <div className="rounded-[calc(1rem-1.5px)] bg-gradient-to-b from-[#0f172a]/95 via-[#0b101b]/95 to-[#070b14]/98 shadow-inner overflow-hidden backdrop-blur-2xl">
+          {/* Header Bar */}
+          <div className="bg-gradient-to-r from-red-950/80 via-slate-900/90 to-slate-900/90 px-4 py-3 flex items-center justify-between border-b border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1.5 bg-red-600 rounded-lg text-white shadow-[0_0_12px_rgba(239,68,68,0.4)] animate-pulse">
+                <Sparkles size={14} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-extrabold text-xs text-white tracking-wider">
+                    SIH JUDGE EVALUATION WALKTHROUGH
+                  </span>
+                  <span className="px-2 py-0.2 rounded-full text-[9px] font-mono font-bold bg-red-900/80 text-red-200 border border-red-500/50">
+                    DEMO MODE
+                  </span>
+                </div>
+                <div className="text-[10px] font-mono text-slate-300">
+                  Step {currentStep.step} of 9: <span className="text-amber-300 font-bold">{currentStep.title}</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-xs text-white tracking-wider">
-                  SIH JUDGE EVALUATION WALKTHROUGH
-                </span>
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-red-900/80 text-red-200 border border-red-700">
-                  DEMO MODE
-                </span>
-              </div>
-              <div className="text-[10px] font-mono text-slate-300">
-                Step {currentStep.step} of 9: <span className="text-amber-300 font-bold">{currentStep.title}</span>
-              </div>
+
+            <div className="flex items-center gap-1.5">
+              {/* Autoplay Toggle Button */}
+              <button
+                onClick={toggleAutoPlay}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold flex items-center gap-1.5 border transition-all ${
+                  isAutoPlaying
+                    ? 'bg-emerald-950 text-emerald-300 border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.3)] animate-pulse'
+                    : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border-white/10'
+                }`}
+                title={isAutoPlaying ? 'Pause Automated Walkthrough' : 'Start Automated 3-Minute Presentation'}
+              >
+                {isAutoPlaying ? <Pause size={10} /> : <Play size={10} />}
+                <span>{isAutoPlaying ? `TOUR (${autoPlayCountdown}s)` : 'AUTOPLAY'}</span>
+              </button>
+
+              {/* How It Works Button */}
+              <button
+                onClick={() => setShowHowItWorks(true)}
+                className="px-2.5 py-1 rounded-full bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 text-[10px] font-mono font-bold flex items-center gap-1 border border-cyan-500/40 transition-colors shadow-sm"
+                title="How this demo works & architectural proof"
+              >
+                <HelpCircle size={11} />
+                <span>HOW IT WORKS</span>
+              </button>
+
+              {/* Minimize/Expand Toggle */}
+              <button
+                onClick={() => setIsMinimized(!isMinimized)}
+                className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors"
+                title={isMinimized ? 'Expand' : 'Minimize'}
+              >
+                {isMinimized ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+              </button>
+
+              {/* Close */}
+              <button
+                onClick={onClose}
+                className="p-1 text-slate-400 hover:text-red-400 rounded-lg hover:bg-white/[0.06] transition-colors"
+                title="Close Walkthrough"
+              >
+                <X size={15} />
+              </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-1.5">
-            {/* Autoplay Toggle Button */}
-            <button
-              onClick={toggleAutoPlay}
-              className={`px-2 py-0.5 rounded text-[11px] font-mono flex items-center gap-1 border transition-colors ${
-                isAutoPlaying
-                  ? 'bg-emerald-950 text-emerald-300 border-emerald-700 animate-pulse'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
-              }`}
-              title={isAutoPlaying ? 'Pause Automated Walkthrough' : 'Start Automated 3-Minute Presentation'}
-            >
-              {isAutoPlaying ? <Pause size={11} /> : <Play size={11} />}
-              <span>{isAutoPlaying ? `TOUR (${autoPlayCountdown}s)` : 'AUTOPLAY'}</span>
-            </button>
-
-            {/* How It Works Button */}
-            <button
-              onClick={() => setShowHowItWorks(true)}
-              className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px] font-mono flex items-center gap-1 border border-cyan-800/50 transition-colors"
-              title="How this demo works & architectural proof"
-            >
-              <HelpCircle size={12} />
-              <span>HOW IT WORKS</span>
-            </button>
-
-            {/* Minimize/Expand Toggle */}
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800"
-              title={isMinimized ? 'Expand' : 'Minimize'}
-            >
-              {isMinimized ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button>
-
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="p-1 text-slate-400 hover:text-red-400 rounded hover:bg-slate-800"
-              title="Close Walkthrough"
-            >
-              <X size={16} />
-            </button>
-          </div>
-        </div>
 
         {/* Permanent Quick Simulation Presets & Reset Bar (Always Visible) */}
         <div className="bg-slate-950/90 px-3 py-1.5 border-b border-slate-800/80 flex items-center justify-between gap-1 text-[11px] font-mono">
@@ -518,6 +519,7 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
             </div>
           </div>
         )}
+        </div>
       </div>
 
       {/* "How This Demo Works" Modal */}

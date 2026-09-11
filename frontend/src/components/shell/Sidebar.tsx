@@ -11,7 +11,8 @@ import {
   Cpu,
   Database,
   FileText,
-  Settings
+  Settings,
+  ShieldCheck
 } from 'lucide-react';
 
 export type NavView =
@@ -35,70 +36,115 @@ interface SidebarProps {
   inspectionBadgeCount?: number;
 }
 
+interface NavSection {
+  title: string;
+  items: Array<{ id: NavView; label: string; icon: React.ReactNode; badge?: number }>;
+}
+
 export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
   onSelectView,
   alertBadgeCount = 0,
   inspectionBadgeCount = 0,
 }) => {
-  const navItems: Array<{ id: NavView; label: string; icon: React.ReactNode; badge?: number }> = [
-    { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={16} /> },
-    { id: 'map', label: 'Risk Map', icon: <Map size={16} /> },
-    { id: 'conditions', label: 'Live Conditions', icon: <CloudRain size={16} /> },
-    { id: 'infrastructure', label: 'Infrastructure', icon: <Building2 size={16} /> },
-    { id: 'alerts', label: 'Alerts', icon: <AlertTriangle size={16} />, badge: alertBadgeCount },
-    { id: 'simulation', label: 'Simulation', icon: <PlaySquare size={16} /> },
-    { id: 'history', label: 'Historical Analysis', icon: <History size={16} /> },
-    { id: 'inspections', label: 'Inspections', icon: <ClipboardList size={16} />, badge: inspectionBadgeCount },
-    { id: 'model_data', label: 'Model & ML', icon: <Cpu size={16} /> },
-    { id: 'data_engine', label: 'Data Engine', icon: <Database size={16} /> },
-    { id: 'reports', label: 'Reports', icon: <FileText size={16} /> },
-    { id: 'settings', label: 'Settings', icon: <Settings size={16} /> },
+  const sections: NavSection[] = [
+    {
+      title: 'SITUATION ROOM',
+      items: [
+        { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={15} /> },
+        { id: 'map', label: 'Risk Map', icon: <Map size={15} /> },
+        { id: 'conditions', label: 'Live Conditions', icon: <CloudRain size={15} /> },
+      ],
+    },
+    {
+      title: 'PHYSICS & IMPACT',
+      items: [
+        { id: 'infrastructure', label: 'Infrastructure', icon: <Building2 size={15} /> },
+        { id: 'alerts', label: 'Alerts', icon: <AlertTriangle size={15} />, badge: alertBadgeCount },
+        { id: 'simulation', label: 'Simulation', icon: <PlaySquare size={15} /> },
+        { id: 'history', label: 'Historical Analysis', icon: <History size={15} /> },
+      ],
+    },
+    {
+      title: 'FIELD & ENGINE',
+      items: [
+        { id: 'inspections', label: 'Inspections', icon: <ClipboardList size={15} />, badge: inspectionBadgeCount },
+        { id: 'model_data', label: 'Model & ML', icon: <Cpu size={15} /> },
+        { id: 'data_engine', label: 'Data Engine', icon: <Database size={15} /> },
+        { id: 'reports', label: 'Reports', icon: <FileText size={15} /> },
+        { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
+      ],
+    },
   ];
 
   return (
-    <aside className="w-56 bg-[#090d16] border-r border-slate-800 flex flex-col justify-between shrink-0 p-2 select-none">
-      <div className="space-y-1">
-        <div className="px-3 py-2 text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold">
-          Navigation Control
-        </div>
-        {navItems.map((item) => {
-          const isActive = currentView === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onSelectView(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950/40 text-cyan-300 border border-cyan-700/60 font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <span className={isActive ? 'text-cyan-400' : 'text-slate-500'}>{item.icon}</span>
-                <span>{item.label}</span>
-              </div>
-              {item.badge !== undefined && item.badge > 0 && (
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                  item.id === 'alerts' ? 'bg-red-500/20 text-red-400 border border-red-500/40' : 'bg-slate-800 text-slate-300'
-                }`}>
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
+    <aside className="w-60 bg-[#060912]/95 backdrop-blur-xl border-r border-white/[0.08] flex flex-col justify-between shrink-0 p-3 select-none shadow-2xl relative z-20">
+      <div className="space-y-4 overflow-y-auto pr-0.5">
+        {sections.map((section, idx) => (
+          <div key={idx} className="space-y-1">
+            <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-[0.18em] text-slate-500 font-bold">
+              {section.title}
+            </div>
+
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const isActive = currentView === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onSelectView(item.id)}
+                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all duration-200 ease-spring relative overflow-hidden ${
+                      isActive
+                        ? 'bg-gradient-to-r from-cyan-500/15 via-cyan-500/5 to-transparent text-cyan-200 border-l-2 border-cyan-400 font-semibold shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] border-l-2 border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 relative z-10">
+                      <span
+                        className={`transition-colors duration-200 ${
+                          isActive
+                            ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]'
+                            : 'text-slate-500 group-hover:text-slate-300'
+                        }`}
+                      >
+                        {item.icon}
+                      </span>
+                      <span className="tracking-wide">{item.label}</span>
+                    </div>
+
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono tracking-wider shadow-sm transition-transform group-hover:scale-105 ${
+                          item.id === 'alerts'
+                            ? 'bg-red-500/20 text-red-300 border border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]'
+                            : 'bg-white/10 text-slate-200 border border-white/10'
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Safety Notice Footer */}
-      <div className="p-2.5 bg-slate-900/40 border border-slate-800/80 rounded text-[10px] font-sans text-slate-500 space-y-1">
-        <div className="font-mono font-bold text-slate-400 uppercase text-[9px] flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          Decision Support System
+      {/* Safety Notice Footer Card (Doppelrand Style) */}
+      <div className="mt-3 p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent">
+        <div className="p-3 bg-gradient-to-b from-[#0c121e] to-[#080d16] rounded-[calc(0.75rem-1px)] text-[10px] font-sans text-slate-400 space-y-1.5 shadow-inner">
+          <div className="font-mono font-bold text-slate-300 uppercase text-[9px] flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span>DECISION SUPPORT</span>
+            </span>
+            <ShieldCheck size={12} className="text-cyan-400" />
+          </div>
+          <p className="leading-tight text-slate-400 text-[10px]">
+            Infinite-slope limit equilibrium &amp; ML probability estimation. Physics verified.
+          </p>
         </div>
-        <p className="leading-tight">
-          Estimates geotechnical probability. Does not guarantee whether a failure will occur.
-        </p>
       </div>
     </aside>
   );
