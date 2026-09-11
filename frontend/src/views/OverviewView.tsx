@@ -417,9 +417,18 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     <div className="text-[10px] text-slate-400 font-sans">Tier 2 Arterial • Heavy Transit</div>
                   </div>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">
-                  Partial Halt
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">
+                    Partial Halt
+                  </span>
+                  <button
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-road-modal'))}
+                    className="px-2 py-0.5 rounded text-[10px] font-mono text-cyan-400 hover:text-cyan-200 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-800/80 transition-colors"
+                    title="Inspect cut-slope stability, culvert clogging risk and safety factor"
+                  >
+                    Cut-Slope AI
+                  </button>
+                </div>
               </div>
             </div>
           </Card>
@@ -510,6 +519,42 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   className="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
                 >
                   <span>Simulate</span>
+                  <ArrowRight size={11} />
+                </button>
+              </div>
+
+              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
+                <div>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="font-bold text-amber-400 text-[10px]">DIR 04</span>
+                    <span className="text-slate-200 font-sans font-semibold text-xs">Record Ground Crack Tension</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-sans">Citizen &amp; patrol crack width loop (recalibrates risk)</p>
+                </div>
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-incident-modal'))}
+                  className="px-2.5 py-1 bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  title="Open Ground Crack / Tension Fissure Verification Modal"
+                >
+                  <span>Report Crack</span>
+                  <ArrowRight size={11} />
+                </button>
+              </div>
+
+              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
+                <div>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="font-bold text-purple-400 text-[10px]">DIR 05</span>
+                    <span className="text-slate-200 font-sans font-semibold text-xs">Sentinel-1/2 Satellite AI Analysis</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-sans">Multispectral NDVI delta &amp; SAR coherence loss detection</p>
+                </div>
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-satellite-modal'))}
+                  className="px-2.5 py-1 bg-purple-950 hover:bg-purple-900 text-purple-300 border border-purple-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  title="Open Sentinel-2 MSI & Sentinel-1 SAR Remote Sensing Modal"
+                >
+                  <span>Inspect Radar</span>
                   <ArrowRight size={11} />
                 </button>
               </div>

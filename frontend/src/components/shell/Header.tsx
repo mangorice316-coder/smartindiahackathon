@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle } from 'lucide-react';
+import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satellite, Compass, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 
 interface HeaderProps {
@@ -137,6 +137,34 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden sm:inline">AI Assistant</span>
           </button>
         )}
+
+        {/* Quick Decision & Remote Sensing Tools */}
+        <div className="hidden xl:flex items-center gap-1.5 pl-1.5 border-l border-slate-800/80">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-satellite-modal'))}
+            className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-purple-300 border border-slate-800 hover:border-purple-700/60 text-xs font-mono rounded-lg transition-colors"
+            title="Open Sentinel-1/2 Satellite Change Detection (Feature 11)"
+          >
+            <Satellite size={12} className="text-purple-400" />
+            <span>Satellite AI</span>
+          </button>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-road-modal'))}
+            className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-800 hover:border-amber-700/60 text-xs font-mono rounded-lg transition-colors"
+            title="Open Road & Arterial Lifeline Vulnerability Assessment (Feature 13)"
+          >
+            <Compass size={12} className="text-amber-400" />
+            <span>Road Risk</span>
+          </button>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-incident-modal'))}
+            className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-slate-800 hover:border-emerald-700/60 text-xs font-mono rounded-lg transition-colors"
+            title="Record Citizen / Field Patrol Ground Crack Tension Fissure (Feature 15)"
+          >
+            <AlertCircle size={12} className="text-emerald-400" />
+            <span>Report Crack</span>
+          </button>
+        </div>
 
         {/* Active Alert Ticker */}
         {activeAlertCount > 0 && (

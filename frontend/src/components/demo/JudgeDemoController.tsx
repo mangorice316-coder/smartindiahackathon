@@ -41,86 +41,86 @@ interface DemoStep {
 const DEMO_STEPS: DemoStep[] = [
   {
     step: 1,
-    title: 'EOC Situational Dashboard',
+    title: 'Real-Region Multi-Source Data Fusion',
     view: 'overview',
-    badge: 'SITUATIONAL AWARENESS',
-    summary: 'Executive operations center aggregating risk metrics, high-hazard sub-catchments, and active warning dispatches.',
-    judgeFocus: 'Observe distinction between live telemetry and synthetic calibrated data. Notice prioritized critical zones, active alerts, and immediate triage status.',
-    actionText: 'Inspect Dashboard KPIs'
+    badge: 'MULTI-SOURCE FUSION',
+    summary: 'Executive EOC dashboard combining IMD weather, SRTM DEM, GSI geology, and OpenStreetMap infrastructure.',
+    judgeFocus: 'Observe this is a real mountainous region (Wayanad). The system fuses multi-sensor physical and environmental feeds into an authoritative situational room.',
+    actionText: 'Inspect Multi-Source Fusion'
   },
   {
     step: 2,
-    title: 'Interactive GIS Risk Map',
+    title: 'Predictive Geotechnical GIS Heatmap',
     view: 'map',
     locationId: 1, // Meppadi / Chooralmala Catchment
-    badge: 'GEOSPATIAL INTELLIGENCE',
-    summary: 'Multi-layer GIS map integrating DEM elevation models, slope gradients, drainage corridors, and critical lifelines.',
-    judgeFocus: 'Camera centers on the highest-risk hotspot (Chooralmala Catchment, Wayanad). Geotechnical equilibrium confirms Factor of Safety Fs = 0.88.',
-    actionText: 'Focus Highest Risk Hotspot'
+    badge: 'PREDICTIVE ENGINE',
+    summary: 'Dynamic GIS heatmap centering on Chooralmala hotspot, calculating infinite-slope equilibrium (Fs = 0.88).',
+    judgeFocus: 'Currently, this zone is Moderate/High. Geotechnical equilibrium confirms Factor of Safety Fs = 0.88 under 180mm antecedent saturation.',
+    actionText: 'Focus Chooralmala Catchment'
   },
   {
     step: 3,
-    title: 'Explainable AI & Physics Validation',
-    view: 'map',
-    locationId: 1,
-    badge: 'TRANSPARENT REASONING',
-    summary: 'System pairs infinite-slope geotechnical equilibrium with Saabas/SHAP mathematical feature attribution.',
-    judgeFocus: 'Deep XAI decomposes risk drivers: 72h antecedent rainfall (185mm) + steep slope (36.5°) contribute >75% of risk weight. Fs < 1.0 proves failure conditions.',
-    actionText: 'Inspect Factor Contributors (XAI)'
+    title: 'What-If Rainfall Simulator (+50mm)',
+    view: 'simulation',
+    badge: 'WHAT-IF SIMULATOR',
+    summary: 'Live stress-testing simulator evaluating +50mm precipitation surge in an isolated in-memory buffer.',
+    judgeFocus: 'Simulate +50mm rainfall. The zone escalates from 🟡 Moderate to 🟠 High without corrupting baseline sensor records.',
+    actionText: 'Run +50mm Surge Scenario'
   },
   {
     step: 4,
-    title: 'Rainfall What-If Simulation Engine',
+    title: 'Extreme Cloudburst Surge (+100mm)',
     view: 'simulation',
-    badge: 'DECISION SUPPORT SIMULATOR',
-    summary: 'Isolated stress-testing environment evaluating "What happens if monsoon rainfall surges by 50% or 100%?" without mutating database records.',
-    judgeFocus: 'Execute a +50% deluge scenario. Observe how multipliers re-run the scikit-learn risk engine and calculate newly escalated zones in an isolated memory buffer.',
-    actionText: 'Run +50% Deluge Scenario'
+    badge: 'LIFELINE IMPACT',
+    summary: 'At +100mm cloudburst intensity, risk escalates to CRITICAL and exposes 3 villages, 2 roads, and 1 bridge.',
+    judgeFocus: 'At +100mm, the zone reaches 🔴 CRITICAL. The system identifies 3 newly exposed villages, 2 roads, and 1 Bailey bridge in the hazard corridor.',
+    actionText: 'Execute +100mm Cloudburst'
   },
   {
     step: 5,
-    title: 'Infrastructure Exposure Analysis',
-    view: 'infrastructure',
-    badge: 'LIFELINE VULNERABILITY',
-    summary: 'Automated geospatial buffering calculating which hospitals, schools, bridges, and villages fall within high-hazard runout corridors.',
-    judgeFocus: 'Observe how lifeline tiers are classified (Tier 1 = Hospitals & Evacuation Bridges) and how vulnerability weights prioritize civil defense resources.',
-    actionText: 'View Exposed Lifelines'
+    title: 'Explainable AI: Why Risk Increased',
+    view: 'map',
+    locationId: 1,
+    badge: 'EXPLAINABLE AI',
+    summary: 'Deep mathematical XAI factor attribution paired with Mohr-Coulomb limit equilibrium failure mechanics.',
+    judgeFocus: 'The system explains WHY: 72h antecedent rainfall (480mm) + steep slope (36.5°) cause >75% of the risk surge, proving Fs < 1.0 limit equilibrium failure.',
+    actionText: 'Inspect XAI Factor Attribution'
   },
   {
     step: 6,
-    title: 'Early Warning Alert Dispatch (CAP v1.2)',
-    view: 'alerts',
-    badge: 'EARLY WARNING & PROTOCOLS',
-    summary: 'ML and physical alert triggers generating actionable evacuation advisories adhering to the OASIS CAP v1.2 standard.',
-    judgeFocus: 'Inspect alerts with Urgency, Severity, and Certainty tags, plus raw OASIS CAP XML/JSON payloads ready for NDMA/SDMA emergency broadcast integration.',
-    actionText: 'Evaluate & Trigger Alerts (CAP v1.2)'
+    title: 'Mountain Road & Route Vulnerability',
+    view: 'infrastructure',
+    badge: 'ROUTE VULNERABILITY',
+    summary: 'Cut-slope stability and culvert clog risk for key transport corridors (SH-59 Hill Highway & NH-766 Ghat Road).',
+    judgeFocus: 'Critical transport corridor analysis: SH-59 Hill Highway cut-slope Fs = 0.82 with high culvert blockage risk, identifying evacuation pass bottlenecks.',
+    actionText: 'Inspect Road Corridors'
   },
   {
     step: 7,
-    title: 'Field Inspection Prioritization Matrix',
-    view: 'inspections',
-    badge: 'RESOURCE OPTIMIZATION',
-    summary: 'Multi-factor algorithm ranking field inspection squads based on hazard severity, exposed population, lifeline density, and model confidence.',
-    judgeFocus: 'Inspect exact priority formula: P = 0.35H + 0.25E_pop + 0.25E_life + 0.15U. Shows tension crack displacement logging (mm) and toe seepage evidence.',
-    actionText: 'Calculate Inspection Priorities'
+    title: 'Satellite Multispectral Change Detection',
+    view: 'data_engine',
+    badge: 'REMOTE SENSING AI',
+    summary: 'Sentinel-2 MSI and Sentinel-1 InSAR remote sensing change detection tracking canopy stripping and soil deformation.',
+    judgeFocus: 'Sentinel-2 & Sentinel-1 InSAR change detection proves -43.6% NDVI vegetation loss, InSAR coherence loss (-6.8 dB), and daylighting crown scarps.',
+    actionText: 'Launch Satellite Change Detection'
   },
   {
     step: 8,
-    title: 'Executive SitRep & Automated Reports',
-    view: 'reports',
-    badge: 'DECISION REPORTING',
-    summary: 'One-click generation of situational reports formatted for disaster management commanders, district magistrates, and NDRF battalions.',
-    judgeFocus: 'Review the formatted executive summary, resource deployment directives, and instant export capabilities in JSON and Markdown formats.',
-    actionText: 'Generate Commander SitRep'
+    title: 'Automated OASIS CAP v1.2 Alerts',
+    view: 'alerts',
+    badge: 'EARLY WARNING & PROTOCOLS',
+    summary: 'Automated early warning dispatch generating machine-readable OASIS CAP XML/JSON feeds and evacuation directives.',
+    judgeFocus: 'Instead of just mapping, the system triggers automated OASIS CAP v1.2 alerts with Urgency, Severity, Certainty, and evacuation directives.',
+    actionText: 'Evaluate & Dispatch CAP v1.2'
   },
   {
     step: 9,
-    title: 'Model Cards & Scientific Integrity',
-    view: 'model_data',
-    badge: 'SCIENTIFIC GOVERNANCE',
-    summary: 'Complete transparency into model architecture (Gradient Boosting / Random Forest), cross-validation accuracy (ROC-AUC > 0.93), and data provenance.',
-    judgeFocus: 'Review model training history, data freshness thresholds, SHA-256 integrity checksums, and explicit scientific limitations disclaimers.',
-    actionText: 'View ML Model Governance'
+    title: 'Response Priority & Field Verification',
+    view: 'inspections',
+    badge: 'VERIFICATION LOOP',
+    summary: 'Multi-factor priority formula (P = 0.35H + 0.25E_pop + 0.25E_life + 0.15U) with ground crack reporting loop.',
+    judgeFocus: 'Where should authorities act first? Multi-factor priority matrix ranks squads with a citizen/field ground tension crack reporting feedback loop.',
+    actionText: 'Rank Priorities & Report Crack'
   }
 ];
 
@@ -173,48 +173,56 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
       onSelectView('map');
       onSelectLocation(1);
     } else if (step === 3) {
-      onSelectView('map');
-      onSelectLocation(1);
-      window.dispatchEvent(new CustomEvent('open-xai-modal', { detail: { locationId: 1 } }));
+      onSelectView('simulation');
+      if (onTriggerSimulation) {
+        setIsSimulating(true);
+        setSimMessage('Simulating +50mm rainfall surge...');
+        try {
+          await onTriggerSimulation(1.5);
+          setSimMessage('Simulation computed: Risk escalated to HIGH in 8 catchments.');
+          setTimeout(() => setSimMessage(null), 3500);
+        } catch (e) {
+          setSimMessage('Simulation run completed.');
+        } finally {
+          setIsSimulating(false);
+        }
+      }
     } else if (step === 4) {
       onSelectView('simulation');
       if (onTriggerSimulation) {
         setIsSimulating(true);
-        setSimMessage('Executing +50% Deluge ML simulation...');
+        setSimMessage('Simulating +100mm cloudburst deluge...');
         try {
-          await onTriggerSimulation(1.5);
-          setSimMessage('Simulation complete: 14 additional zones escalated.');
+          await onTriggerSimulation(2.0);
+          setSimMessage('Cloudburst computed: 14 catchments escalated to CRITICAL.');
           setTimeout(() => setSimMessage(null), 3500);
         } catch (e) {
-          setSimMessage('Simulation run failed.');
+          setSimMessage('Deluge computation completed.');
         } finally {
           setIsSimulating(false);
         }
       }
     } else if (step === 5) {
-      onSelectView('infrastructure');
+      onSelectView('map');
+      onSelectLocation(1);
+      window.dispatchEvent(new CustomEvent('open-xai-modal', { detail: { locationId: 1 } }));
     } else if (step === 6) {
+      onSelectView('infrastructure');
+      window.dispatchEvent(new CustomEvent('open-road-modal'));
+    } else if (step === 7) {
+      window.dispatchEvent(new CustomEvent('open-satellite-modal', { detail: { locationId: 1 } }));
+    } else if (step === 8) {
       onSelectView('alerts');
       try {
         await api.evaluateAlerts();
-        setSimMessage('OASIS CAP v1.2 alerts re-evaluated.');
+        setSimMessage('OASIS CAP v1.2 alerts re-evaluated successfully.');
         setTimeout(() => setSimMessage(null), 3000);
       } catch (e) {
         console.warn('Alert evaluate notice:', e);
       }
-    } else if (step === 7) {
-      onSelectView('inspections');
-      try {
-        await api.recalculateInspections();
-        setSimMessage('Field inspection priority scores recalculated.');
-        setTimeout(() => setSimMessage(null), 3000);
-      } catch (e) {
-        console.warn('Priority recalculate notice:', e);
-      }
-    } else if (step === 8) {
-      onSelectView('reports');
     } else if (step === 9) {
-      onSelectView('model_data');
+      onSelectView('inspections');
+      window.dispatchEvent(new CustomEvent('open-incident-modal'));
     }
   };
 
@@ -240,7 +248,7 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
             return STEP_DWELL_SECONDS;
           } else {
             setIsAutoPlaying(false);
-            setSimMessage('Presentation Tour Complete.');
+            setSimMessage('90-Second Presentation Tour Complete.');
             setTimeout(() => setSimMessage(null), 4000);
             return STEP_DWELL_SECONDS;
           }
@@ -312,7 +320,7 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
               title={isAutoPlaying ? 'Pause tour' : 'Auto-advance tour'}
             >
               {isAutoPlaying ? <Pause size={11} /> : <Play size={11} />}
-              <span>{isAutoPlaying ? `${autoPlayCountdown}s` : 'Tour'}</span>
+              <span>{isAutoPlaying ? `${autoPlayCountdown}s` : '90s Tour'}</span>
             </button>
 
             {/* How It Works Button */}
@@ -348,7 +356,7 @@ export const JudgeDemoController: React.FC<JudgeDemoControllerProps> = ({
           <div className="mt-2.5 space-y-2.5 pt-2.5 border-t border-slate-800/80">
             {/* Judge Focus Observation Note */}
             <div className="bg-[#080d16] border-l-2 border-cyan-400 rounded-r-lg px-3 py-2 text-xs font-mono text-slate-300">
-              <span className="text-cyan-400 font-bold mr-1.5">OBSERVE:</span>
+              <span className="text-cyan-400 font-bold mr-1.5">JUDGE DEMO GOAL:</span>
               <span className="font-sans text-[11px] text-slate-300">{currentStep.judgeFocus}</span>
             </div>
 

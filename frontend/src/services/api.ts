@@ -805,6 +805,40 @@ export const api = {
     const res = await fetchWithTimeout(`${API_BASE}/analytics/events/${eventId}`);
     if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to load historical event detail #${eventId}`);
     return res.json();
+  },
+
+  // Feature 11: Satellite Remote-Sensing Change Detection
+  async getSatelliteChange(locationId: number = 1): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/gis/satellite-change?location_id=${locationId}`);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to load satellite change detection`);
+    return res.json();
+  },
+
+  // Feature 13: Mountain Road & Route Vulnerability Analysis
+  async getRoadVulnerability(district?: string): Promise<any> {
+    const q = district ? `?district=${encodeURIComponent(district)}` : '';
+    const res = await fetchWithTimeout(`${API_BASE}/gis/road-vulnerability${q}`);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to load road vulnerability analysis`);
+    return res.json();
+  },
+
+  // Feature 15: Ground Incident Reporting & Field Verification Feedback Loop
+  async reportGroundIncident(payload: {
+    location_id: number;
+    reporter_name: string;
+    crack_width_mm: number;
+    seepage_observed: boolean;
+    tree_tilt_observed: boolean;
+    evidence_notes: string;
+  }): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/inspections/report-incident`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to record ground incident report`);
+    return res.json();
   }
 };
+
 

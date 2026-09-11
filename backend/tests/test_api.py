@@ -107,3 +107,52 @@ def test_reports_sitrep():
     assert "executive_summary" in data
     assert "critical_hotspots" in data
     assert "scientific_disclaimer" in data
+
+
+def test_satellite_change_detection():
+    """Verify remote sensing Sentinel-1/2 change detection metrics (Feature 11)."""
+    response = client.get("/api/v1/gis/satellite-change?location_id=1")
+    assert response.status_code == 200
+    data = response.json()
+    assert "baseline_pass" in data
+    assert "post_event_pass" in data
+    assert "change_metrics" in data
+    assert data["change_metrics"]["ndvi_delta_percent"] < 0
+    assert "scarp_length_detected_m" in data["change_metrics"]
+    assert "scar_polygons" in data
+    assert len(data["scar_polygons"]["features"]) > 0
+
+
+def test_road_vulnerability_assessment():
+    """Verify road and transportation lifeline vulnerability analysis (Feature 13)."""
+    response = client.get("/api/v1/gis/road-vulnerability")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["corridors_analyzed"] >= 2
+    assert data["total_segments_monitored"] >= 3
+    assert len(data["routes"]) >= 2
+    first_route = data["routes"][0]
+    assert "segments" in first_route
+    assert len(first_route["segments"]) >= 2
+    assert "cut_slope_degrees" in first_route["segments"][0]
+    assert "factor_of_safety" in first_route["segments"][0]
+
+
+def test_ground_incident_reporting():
+    """Verify citizen & field ground incident reporting feedback loop (Feature 15)."""
+    payload = {
+        "location_id": 1,
+        "reporter_name": "Field Squad Bravo",
+        "crack_width_mm": 24.5,
+        "seepage_observed": True,
+        "tree_tilt_observed": True,
+        "evidence_notes": "Active tensile crown cracks observed crossing access road."
+    }
+    response = client.post("/api/v1/inspections/report-incident", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "RECORDED_AND_DISPATCHED"
+    assert data["urgency_tier"] == "P1_IMMEDIATE"
+    assert data["task_id"] > 0
+    assert "recalibrated_risk_score" in data
+

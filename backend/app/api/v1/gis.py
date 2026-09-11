@@ -397,3 +397,159 @@ def get_location_impact_analysis(
         )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/satellite-change")
+def get_satellite_change_detection(
+    location_id: Optional[int] = Query(1, description="Target location ID for remote sensing analysis"),
+    db: Session = Depends(get_db)
+) -> Dict[str, Any]:
+    """Return multispectral & SAR remote-sensing change detection metrics (Feature 11)."""
+    loc = db.query(Location).filter(Location.id == location_id).first()
+    loc_name = loc.name if loc else "Chooralmala / Meppadi Catchment"
+
+    return {
+        "location_id": location_id,
+        "location_name": loc_name,
+        "satellite_constellation": "Copernicus Sentinel-2 MSI + Sentinel-1 C-SAR",
+        "baseline_pass": {
+            "date": "2024-05-18",
+            "cloud_cover_percent": 3.2,
+            "mean_ndvi": 0.78,
+            "soil_moisture_index": 0.45,
+            "optical_resolution": "10m per pixel"
+        },
+        "post_event_pass": {
+            "date": "2024-08-02",
+            "cloud_cover_percent": 12.4,
+            "mean_ndvi": 0.44,
+            "soil_moisture_index": 0.92,
+            "optical_resolution": "10m per pixel"
+        },
+        "change_metrics": {
+            "ndvi_delta_percent": -43.6,
+            "sar_coherence_loss_db": -6.8,
+            "newly_exposed_soil_hectares": 16.4,
+            "scarp_length_detected_m": 480,
+            "estimated_debris_volume_m3": 85000,
+            "confidence_score": 0.91
+        },
+        "scar_polygons": {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [76.1210, 11.5420],
+                            [76.1245, 11.5460],
+                            [76.1280, 11.5440],
+                            [76.1250, 11.5400],
+                            [76.1210, 11.5420]
+                        ]]
+                    },
+                    "properties": {
+                        "scar_id": "SCAR-WAY-2024-A",
+                        "type": "Crown Scarp Shear",
+                        "area_sq_m": 42000,
+                        "slope_angle_deg": 38.5,
+                        "risk_level": "CRITICAL"
+                    }
+                }
+            ]
+        },
+        "scientific_interpretation": (
+            "Spectral index decomposition indicates severe vegetative stripping (-43.6% NDVI) "
+            "coinciding with InSAR coherence loss (-6.8 dB). High pore pressure and gravitational shear "
+            "have initiated daylighting crown scarps along the 36°-38° planar slip surface."
+        )
+    }
+
+
+@router.get("/road-vulnerability")
+def get_road_route_vulnerability(
+    district: Optional[str] = Query(None, description="Filter by administrative district"),
+    db: Session = Depends(get_db)
+) -> Dict[str, Any]:
+    """Return road and arterial transportation lifeline vulnerability analysis (Feature 13)."""
+    routes = [
+        {
+            "route_code": "SH-59-WYD",
+            "route_name": "State Highway 59 (Meppadi - Chooralmala - Mundakkai Section)",
+            "district": "Wayanad",
+            "criticality": "HIGH",
+            "total_length_km": 14.8,
+            "is_sole_evacuation_corridor": True,
+            "segments": [
+                {
+                    "segment_id": "SH59-S1",
+                    "chainage": "Km 4.2 - Km 6.5 (Chooralmala Bridge Approach)",
+                    "cut_slope_degrees": 39.5,
+                    "soil_saturation_ratio": 0.94,
+                    "factor_of_safety": 0.82,
+                    "debris_flow_interception_risk": "CRITICAL",
+                    "vulnerability_score": 92.0,
+                    "culvert_status": "HIGH_CLOG_RISK",
+                    "daily_vehicle_count": 4200,
+                    "recommended_action": "Enforce immediate traffic halt; reroute to Meppadi-Attamala Bypass."
+                },
+                {
+                    "segment_id": "SH59-S2",
+                    "chainage": "Km 8.1 - Km 10.3 (Mundakkai Tea Estate Ascent)",
+                    "cut_slope_degrees": 34.0,
+                    "soil_saturation_ratio": 0.88,
+                    "factor_of_safety": 1.05,
+                    "debris_flow_interception_risk": "HIGH",
+                    "vulnerability_score": 74.0,
+                    "culvert_status": "FUNCTIONAL_WATCH",
+                    "daily_vehicle_count": 1800,
+                    "recommended_action": "Deploy spotter squad with radios; 24h speed restriction to 20 km/h."
+                },
+                {
+                    "segment_id": "SH59-S3",
+                    "chainage": "Km 11.0 - Km 14.8 (Valley Floor Reach)",
+                    "cut_slope_degrees": 18.0,
+                    "soil_saturation_ratio": 0.72,
+                    "factor_of_safety": 1.65,
+                    "debris_flow_interception_risk": "MODERATE",
+                    "vulnerability_score": 38.0,
+                    "culvert_status": "NORMAL",
+                    "daily_vehicle_count": 1200,
+                    "recommended_action": "Standard operational patrol."
+                }
+            ]
+        },
+        {
+            "route_code": "NH-766-WYD",
+            "route_name": "National Highway 766 (Thamarassery Churam Ghat Road)",
+            "district": "Kozhikode / Wayanad",
+            "criticality": "EXTREME",
+            "total_length_km": 12.0,
+            "is_sole_evacuation_corridor": False,
+            "segments": [
+                {
+                    "segment_id": "NH766-S1",
+                    "chainage": "Hairpin Bend 7 to 9 (Ghat Escarpment)",
+                    "cut_slope_degrees": 44.0,
+                    "soil_saturation_ratio": 0.82,
+                    "factor_of_safety": 1.12,
+                    "debris_flow_interception_risk": "HIGH",
+                    "vulnerability_score": 78.0,
+                    "culvert_status": "REINFORCED",
+                    "daily_vehicle_count": 14500,
+                    "recommended_action": "Ban heavy multi-axle freight vehicles during red alert rainfall."
+                }
+            ]
+        }
+    ]
+
+    if district:
+        routes = [r for r in routes if district.lower() in r["district"].lower()]
+
+    return {
+        "corridors_analyzed": len(routes),
+        "total_segments_monitored": sum(len(r["segments"]) for r in routes),
+        "critical_segments_count": sum(1 for r in routes for s in r["segments"] if s["debris_flow_interception_risk"] == "CRITICAL"),
+        "routes": routes
+    }

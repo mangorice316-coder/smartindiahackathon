@@ -16,6 +16,9 @@ import { SettingsView } from './views/SettingsView';
 import { LoadingState, ErrorState } from './components/common/LoadingState';
 import { JudgeDemoController } from './components/demo/JudgeDemoController';
 import { DisasterAssistantDrawer } from './components/assistant/DisasterAssistantDrawer';
+import { SatelliteChangeModal } from './components/satellite/SatelliteChangeModal';
+import { RoadVulnerabilityModal } from './components/roads/RoadVulnerabilityModal';
+import { ReportIncidentModal } from './components/incident/ReportIncidentModal';
 import { api } from './services/api';
 import {
   DashboardOverview,
@@ -50,6 +53,9 @@ export const App: React.FC = () => {
   const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
   const [isSyncingLive, setIsSyncingLive] = useState<boolean>(false);
+  const [isSatelliteModalOpen, setIsSatelliteModalOpen] = useState<boolean>(false);
+  const [isRoadModalOpen, setIsRoadModalOpen] = useState<boolean>(false);
+  const [isIncidentModalOpen, setIsIncidentModalOpen] = useState<boolean>(false);
 
   // Core Datasets
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
@@ -204,6 +210,23 @@ export const App: React.FC = () => {
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
+
+  // Window Custom Event Listeners for 90-Second Demo & Feature Modals
+  useEffect(() => {
+    const handleOpenSatellite = () => setIsSatelliteModalOpen(true);
+    const handleOpenRoad = () => setIsRoadModalOpen(true);
+    const handleOpenIncident = () => setIsIncidentModalOpen(true);
+
+    window.addEventListener('open-satellite-modal', handleOpenSatellite);
+    window.addEventListener('open-road-modal', handleOpenRoad);
+    window.addEventListener('open-incident-modal', handleOpenIncident);
+
+    return () => {
+      window.removeEventListener('open-satellite-modal', handleOpenSatellite);
+      window.removeEventListener('open-road-modal', handleOpenRoad);
+      window.removeEventListener('open-incident-modal', handleOpenIncident);
+    };
+  }, []);
 
   // Action Handlers
   const handleAcknowledgeAlert = async (id: number, acknowledged_by: string, notes?: string) => {
@@ -558,6 +581,27 @@ export const App: React.FC = () => {
         isOpen={isAssistantOpen}
         onClose={() => setIsAssistantOpen(false)}
         onNavigateView={(v) => setCurrentView(v)}
+      />
+
+      {/* Feature 11: Satellite Multispectral & SAR Change Detection Modal */}
+      <SatelliteChangeModal
+        isOpen={isSatelliteModalOpen}
+        onClose={() => setIsSatelliteModalOpen(false)}
+        locationId={selectedLocationId || 1}
+      />
+
+      {/* Feature 13: Mountain Road & Route Vulnerability Modal */}
+      <RoadVulnerabilityModal
+        isOpen={isRoadModalOpen}
+        onClose={() => setIsRoadModalOpen(false)}
+      />
+
+      {/* Feature 15: Ground Incident Reporting & Verification Loop Modal */}
+      <ReportIncidentModal
+        isOpen={isIncidentModalOpen}
+        onClose={() => setIsIncidentModalOpen(false)}
+        locations={locations}
+        onIncidentReported={() => loadAllData()}
       />
     </div>
   );
