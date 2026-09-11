@@ -176,6 +176,15 @@ async def get_weather_forecast(
     return await open_meteo_adapter.fetch_forecast_rainfall(loc.latitude, loc.longitude, hours=72)
 
 
+@router.get("/live-coordinate")
+async def get_live_weather_for_coordinate(
+    latitude: float = Query(..., ge=-90.0, le=90.0, description="Target GPS latitude"),
+    longitude: float = Query(..., ge=-180.0, le=180.0, description="Target GPS longitude")
+):
+    """Retrieve live real-time Open-Meteo weather and soil telemetry for any arbitrary GPS coordinate on Earth."""
+    return await open_meteo_adapter.fetch_current_rainfall(latitude, longitude)
+
+
 @router.post("/sync-live")
 async def sync_live_weather(
     db: Session = Depends(get_db)

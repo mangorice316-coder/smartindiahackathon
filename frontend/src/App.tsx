@@ -19,6 +19,8 @@ import { DisasterAssistantDrawer } from './components/assistant/DisasterAssistan
 import { SatelliteChangeModal } from './components/satellite/SatelliteChangeModal';
 import { RoadVulnerabilityModal } from './components/roads/RoadVulnerabilityModal';
 import { ReportIncidentModal } from './components/incident/ReportIncidentModal';
+import { LiveCoordinateInspectorModal } from './components/live/LiveCoordinateInspectorModal';
+import { Compass, RefreshCw } from 'lucide-react';
 import { api } from './services/api';
 import {
   DashboardOverview,
@@ -45,10 +47,10 @@ import {
 } from './services/mockData';
 
 export const App: React.FC = () => {
-  // Navigation & Selection State
+  // Navigation & Core States
   const [currentView, setCurrentView] = useState<NavView>('overview');
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null);
-  const [dataMode, setDataMode] = useState<'DEMO' | 'REAL'>('DEMO');
+  const [dataMode, setDataMode] = useState<'DEMO' | 'REAL'>('REAL');
   const [systemStatus, setSystemStatus] = useState<string>('OPERATIONAL');
   const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
@@ -56,6 +58,11 @@ export const App: React.FC = () => {
   const [isSatelliteModalOpen, setIsSatelliteModalOpen] = useState<boolean>(false);
   const [isRoadModalOpen, setIsRoadModalOpen] = useState<boolean>(false);
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState<boolean>(false);
+  const [isLiveGpsModalOpen, setIsLiveGpsModalOpen] = useState<boolean>(false);
+  const [liveGpsCoords, setLiveGpsCoords] = useState<{ lat: number; lon: number }>({ lat: 11.5365, lon: 76.1322 });
+  const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
+  const [lastSyncTime, setLastSyncTime] = useState<Date>(new Date());
+  const [secondsSinceSync, setSecondsSinceSync] = useState<number>(0);
 
   // Core Datasets
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
@@ -211,20 +218,54 @@ export const App: React.FC = () => {
     loadAllData();
   }, [loadAllData]);
 
+  // Real-time ticking interval for seconds since last sync
+  useEffect(() => {
+    const ticker = setInterval(() => {
+      setSecondsSinceSync(Math.floor((Date.now() - lastSyncTime.getTime()) / 1000));
+    }, 1000);
+    return () => clearInterval(ticker);
+  }, [lastSyncTime]);
+
+  // Real-Time Background Live Telemetry Polling Loop (every 30 seconds in REAL mode)
+  useEffect(() => {
+    if (!isLiveStreaming || dataMode !== 'REAL') return;
+    const interval = setInterval(async () => {
+      try {
+        if (isBackendConnected) {
+          await api.syncLiveWeather();
+          await loadAllData();
+          setLastSyncTime(new Date());
+          setSecondsSinceSync(0);
+        }
+      } catch (e) {
+        console.warn('Background live telemetry auto-sync notice:', e);
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [isLiveStreaming, dataMode, isBackendConnected, loadAllData]);
+
   // Window Custom Event Listeners for 90-Second Demo & Feature Modals
   useEffect(() => {
     const handleOpenSatellite = () => setIsSatelliteModalOpen(true);
     const handleOpenRoad = () => setIsRoadModalOpen(true);
     const handleOpenIncident = () => setIsIncidentModalOpen(true);
+    const handleOpenLiveGps = (e: any) => {
+      if (e.detail?.lat && e.detail?.lon) {
+        setLiveGpsCoords({ lat: e.detail.lat, lon: e.detail.lon });
+      }
+      setIsLiveGpsModalOpen(true);
+    };
 
     window.addEventListener('open-satellite-modal', handleOpenSatellite);
     window.addEventListener('open-road-modal', handleOpenRoad);
     window.addEventListener('open-incident-modal', handleOpenIncident);
+    window.addEventListener('open-live-gps-modal', handleOpenLiveGps);
 
     return () => {
       window.removeEventListener('open-satellite-modal', handleOpenSatellite);
       window.removeEventListener('open-road-modal', handleOpenRoad);
       window.removeEventListener('open-incident-modal', handleOpenIncident);
+      window.removeEventListener('open-live-gps-modal', handleOpenLiveGps);
     };
   }, []);
 
@@ -415,6 +456,43 @@ export const App: React.FC = () => {
 
         {/* Dynamic View Display Container */}
         <main className="flex-1 overflow-y-auto p-4 bg-[#0b0f19]">
+          {/* 100% Real-Time Live Telemetry Status Strip */}
+          {dataMode === 'REAL' && isBackendConnected && !isLoading && (
+            <div className="mb-3 px-3.5 py-2 rounded-xl bg-[#0a1424] border border-emerald-800/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-300 shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-emerald-400 font-bold tracking-tight uppercase text-[11px]">
+                  100% Real-Time Meteorology Active:
+                </span>
+                <span className="text-slate-300 text-[11px] hidden sm:inline">
+                  Open-Meteo REST Ingestion (ECMWF/GFS numerical feed) • Geotechnical Fs &amp; ML recalculated on live values
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className="text-slate-400 text-[11px]">
+                  {secondsSinceSync < 5 ? 'Updated just now' : `Updated ${secondsSinceSync}s ago`}
+                </span>
+                <button
+                  onClick={handleSyncLive}
+                  disabled={isSyncingLive}
+                  className="px-2.5 py-1 rounded bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/70 flex items-center gap-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50"
+                  title="Force instant fetch of latest Open-Meteo readings"
+                >
+                  <RefreshCw size={11} className={isSyncingLive ? 'animate-spin' : ''} />
+                  <span>{isSyncingLive ? 'Syncing...' : 'Sync Now'}</span>
+                </button>
+                <button
+                  onClick={() => setIsLiveGpsModalOpen(true)}
+                  className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 flex items-center gap-1.5 text-[11px] font-semibold transition-colors"
+                  title="Inspect real-time conditions and landslide risk for any GPS coordinates on Earth"
+                >
+                  <Compass size={11} className="text-cyan-400" />
+                  <span>Inspect Any GPS</span>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Offline / Backend Fallback Banner if operating offline */}
           {!isBackendConnected && !isLoading && (
             <div className="mb-3 px-3 py-1.5 rounded bg-amber-950/40 border border-amber-600/50 flex items-center justify-between text-xs font-mono text-amber-300">
@@ -602,6 +680,14 @@ export const App: React.FC = () => {
         onClose={() => setIsIncidentModalOpen(false)}
         locations={locations}
         onIncidentReported={() => loadAllData()}
+      />
+
+      {/* Real-Time Live GPS Landslide Hazard Inspector Modal */}
+      <LiveCoordinateInspectorModal
+        isOpen={isLiveGpsModalOpen}
+        onClose={() => setIsLiveGpsModalOpen(false)}
+        initialLat={liveGpsCoords.lat}
+        initialLon={liveGpsCoords.lon}
       />
     </div>
   );

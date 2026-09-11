@@ -16,7 +16,8 @@ class Settings(BaseSettings):
     
     # Environment & Operating Mode
     ENV: str = Field(default="development", description="development | production | test")
-    DATA_MODE: str = Field(default="DEMO", description="DEMO (synthetic marked data) | REAL (external adapters)")
+    DATA_MODE: str = Field(default="REAL", description="DEMO (synthetic marked data) | REAL (external adapters)")
+    LIVE_SYNC_INTERVAL_SECONDS: int = Field(default=60, description="Interval in seconds for background live telemetry ingestion")
     
     # Security & Authentication
     SECRET_KEY: str = Field(default="sih-landslide-intelligence-super-secret-key-change-in-prod-2026", description="JWT secret key")

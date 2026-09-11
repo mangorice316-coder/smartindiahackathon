@@ -23,6 +23,7 @@ import {
   Activity,
   AlertCircle,
   Sparkles,
+  Compass,
   Send,
   Play,
   X,
@@ -619,6 +620,14 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('open-live-gps-modal'))}
+              className="px-2.5 py-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 border border-emerald-700 font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"
+              title="Inspect real-time conditions and landslide risk for any GPS coordinates on Earth"
+            >
+              <Compass size={12} className="text-emerald-400" />
+              <span>Live GPS</span>
+            </button>
             <button
               onClick={handleCreateAlert}
               className="px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition-colors flex items-center gap-1 shadow-sm"

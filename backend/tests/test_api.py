@@ -156,3 +156,36 @@ def test_ground_incident_reporting():
     assert data["task_id"] > 0
     assert "recalibrated_risk_score" in data
 
+
+def test_live_coordinate_weather():
+    """Verify live meteorological telemetry ingestion for arbitrary coordinates."""
+    response = client.get("/api/v1/weather/live-coordinate?latitude=11.5365&longitude=76.1322")
+    assert response.status_code == 200
+    data = response.json()
+    assert "intensity_1h_mm" in data
+    assert "accum_24h_mm" in data
+    assert "temperature_c" in data
+    assert "soil_moisture_ratio" in data
+
+
+def test_evaluate_live_coordinate_risk():
+    """Verify real-time coupled slope physics and ML risk evaluation on arbitrary GPS point."""
+    payload = {
+        "latitude": 11.5365,
+        "longitude": 76.1322,
+        "location_name": "Chooralmala Valley Slopes",
+        "slope_degrees": 36.0,
+        "cohesion_kpa": 14.0
+    }
+    response = client.post("/api/v1/risk/evaluate-live-coordinate", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "LIVE_EVALUATION_SUCCESS"
+    assert "physics_geotechnical" in data
+    assert "factor_of_safety" in data["physics_geotechnical"]
+    assert "machine_learning" in data
+    assert "initiation_probability" in data["machine_learning"]
+    assert "risk_assessment" in data
+    assert "overall_risk_score" in data["risk_assessment"]
+
+

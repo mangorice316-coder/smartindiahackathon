@@ -141,6 +141,14 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Quick Decision & Remote Sensing Tools */}
         <div className="hidden xl:flex items-center gap-1.5 pl-1.5 border-l border-slate-800/80">
           <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-live-gps-modal'))}
+            className="flex items-center gap-1 px-2.5 py-1.5 bg-emerald-950/70 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 text-xs font-mono rounded-lg transition-colors"
+            title="Inspect real-time weather and run landslide model on ANY GPS coordinates"
+          >
+            <Compass size={12} className="text-emerald-400" />
+            <span>Live GPS Inspector</span>
+          </button>
+          <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-satellite-modal'))}
             className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-purple-300 border border-slate-800 hover:border-purple-700/60 text-xs font-mono rounded-lg transition-colors"
             title="Open Sentinel-1/2 Satellite Change Detection (Feature 11)"

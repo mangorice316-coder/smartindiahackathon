@@ -497,6 +497,29 @@ export const api = {
     return res.json();
   },
 
+  async getLiveCoordinateWeather(latitude: number, longitude: number): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/weather/live-coordinate?latitude=${latitude}&longitude=${longitude}`);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to fetch live weather for coordinates`);
+    return res.json();
+  },
+
+  async evaluateLiveCoordinate(payload: {
+    latitude: number;
+    longitude: number;
+    location_name?: string;
+    slope_degrees?: number;
+    cohesion_kpa?: number;
+    friction_angle_deg?: number;
+  }): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/risk/evaluate-live-coordinate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }, 15000);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to evaluate real-time coordinate risk`);
+    return res.json();
+  },
+
   async queryDisasterAssistant(query: string): Promise<{
     query: string;
     answer: string;

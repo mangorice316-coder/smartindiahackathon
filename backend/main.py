@@ -17,12 +17,34 @@ from app.database import init_db, SessionLocal
 from app.api.v1.router import api_router
 from app.data_adapters.demo_adapter import seed_demo_data
 from app.ml.model_registry import initialize_or_load_default_model
+import asyncio
+from app.api.v1.weather import run_live_meteorology_sync
 from app.inspections.prioritizer import generate_prioritized_inspections
 from app.security.integrity import register_integrity_guards
 from app.security.safe_logging import configure_safe_logging
 from app.security.rate_limiter import RateLimitMiddleware
 
 logger = logging.getLogger("landslide_intelligence")
+
+
+async def live_weather_sync_daemon():
+    """Continuous background loop pulling live Open-Meteo observations and recalculating risk."""
+    while True:
+        try:
+            await asyncio.sleep(settings.LIVE_SYNC_INTERVAL_SECONDS)
+            if settings.DATA_MODE == "REAL":
+                db = SessionLocal()
+                try:
+                    logger.info("Auto-syncing real-time Open-Meteo observations for all catchments...")
+                    await run_live_meteorology_sync(db)
+                except Exception as sync_err:
+                    logger.warning(f"Background live weather sync warning: {sync_err}")
+                finally:
+                    db.close()
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.warning(f"Background sync daemon loop error: {e}")
 
 
 @asynccontextmanager
@@ -46,12 +68,22 @@ async def lifespan(app: FastAPI):
     try:
         seed_demo_data(db, force_reset=False)
         initialize_or_load_default_model(db)
+        if settings.DATA_MODE == "REAL":
+            logger.info("DATA_MODE=REAL: Performing initial live Open-Meteo synchronization...")
+            try:
+                await run_live_meteorology_sync(db)
+            except Exception as e:
+                logger.warning(f"Initial live meteorology sync notice: {e}")
         generate_prioritized_inspections(db)
     finally:
         db.close()
 
+    # 6. Launch continuous live synchronization background daemon
+    sync_task = asyncio.create_task(live_weather_sync_daemon())
+
     yield
-    # Shutdown events if needed
+    # Shutdown events: cancel background tasks cleanly
+    sync_task.cancel()
 
 
 app = FastAPI(
