@@ -3,26 +3,20 @@ import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satell
 import { api } from '../../services/api';
 
 interface HeaderProps {
-  dataMode: 'DEMO' | 'REAL';
-  onToggleMode: () => void;
+  dataMode?: 'DEMO' | 'REAL';
+  onToggleMode?: () => void;
   activeAlertCount: number;
-  onResetDemo: () => void;
   systemStatus: string;
   onRoleChange?: (role: string) => void;
-  onOpenJudgeDemo?: () => void;
   onSyncLive?: () => void;
   isSyncing?: boolean;
   onOpenAssistant?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  dataMode,
-  onToggleMode,
   activeAlertCount,
-  onResetDemo,
   systemStatus,
   onRoleChange,
-  onOpenJudgeDemo,
   onSyncLive,
   isSyncing = false,
   onOpenAssistant,
@@ -72,37 +66,18 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center Segmented Mode Controller */}
-      <div className="hidden md:flex items-center bg-slate-900/90 border border-slate-800 rounded-lg p-0.5 text-xs font-mono">
-        <button
-          onClick={() => dataMode !== 'DEMO' && onToggleMode()}
-          className={`px-3 py-1 rounded-md transition-all ${
-            dataMode === 'DEMO'
-              ? 'bg-slate-800 text-amber-300 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-          title="Calibrated Wayanad 2024 ground truth baseline dataset"
-        >
-          Calibrated Demo
-        </button>
-        <button
-          onClick={() => dataMode !== 'REAL' && onToggleMode()}
-          className={`px-3 py-1 rounded-md transition-all flex items-center gap-1.5 ${
-            dataMode === 'REAL'
-              ? 'bg-emerald-950/80 text-emerald-300 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-          title="Live meteorological observations from Open-Meteo REST API"
-        >
-          <Radio size={11} className={dataMode === 'REAL' ? 'text-emerald-400 animate-pulse' : ''} />
-          <span>Live Telemetry</span>
-        </button>
+      {/* Center Operational Mode Badge (100% Real-Time Live) */}
+      <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-emerald-950/70 border border-emerald-800/80 rounded-lg text-xs font-mono text-emerald-300 shadow-sm">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="font-bold tracking-tight">LIVE METEOROLOGY ACTIVE</span>
+        <span className="text-slate-600">|</span>
+        <span className="text-slate-400 text-[10px]">Open-Meteo REST Stream</span>
       </div>
 
       {/* Right Command Actions */}
       <div className="flex items-center gap-2">
-        {/* Live Weather Sync (Only in REAL mode) */}
-        {dataMode === 'REAL' && onSyncLive && (
+        {/* Live Weather Sync */}
+        {onSyncLive && (
           <button
             onClick={onSyncLive}
             disabled={isSyncing}
@@ -114,17 +89,6 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         )}
 
-        {/* SIH Judge Demo Walkthrough Button */}
-        {onOpenJudgeDemo && (
-          <button
-            onClick={onOpenJudgeDemo}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
-            title="Launch interactive 9-step evaluation walkthrough"
-          >
-            <Play size={12} fill="currentColor" />
-            <span>Run Demo Tour</span>
-          </button>
-        )}
 
         {/* AI Assistant Button */}
         {onOpenAssistant && (

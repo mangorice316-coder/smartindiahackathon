@@ -3,17 +3,14 @@ import { Card } from '../components/common/Card';
 import { Sliders, RefreshCw, Radio, Save, ShieldAlert } from 'lucide-react';
 
 interface SettingsViewProps {
-  dataMode: 'DEMO' | 'REAL';
-  onToggleMode: (mode: 'DEMO' | 'REAL') => Promise<void>;
-  onResetDemo: () => Promise<void>;
+  dataMode?: 'DEMO' | 'REAL';
+  onToggleMode?: (mode: 'DEMO' | 'REAL') => Promise<void>;
+  onResetDemo?: () => Promise<void>;
   thresholds: any;
   onUpdateThresholds: (thresholds: Record<string, number>) => Promise<void>;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
-  dataMode,
-  onToggleMode,
-  onResetDemo,
   thresholds,
   onUpdateThresholds,
 }) => {
@@ -21,7 +18,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [modMax, setModMax] = useState(thresholds?.MODERATE_MAX || 50.0);
   const [highMax, setHighMax] = useState(thresholds?.HIGH_MAX || 70.0);
   const [isSaving, setIsSaving] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   const handleSaveThresholds = async () => {
@@ -41,72 +37,27 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     }
   };
 
-  const handleReset = async () => {
-    if (!window.confirm('Reset demo database to clean calibrated initial state?')) return;
-    setIsResetting(true);
-    try {
-      await onResetDemo();
-      alert('Demo environment successfully re-seeded.');
-    } catch (e) {
-      alert('Failed to reset demo data');
-    } finally {
-      setIsResetting(false);
-    }
-  };
-
   return (
     <div className="space-y-4 max-w-4xl">
-      {/* Operating Mode Selector */}
+      {/* Operating Mode Status Card */}
       <Card
-        title="Operational Mode & External Data Adapters"
-        subtitle="Toggle between synthetic demonstration data and real live weather ingestion"
+        title="Operational Telemetry & Data Adapters"
+        subtitle="Current status of global meteorological streaming feeds and numerical weather prediction models"
       >
         <div className="space-y-3 font-mono text-xs">
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 cursor-pointer p-3 bg-slate-900 border border-slate-800 rounded-lg flex-1">
-              <input
-                type="radio"
-                name="dataMode"
-                value="DEMO"
-                checked={dataMode === 'DEMO'}
-                onChange={() => onToggleMode('DEMO')}
-                className="text-cyan-400 focus:ring-0"
-              />
+          <div className="p-3.5 bg-emerald-950/40 border border-emerald-800/80 rounded-xl flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <div>
-                <span className="font-bold text-slate-100">DEMO MODE</span>
+                <div className="font-bold text-white text-xs">REAL-TIME TELEMETRY INGESTION (ACTIVE)</div>
                 <p className="text-[11px] text-slate-400 font-sans mt-0.5">
-                  Pre-configured high-fidelity synthetic data for 5 Indian hotspots (Wayanad, Idukki, Chamoli, Shimla, Nilgiris).
+                  Connected to Open-Meteo REST API (ECMWF/GFS numerical weather prediction stream) for live precipitation, antecedent deluge, and root-zone soil saturation.
                 </p>
               </div>
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer p-3 bg-slate-900 border border-slate-800 rounded-lg flex-1">
-              <input
-                type="radio"
-                name="dataMode"
-                value="REAL"
-                checked={dataMode === 'REAL'}
-                onChange={() => onToggleMode('REAL')}
-                className="text-cyan-400 focus:ring-0"
-              />
-              <div>
-                <span className="font-bold text-slate-100">REAL DATA MODE</span>
-                <p className="text-[11px] text-slate-400 font-sans mt-0.5">
-                  Connects to live Open-Meteo REST API for actual hourly precipitation and soil moisture readings.
-                </p>
-              </div>
-            </label>
-          </div>
-
-          <div className="pt-2">
-            <button
-              onClick={handleReset}
-              disabled={isResetting}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded transition-colors"
-            >
-              <RefreshCw size={13} className={isResetting ? 'animate-spin' : ''} />
-              <span>{isResetting ? 'Resetting Database...' : 'Reset Demo Records'}</span>
-            </button>
+            </div>
+            <span className="px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-700">
+              100% REALTIME
+            </span>
           </div>
         </div>
       </Card>

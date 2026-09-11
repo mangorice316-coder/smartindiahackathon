@@ -53,7 +53,7 @@ export const RiskMapView: React.FC<RiskMapViewProps> = ({
   selectedLocationId,
   onSelectLocation,
   onNavigate,
-  dataMode = 'DEMO',
+  dataMode = 'REAL',
   activeAlertCount = 7
 }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);

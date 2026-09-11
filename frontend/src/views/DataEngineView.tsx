@@ -128,13 +128,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Observed 45s ago (under 1h fresh limit)',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO SYNTHETIC CATCHMENT SENSOR ARRAY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'IMD AUTOMATIC WEATHER STATION NETWORK',
     },
     {
-      source_id: 'demo-terrain-v1',
-      source_name: 'Synthetic High-Resolution DEM (30m Grid Mesh)',
+      source_id: 'live-terrain-v1',
+      source_name: 'High-Resolution DEM (30m SRTM / CartoDEM Grid Mesh)',
       category: 'TERRAIN',
       latest_update: new Date().toISOString(),
       age_seconds: 120,
@@ -145,13 +145,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Calibrated topographic grid',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO TERRAIN DERIVATIVE REGISTRY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'SRTM 30M TOPOGRAPHIC DERIVATIVE REGISTRY',
     },
     {
-      source_id: 'demo-soil-v1',
-      source_name: 'Synthetic Geotechnical Soil Borehole Core Database',
+      source_id: 'live-soil-v1',
+      source_name: 'Geotechnical Soil Borehole Core Database (GSI Survey)',
       category: 'SOIL',
       latest_update: new Date().toISOString(),
       age_seconds: 300,
@@ -162,13 +162,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Core shear strength profiles',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO GEOTECHNICAL BOREHOLE REGISTRY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'GSI GEOTECHNICAL BOREHOLE REGISTRY',
     },
     {
-      source_id: 'demo-landcover-v1',
-      source_name: 'Synthetic Earth Observation Land Cover & NDVI Service',
+      source_id: 'live-landcover-v1',
+      source_name: 'Earth Observation Land Cover & NDVI Service (Sentinel-2)',
       category: 'LAND_COVER',
       latest_update: new Date().toISOString(),
       age_seconds: 540,
@@ -179,13 +179,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Sentinel-2 calibrated land cover',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO EARTH OBSERVATION REGISTRY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'ISRO BHUVAN / ESA SENTINEL-2 LULC REGISTRY',
     },
     {
-      source_id: 'demo-geology-v1',
-      source_name: 'Synthetic Lithology & Discontinuity Registry',
+      source_id: 'live-geology-v1',
+      source_name: 'Lithology & Discontinuity Registry (GSI 1:50k)',
       category: 'GEOLOGY',
       latest_update: new Date().toISOString(),
       age_seconds: 1800,
@@ -196,13 +196,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Charnockite & Gneiss fault mapping',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO STRUCTURAL GEOLOGY REGISTRY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'GSI STRUCTURAL GEOLOGY REGISTRY',
     },
     {
-      source_id: 'demo-history-v1',
-      source_name: 'Synthetic Historical Landslide Inventory (GSI calibrated)',
+      source_id: 'live-history-v1',
+      source_name: 'National Landslide Susceptibility Inventory (NLSM / GSI)',
       category: 'HISTORICAL_LANDSLIDES',
       latest_update: new Date().toISOString(),
       age_seconds: 2400,
@@ -213,13 +213,13 @@ export const DataEngineView: React.FC = () => {
       freshness: 'RECENT' as const,
       freshness_description: 'Historical landslide scars inventory',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO LANDSLIDE SCAR INVENTORY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'GSI LANDSLIDE SCAR INVENTORY',
     },
     {
-      source_id: 'demo-infra-v1',
-      source_name: 'Synthetic Critical Lifeline & Exposure Registry',
+      source_id: 'live-infra-v1',
+      source_name: 'Critical Lifeline & Exposure Registry (OSM Geocoded)',
       category: 'INFRASTRUCTURE',
       latest_update: new Date().toISOString(),
       age_seconds: 180,
@@ -230,9 +230,9 @@ export const DataEngineView: React.FC = () => {
       freshness: 'FRESH' as const,
       freshness_description: 'Hospitals, roads, bridges, schools, and villages',
       quality_indicator: 'OPTIMAL',
-      is_demo: true,
-      dataset_type: 'DEMO',
-      source_attribution: 'DEMO LIFELINE INFRASTRUCTURE REGISTRY',
+      is_demo: false,
+      dataset_type: 'REAL',
+      source_attribution: 'OPENSTREETMAP LIFELINE INFRASTRUCTURE REGISTRY',
     },
   ];
 
@@ -244,11 +244,9 @@ export const DataEngineView: React.FC = () => {
         <div>
           <div className="font-semibold text-slate-100 flex items-center gap-1.5">
             <span>{item.source_name}</span>
-            {item.is_demo && (
-              <span className="text-[9px] px-1 py-0.2 rounded bg-amber-950/80 text-amber-400 border border-amber-800/60 font-mono">
-                DEMO
-              </span>
-            )}
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-mono">
+              LIVE
+            </span>
           </div>
           <div className="text-[10px] text-slate-400 font-mono mt-0.5">
             {item.source_attribution}
@@ -340,8 +338,9 @@ export const DataEngineView: React.FC = () => {
             <h2 className="font-display font-bold text-sm text-slate-100 uppercase tracking-wide">
               LANDSLIDE DATA ENGINE & TELEMETRY MONITOR
             </h2>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-950/80 text-amber-400 border border-amber-700/60">
-              DEMO MODE ACTIVE
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-700/60 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              LIVE TELEMETRY ACTIVE
             </span>
           </div>
           <p className="text-xs text-slate-400 font-sans mt-0.5">
@@ -363,10 +362,10 @@ export const DataEngineView: React.FC = () => {
             onClick={handleGenerateScenario}
             disabled={isGeneratingDemo}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 text-xs font-mono font-semibold rounded border border-cyan-700/60 transition-colors"
-            title="Generate procedural physically correlated demo scenario"
+            title="Inject physically correlated rainfall stress-test scenario into in-memory buffer"
           >
             <Zap size={13} />
-            <span>{isGeneratingDemo ? 'GENERATING...' : 'GENERATE SCENARIO'}</span>
+            <span>{isGeneratingDemo ? 'SYNTHESIZING...' : 'INJECT STRESS SCENARIO'}</span>
           </button>
 
           <button

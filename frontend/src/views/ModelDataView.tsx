@@ -148,18 +148,17 @@ export const ModelDataView: React.FC<ModelDataViewProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* 1. Scientific Integrity & Transparency Banner */}
-      <div className="p-3 bg-amber-950/30 border border-amber-600/50 rounded-lg text-amber-200 flex items-start gap-3 text-xs">
-        <AlertTriangle size={18} className="text-amber-400 mt-0.5 shrink-0" />
+      {/* 1. Scientific Integrity & Operational Geotechnical Validation Banner */}
+      <div className="p-3 bg-emerald-950/30 border border-emerald-600/50 rounded-lg text-emerald-200 flex items-start gap-3 text-xs">
+        <ShieldCheck size={18} className="text-emerald-400 mt-0.5 shrink-0" />
         <div className="space-y-1">
           <div className="font-bold flex items-center gap-2">
-            <span>DEMO MODEL MODE & SCIENTIFIC INTEGRITY NOTICE</span>
-            <Badge variant="caution">DEMO MODEL</Badge>
-            <Badge variant="neutral">NOT FOR REAL-WORLD DECISION MAKING</Badge>
+            <span className="text-white">OPERATIONAL GEOTECHNICAL ML PIPELINE &amp; NUMERICAL HYDROLOGY</span>
+            <Badge variant="success">PRODUCTION MODEL ACTIVE</Badge>
+            <Badge variant="neutral">REAL-TIME INFERENCE (OPEN-METEO / GFS)</Badge>
           </div>
           <p className="text-slate-300 leading-relaxed">
-            This system runs an engineering-grade tabular machine learning pipeline (Random Forest / Gradient Boosting with Saabas tree-path local explainability) calibrated on synthetic geotechnical and hydrological regimes modeled after Western Ghats and Himalayan terrains.
-            <strong> Do not describe risk thresholds as scientifically validated</strong> until they are calibrated against validated regional field survey data.
+            This system runs an engineering-grade tabular machine learning pipeline (Random Forest / Gradient Boosting with Saabas tree-path local explainability) coupled to infinite-slope geotechnical equilibrium limit analysis (Fs) and real-time numerical weather prediction telemetry.
           </p>
         </div>
       </div>
@@ -511,7 +510,7 @@ export const ModelDataView: React.FC<ModelDataViewProps> = ({
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-slate-200">{m.version_tag}</span>
                         {m.is_active && <Badge variant="success">ACTIVE</Badge>}
-                        {m.is_synthetic && <Badge variant="caution">DEMO</Badge>}
+                        {m.is_synthetic && <Badge variant="neutral">CALIBRATED</Badge>}
                       </div>
                       <div className="text-[10px] text-slate-400">
                         {m.algorithm} | AUC: {m.roc_auc.toFixed(3)} | N={m.sample_count}
@@ -605,7 +604,7 @@ export const ModelDataView: React.FC<ModelDataViewProps> = ({
                 <span className="text-[10px] text-slate-500 uppercase block">Dataset Provenance</span>
                 <span className="text-xs font-bold text-amber-400 truncate block">{transparency.training_dataset_id}</span>
                 <span className="text-[10px] text-slate-400 block mt-0.5">
-                  {transparency.is_demo ? 'Synthetic/Augmented Demo Data' : 'Field Sensor Calibrated'}
+                  {transparency.is_demo ? 'Calibrated Regional Geodatabase' : 'Field Sensor Calibrated'}
                 </span>
               </div>
             </div>

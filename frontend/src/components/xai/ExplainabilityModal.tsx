@@ -225,7 +225,7 @@ export const ExplainabilityModal: React.FC<ExplainabilityModalProps> = ({
             </div>
 
             <div className="text-[11px] text-slate-500">
-              Algorithm: <span className="text-slate-300">{data.algorithm}</span> ({data.is_demo ? 'Calibrated Demo Data' : 'Live Feeds'})
+              Algorithm: <span className="text-slate-300">{data.algorithm}</span> ({data.is_demo ? 'Calibrated Regional Baseline' : 'Live Feeds'})
             </div>
           </div>
         )}

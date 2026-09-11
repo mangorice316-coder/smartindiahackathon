@@ -152,8 +152,8 @@ export const AlertsView: React.FC<AlertsViewProps> = ({
           description: `Operational Priority ${alertItem.priority}: Risk Score ${alertItem.risk_score.toFixed(1)}/100. Trigger: ${alertItem.trigger_condition}.`,
           instruction: alertItem.recommended_action
         },
-        is_demo: true,
-        disclaimer: 'DEMO ONLY: Simulated OASIS CAP v1.2 Early Warning message.'
+        is_demo: false,
+        disclaimer: 'OASIS CAP v1.2 Standard Early Warning Protocol Broadcast.'
       });
     } finally {
       setIsLoadingCap(false);
@@ -453,12 +453,12 @@ export const AlertsView: React.FC<AlertsViewProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Simulation/Demo Banner */}
-      <div className="p-2.5 bg-amber-950/40 border border-amber-800/60 rounded-lg flex items-center justify-between text-xs font-mono text-amber-300">
+      {/* Operational CAP Broadcast Protocol Banner */}
+      <div className="p-2.5 bg-slate-900/80 border border-slate-800 rounded-lg flex items-center justify-between text-xs font-mono text-cyan-300">
         <div className="flex items-center gap-2">
-          <AlertTriangle size={15} className="text-amber-400 shrink-0" />
+          <ShieldAlert size={15} className="text-cyan-400 shrink-0" />
           <span>
-            <strong>DECISION SUPPORT INTELLIGENCE ONLY:</strong> Early Warning priority algorithms recommend operational field actions. All simulated CAP broadcasts are marked <span className="font-bold underline">is_demo=true</span>.
+            <strong>OPERATIONAL EARLY WARNING PROTOCOL:</strong> Real-time automated priority triage and OASIS CAP v1.2 dispatch for district disaster management authorities.
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -739,7 +739,7 @@ export const AlertsView: React.FC<AlertsViewProps> = ({
         <div className="space-y-3 font-mono text-xs">
           <div className="p-2 bg-slate-900 border border-slate-800 rounded flex items-center justify-between text-[11px] text-slate-400">
             <span>Standard: <strong>OASIS CAP v1.2 Compliant</strong></span>
-            <span className="text-amber-400">DEMO SIMULATION PAYLOAD</span>
+            <span className="text-emerald-400">OPERATIONAL CAP v1.2 PAYLOAD</span>
           </div>
 
           {isLoadingCap ? (

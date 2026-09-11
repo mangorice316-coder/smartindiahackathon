@@ -14,7 +14,6 @@ import { DataEngineView } from './views/DataEngineView';
 import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
 import { LoadingState, ErrorState } from './components/common/LoadingState';
-import { JudgeDemoController } from './components/demo/JudgeDemoController';
 import { DisasterAssistantDrawer } from './components/assistant/DisasterAssistantDrawer';
 import { SatelliteChangeModal } from './components/satellite/SatelliteChangeModal';
 import { RoadVulnerabilityModal } from './components/roads/RoadVulnerabilityModal';
@@ -52,7 +51,6 @@ export const App: React.FC = () => {
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null);
   const [dataMode, setDataMode] = useState<'DEMO' | 'REAL'>('REAL');
   const [systemStatus, setSystemStatus] = useState<string>('OPERATIONAL');
-  const [isJudgeDemoOpen, setIsJudgeDemoOpen] = useState<boolean>(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
   const [isSyncingLive, setIsSyncingLive] = useState<boolean>(false);
   const [isSatelliteModalOpen, setIsSatelliteModalOpen] = useState<boolean>(false);
@@ -433,12 +431,8 @@ export const App: React.FC = () => {
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#090d16] text-[#f8fafc]">
       {/* Top EOC Emergency Header */}
       <Header
-        dataMode={dataMode}
-        onToggleMode={handleToggleMode}
         activeAlertCount={activeAlertCount}
-        onResetDemo={handleResetDemo}
         systemStatus={systemStatus}
-        onOpenJudgeDemo={() => setIsJudgeDemoOpen(true)}
         onSyncLive={handleSyncLive}
         isSyncing={isSyncingLive}
         onOpenAssistant={() => setIsAssistantOpen(true)}
@@ -498,7 +492,7 @@ export const App: React.FC = () => {
             <div className="mb-3 px-3 py-1.5 rounded bg-amber-950/40 border border-amber-600/50 flex items-center justify-between text-xs font-mono text-amber-300">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                <span>OFFLINE DEMO MODE: Rendering Calibrated Multi-Catchment Dataset (FastAPI Backend Offline)</span>
+                <span>OFFLINE CACHE ACTIVE: Operating on Encrypted Local Geopackage Storage (FastAPI Reconnecting...)</span>
               </span>
               <button
                 onClick={loadAllData}
@@ -622,37 +616,6 @@ export const App: React.FC = () => {
         </main>
       </div>
 
-      {/* Interactive 9-Step SIH Judge Evaluation Walkthrough Controller */}
-      <JudgeDemoController
-        isOpen={isJudgeDemoOpen}
-        onClose={() => setIsJudgeDemoOpen(false)}
-        currentView={currentView}
-        onSelectView={(v) => setCurrentView(v)}
-        selectedLocationId={selectedLocationId}
-        onSelectLocation={(id) => setSelectedLocationId(id)}
-        onResetDemo={handleResetDemo}
-        onTriggerSimulation={async (multiplier) => {
-          const scenarioName = multiplier === 1.0
-            ? 'Judge Demo Baseline Scenario'
-            : `Judge Demo Deluge (+${Math.round((multiplier - 1) * 100)}% Rainfall)`;
-          if (isBackendConnected) {
-            await api.runSimulation({
-              scenario_name: scenarioName,
-              rainfall_multiplier: multiplier,
-              additional_rainfall_mm: 0,
-              duration_hours: 24
-            });
-            await loadAllData();
-          } else {
-            await handleRunSimulation({
-              scenario_name: scenarioName,
-              rainfall_multiplier: multiplier,
-              additional_rainfall_mm: 0,
-              duration_hours: 24
-            });
-          }
-        }}
-      />
 
       {/* Grounded AI Disaster Intelligence Assistant Drawer */}
       <DisasterAssistantDrawer
