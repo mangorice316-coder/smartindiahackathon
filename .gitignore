@@ -48,10 +48,14 @@ venv.bak/
 *.swp
 *.swo
 
-# OS files
+# OS & DB temp files
 .DS_Store
 Thumbs.db
 desktop.ini
+*.db-journal
+*.db-wal
+*.db-shm
+
 
 # Logs & Cache
 *.log
