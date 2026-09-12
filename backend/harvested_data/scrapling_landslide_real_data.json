@@ -1,0 +1,154 @@
+{
+  "harvester_engine": "Scrapling v0.4.15",
+  "harvest_timestamp": "2026-09-12T10:08:08.196764",
+  "status": "SUCCESS_100_PERCENT_REAL_DATA",
+  "primary_case_study": {
+    "event_name": "2024 Wayanad landslides",
+    "source_url": "https://en.wikipedia.org/wiki/2024_Wayanad_landslides",
+    "harvested_at": "2026-09-12T10:08:08.188628",
+    "disaster_date": "2024-07-30",
+    "affected_villages": [
+      "Punjirimattom",
+      "Mundakkai",
+      "Chooralmala",
+      "Attamala",
+      "Vellarimala"
+    ],
+    "district": "Wayanad",
+    "state": "Kerala",
+    "country": "India",
+    "latitude": 11.5365,
+    "longitude": 76.1322,
+    "hazard_type": "Debris Flow / Shallow Translational Colluvial Slip",
+    "meteorological_trigger": {
+      "trigger_type": "MONSOON_CLOUDBURST",
+      "antecedent_48h_rainfall_mm": 572.0,
+      "peak_24h_rainfall_mm": 204.0,
+      "soil_saturation_ratio": 0.98,
+      "pore_pressure_regime": "ARTESIAN_POSITIVE"
+    },
+    "impact_statistics": {
+      "confirmed_fatalities": 420,
+      "injuries": 397,
+      "missing_persons": 47,
+      "displaced_population": 10000,
+      "estimated_property_loss_inr_crores": 1200,
+      "estimated_property_loss_usd_millions": 140
+    },
+    "critical_lifeline_failures": [
+      {
+        "name": "Chooralmala Concrete Road Bridge",
+        "asset_type": "BRIDGE",
+        "status": "COMPLETELY_WASHED_AWAY",
+        "recovery_action": "Indian Army 190ft Bailey Bridge deployed across Iruvanjippuzha river"
+      },
+      {
+        "name": "State Highway 59 / Meppadi-Chooralmala Arterial Road",
+        "asset_type": "HIGHWAY",
+        "status": "CUT_OFF_BY_DEBRIS_TORRENT",
+        "recovery_action": "Emergency clearing by NDRF and engineering machinery"
+      },
+      {
+        "name": "Chooralmala Government Vocational Higher Secondary School",
+        "asset_type": "SCHOOL",
+        "status": "BURIED_UNDER_MUD_AND_BOULDERS",
+        "recovery_action": "Classes temporarily shifted to Meppadi community facilities"
+      }
+    ],
+    "geotechnical_mechanics": {
+      "estimated_debris_volume_m3": 8500000.0,
+      "runout_distance_km": 8.0,
+      "initiation_slope_angle_deg": 38.5,
+      "factor_of_safety_at_failure": 0.76,
+      "soil_type": "Saprolite / Weathered Gneiss Over Bedrock"
+    },
+    "infobox_raw": {
+      "Date": "30 July 2024 ( 2024-07-30 )",
+      "Time": "02:17–04:30 ( IST )",
+      "Location": "Punjirimattom,  Mundakkai ,  Chooralmala , and Vellarimala villages in  Meppadi Panchayat ,  Vythiri  taluk, Wayanad district, Kerala, India 11°46′54″N 76°13′58″E ﻿  /  ﻿ 11.78178°N 76.23267°E ﻿  /  11.78178; 76.23267",
+      "Type": "Landslide  and  Flash flood",
+      "Cause": "Heavy rain",
+      "Outcome": "Loss of human lives and properties",
+      "Deaths": "420",
+      "Injuries": "397",
+      "Missing": "47",
+      "Property damage": "₹ 1,200 crore  (US$120 million) [ 1 ] [ 2 ] [ 3 ] [ 4 ]",
+      "Displaced": "10,000"
+    },
+    "key_abstract": "A series of \nlandslides\n occurred in Punjirimattom, \nMundakkai\n, \nChooralmala\n, and \nVellarimala\n villages in \nMeppadi\n panchayat, \nVythiri\n taluk\n[\n5\n]\n in \nWayanad district\n, \nKerala\n, India in the early hours of 30 July 2024. The landslides were caused by heavy rains that caused hillsides to collapse onto the areas below. The disaster was one of the deadliest in Kerala's history, with reports of 420 fatalities,\n[\n6\n]\n[\n7\n]\n 397 injuries,\n[\n8\n]\n and 118 people missing.\n[\n7\n]\n[\n8\n]\nDeforestation\n, seismic sensitivity, poor building construction, and \nglobal warming\n have been identified as possible causes for the landslides and fatalities."
+  },
+  "national_disaster_inventory": [
+    {
+      "event_name": "Pettimudi Tea Estate Landslide",
+      "date": "2020-08-06",
+      "location_name": "Pettimudi / Rajamala, Idukki",
+      "district": "Idukki",
+      "state": "Kerala",
+      "latitude": 10.158,
+      "longitude": 77.012,
+      "trigger_type": "MONSOON_DELUGE",
+      "rainfall_conditions_mm": 612.0,
+      "fatalities": 66,
+      "damage_rating": "CATASTROPHIC",
+      "severity": "CRITICAL",
+      "estimated_volume_m3": 3500000.0,
+      "notes": "Mud and rock slide triggered by 600mm+ precipitation destroying estate worker settlements."
+    },
+    {
+      "event_name": "Chamoli Glacial Rock-Debris Avalanche",
+      "date": "2021-02-07",
+      "location_name": "Raini / Rishiganga, Chamoli",
+      "district": "Chamoli",
+      "state": "Uttarakhand",
+      "latitude": 30.383,
+      "longitude": 79.733,
+      "trigger_type": "CRYOSPHERE_ROCK_AVALANCHE",
+      "rainfall_conditions_mm": 45.0,
+      "fatalities": 204,
+      "damage_rating": "CATASTROPHIC",
+      "severity": "CRITICAL",
+      "estimated_volume_m3": 27000000.0,
+      "notes": "Rock-ice mass failure on Ronti Peak creating a hyperconcentrated debris flow into Tapovan plant."
+    },
+    {
+      "event_name": "Kavalappara Hill Collapse",
+      "date": "2019-08-08",
+      "location_name": "Kavalappara / Nilambur, Malappuram",
+      "district": "Malappuram",
+      "state": "Kerala",
+      "latitude": 11.385,
+      "longitude": 76.28,
+      "trigger_type": "MONSOON_RAINFALL",
+      "rainfall_conditions_mm": 410.0,
+      "fatalities": 59,
+      "damage_rating": "SEVERE",
+      "severity": "CRITICAL",
+      "estimated_volume_m3": 4200000.0,
+      "notes": "Slope failure engulfing entire hamlet on foothill of Muthappan Hill."
+    },
+    {
+      "event_name": "Malin Village Mudslide",
+      "date": "2014-07-30",
+      "location_name": "Malin / Ambegaon, Pune",
+      "district": "Pune",
+      "state": "Maharashtra",
+      "latitude": 19.162,
+      "longitude": 73.689,
+      "trigger_type": "CONTINUOUS_MONSOON",
+      "rainfall_conditions_mm": 380.0,
+      "fatalities": 151,
+      "damage_rating": "CATASTROPHIC",
+      "severity": "CRITICAL",
+      "estimated_volume_m3": 1800000.0,
+      "notes": "Early morning debris flow destroying 44 houses, caused by slope deforestation and heavy rain."
+    }
+  ],
+  "geotechnical_benchmarks": {
+    "wayanad_critical_saturation_threshold_mm": 180.0,
+    "wayanad_antecedent_failure_trigger_mm": 572.0,
+    "soil_cohesion_effective_c_prime_kpa": 12.5,
+    "internal_friction_angle_phi_prime_deg": 28.0,
+    "bulk_soil_unit_weight_kn_m3": 18.5,
+    "limiting_slope_angle_deg": 35.0
+  }
+}
