@@ -121,7 +121,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               e.stopPropagation();
               setXaiTarget({ id: item.location_id, name: item.location_name });
             }}
-            className="px-2.5 py-1 bg-cyan-950/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 rounded-md text-[11px] font-mono transition-colors flex items-center gap-1"
+            className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 rounded-lg text-[11px] font-mono transition-all flex items-center gap-1 active:scale-[0.98]"
             title="Open Deep Explainable AI (XAI) Attribution"
           >
             <Sparkles size={11} className="text-cyan-400" />
@@ -133,7 +133,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               onSelectLocation(item.location_id);
               onNavigate('map');
             }}
-            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-md text-[11px] font-mono transition-colors"
+            className="px-2.5 py-1 bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.08] hover:border-white/[0.15] rounded-lg text-[11px] font-mono transition-all active:scale-[0.98]"
             title="Focus Catchment on GIS Risk Map"
           >
             GIS Map
@@ -244,17 +244,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             }
           >
             {/* Filter Row */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-800 text-xs font-mono">
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] text-slate-400 uppercase tracking-wider mr-1">Filter Tier:</span>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-white/[0.06] text-xs font-mono">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] text-slate-400 uppercase tracking-wider mr-1">Risk Tier:</span>
                 {(['ALL', 'CRITICAL', 'HIGH', 'MODERATE', 'LOW'] as const).map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setCategoryFilter(cat)}
-                    className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors ${
+                    className={`px-3 py-1 rounded-full text-[11px] font-mono font-medium transition-all ${
                       categoryFilter === cat
-                        ? 'bg-cyan-500 text-slate-950'
-                        : 'text-slate-400 hover:text-slate-200 bg-slate-800/60'
+                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.15)] font-semibold'
+                        : 'text-slate-400 hover:text-slate-200 bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.05]'
                     }`}
                   >
                     {cat}
@@ -263,16 +263,16 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
 
               {districts.length > 0 && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider mr-1">District:</span>
                   <select
                     value={districtFilter}
                     onChange={(e) => setDistrictFilter(e.target.value)}
-                    className="bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
+                    className="bg-white/[0.03] border border-white/[0.08] rounded-full px-3 py-1 text-xs text-slate-200 focus:outline-none focus:border-cyan-400/60 cursor-pointer font-mono"
                   >
-                    <option value="ALL">All Districts</option>
+                    <option value="ALL" className="bg-[#0b0f19] text-white">All Districts</option>
                     {districts.map((d) => (
-                      <option key={d} value={d}>
+                      <option key={d} value={d} className="bg-[#0b0f19] text-white">
                         {d}
                       </option>
                     ))}
@@ -450,19 +450,22 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </button>
             }
           >
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {overview.critical_alerts.slice(0, 2).map((alt) => (
-                <div key={alt.id} className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-lg text-xs space-y-1">
+                <div
+                  key={alt.id}
+                  className="p-3.5 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-white/[0.12] rounded-xl text-xs space-y-1.5 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                >
                   <div className="flex items-center justify-between">
                     <SeverityBadge severity={alt.severity} />
                     <span className="text-[10px] font-mono text-slate-400">{alt.district}</span>
                   </div>
-                  <div className="font-semibold text-slate-200">{alt.location_name}</div>
-                  <p className="text-[11px] text-slate-400 font-sans line-clamp-2">{alt.trigger_condition}</p>
+                  <div className="font-semibold text-slate-100">{alt.location_name}</div>
+                  <p className="text-[11px] text-slate-400 font-sans line-clamp-2 leading-relaxed">{alt.trigger_condition}</p>
                 </div>
               ))}
               {overview.critical_alerts.length === 0 && (
-                <div className="text-center py-3 text-slate-500 font-mono text-xs">
+                <div className="text-center py-4 text-slate-500 font-mono text-xs">
                   No active emergency alerts.
                 </div>
               )}
@@ -474,91 +477,116 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             title="Emergency Action Directives"
             subtitle="Multi-agency operational protocols generated by Decision Engine"
           >
-            <div className="space-y-2.5 font-mono text-xs">
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-red-400 text-[10px]">DIR 01</span>
-                    <span className="text-slate-200 font-sans font-semibold text-xs">Broadcast CAP Evacuation</span>
+            <div className="space-y-2 font-mono text-xs">
+              {/* DIR 01: Evacuation */}
+              <div className="p-3 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-red-500/30 rounded-xl flex items-center justify-between gap-3 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-red-500/15 text-red-400 border border-red-500/30">
+                      P1 EVAC
+                    </span>
+                    <span className="text-slate-100 font-sans font-semibold text-xs truncate">
+                      Broadcast CAP Evacuation Notice
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">Chooralmala riverbank settlements (1.5km zone)</p>
+                  <p className="text-[11px] text-slate-400 font-sans truncate">Chooralmala riverbank settlements (1.5km danger zone)</p>
                 </div>
                 <button
                   onClick={() => onNavigate('alerts')}
-                  className="px-2.5 py-1 bg-red-600 hover:bg-red-500 text-white rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-white border border-red-500/40 rounded-lg text-xs font-mono font-medium transition-all shrink-0 flex items-center gap-1.5 shadow-[0_0_12px_rgba(239,68,68,0.15)] active:scale-[0.98]"
                 >
                   <span>Dispatch</span>
-                  <ArrowRight size={11} />
+                  <ArrowRight size={12} />
                 </button>
               </div>
 
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-orange-400 text-[10px]">DIR 02</span>
-                    <span className="text-slate-200 font-sans font-semibold text-xs">Deploy Geotech Squad Alpha</span>
+              {/* DIR 02: Geotech Squad */}
+              <div className="p-3 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-cyan-500/30 rounded-xl flex items-center justify-between gap-3 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                      FIELD
+                    </span>
+                    <span className="text-slate-100 font-sans font-semibold text-xs truncate">
+                      Deploy Geotech Squad Alpha
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">Inspect expanding crown tension cracks (18.5mm)</p>
+                  <p className="text-[11px] text-slate-400 font-sans truncate">Inspect expanding crown tension cracks (18.5mm)</p>
                 </div>
                 <button
                   onClick={() => onNavigate('inspections')}
-                  className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-orange-300 border border-slate-700 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 rounded-lg text-xs font-mono font-medium transition-all shrink-0 flex items-center gap-1.5 active:scale-[0.98]"
                 >
                   <span>Deploy</span>
-                  <ArrowRight size={11} />
+                  <ArrowRight size={12} />
                 </button>
               </div>
 
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-cyan-400 text-[10px]">DIR 03</span>
-                    <span className="text-slate-200 font-sans font-semibold text-xs">Stress-Test +50% Deluge</span>
+              {/* DIR 03: Simulation */}
+              <div className="p-3 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-cyan-500/30 rounded-xl flex items-center justify-between gap-3 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                      SIM
+                    </span>
+                    <span className="text-slate-100 font-sans font-semibold text-xs truncate">
+                      Stress-Test +50% Deluge Surge
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">Simulate overnight cloudburst scenario</p>
+                  <p className="text-[11px] text-slate-400 font-sans truncate">Simulate overnight cloudburst scenario across slopes</p>
                 </div>
                 <button
                   onClick={() => onNavigate('simulation')}
-                  className="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 rounded-lg text-xs font-mono font-medium transition-all shrink-0 flex items-center gap-1.5 active:scale-[0.98]"
                 >
                   <span>Simulate</span>
-                  <ArrowRight size={11} />
+                  <ArrowRight size={12} />
                 </button>
               </div>
 
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-amber-400 text-[10px]">DIR 04</span>
-                    <span className="text-slate-200 font-sans font-semibold text-xs">Record Ground Crack Tension</span>
+              {/* DIR 04: Crack Tension */}
+              <div className="p-3 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-amber-500/30 rounded-xl flex items-center justify-between gap-3 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                      GROUND
+                    </span>
+                    <span className="text-slate-100 font-sans font-semibold text-xs truncate">
+                      Record Ground Tension Crack
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">Citizen &amp; patrol crack width loop (recalibrates risk)</p>
+                  <p className="text-[11px] text-slate-400 font-sans truncate">Patrol &amp; citizen dilation measurements (recalibrates Fs)</p>
                 </div>
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent('open-incident-modal'))}
-                  className="px-2.5 py-1 bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-amber-200 border border-amber-500/30 rounded-lg text-xs font-mono font-medium transition-all shrink-0 flex items-center gap-1.5 active:scale-[0.98]"
                   title="Open Ground Crack / Tension Fissure Verification Modal"
                 >
-                  <span>Report Crack</span>
-                  <ArrowRight size={11} />
+                  <span>Report</span>
+                  <ArrowRight size={12} />
                 </button>
               </div>
 
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="font-bold text-purple-400 text-[10px]">DIR 05</span>
-                    <span className="text-slate-200 font-sans font-semibold text-xs">Sentinel-1/2 Satellite AI Analysis</span>
+              {/* DIR 05: Satellite AI */}
+              <div className="p-3 bg-[#0b101c]/70 hover:bg-[#0f1626]/90 border border-white/[0.06] hover:border-purple-500/30 rounded-xl flex items-center justify-between gap-3 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">
+                      ORBIT
+                    </span>
+                    <span className="text-slate-100 font-sans font-semibold text-xs truncate">
+                      Sentinel-1/2 Satellite AI Analysis
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">Multispectral NDVI delta &amp; SAR coherence loss detection</p>
+                  <p className="text-[11px] text-slate-400 font-sans truncate">Multispectral NDVI delta &amp; SAR interferometry coherence</p>
                 </div>
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent('open-satellite-modal'))}
-                  className="px-2.5 py-1 bg-purple-950 hover:bg-purple-900 text-purple-300 border border-purple-800 rounded text-[11px] font-semibold transition-colors shrink-0 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 hover:text-purple-200 border border-purple-500/30 rounded-lg text-xs font-mono font-medium transition-all shrink-0 flex items-center gap-1.5 active:scale-[0.98]"
                   title="Open Sentinel-2 MSI & Sentinel-1 SAR Remote Sensing Modal"
                 >
-                  <span>Inspect Radar</span>
-                  <ArrowRight size={11} />
+                  <span>Radar AI</span>
+                  <ArrowRight size={12} />
                 </button>
               </div>
             </div>

@@ -19,6 +19,7 @@ import { SatelliteChangeModal } from './components/satellite/SatelliteChangeModa
 import { RoadVulnerabilityModal } from './components/roads/RoadVulnerabilityModal';
 import { ReportIncidentModal } from './components/incident/ReportIncidentModal';
 import { LiveCoordinateInspectorModal } from './components/live/LiveCoordinateInspectorModal';
+import { StitchStudioModal } from './components/stitch/StitchStudioModal';
 import { Compass, RefreshCw } from 'lucide-react';
 import { api } from './services/api';
 import {
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
   const [isRoadModalOpen, setIsRoadModalOpen] = useState<boolean>(false);
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState<boolean>(false);
   const [isLiveGpsModalOpen, setIsLiveGpsModalOpen] = useState<boolean>(false);
+  const [isStitchModalOpen, setIsStitchModalOpen] = useState<boolean>(false);
   const [liveGpsCoords, setLiveGpsCoords] = useState<{ lat: number; lon: number }>({ lat: 11.5365, lon: 76.1322 });
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
   const [lastSyncTime, setLastSyncTime] = useState<Date>(new Date());
@@ -247,6 +249,7 @@ export const App: React.FC = () => {
     const handleOpenSatellite = () => setIsSatelliteModalOpen(true);
     const handleOpenRoad = () => setIsRoadModalOpen(true);
     const handleOpenIncident = () => setIsIncidentModalOpen(true);
+    const handleOpenStitch = () => setIsStitchModalOpen(true);
     const handleOpenLiveGps = (e: any) => {
       if (e.detail?.lat && e.detail?.lon) {
         setLiveGpsCoords({ lat: e.detail.lat, lon: e.detail.lon });
@@ -258,12 +261,14 @@ export const App: React.FC = () => {
     window.addEventListener('open-road-modal', handleOpenRoad);
     window.addEventListener('open-incident-modal', handleOpenIncident);
     window.addEventListener('open-live-gps-modal', handleOpenLiveGps);
+    window.addEventListener('open-stitch-modal', handleOpenStitch);
 
     return () => {
       window.removeEventListener('open-satellite-modal', handleOpenSatellite);
       window.removeEventListener('open-road-modal', handleOpenRoad);
       window.removeEventListener('open-incident-modal', handleOpenIncident);
       window.removeEventListener('open-live-gps-modal', handleOpenLiveGps);
+      window.removeEventListener('open-stitch-modal', handleOpenStitch);
     };
   }, []);
 
@@ -436,6 +441,7 @@ export const App: React.FC = () => {
         onSyncLive={handleSyncLive}
         isSyncing={isSyncingLive}
         onOpenAssistant={() => setIsAssistantOpen(true)}
+        onOpenStitch={() => setIsStitchModalOpen(true)}
       />
 
       {/* Main EOC Work Area */}
@@ -615,6 +621,12 @@ export const App: React.FC = () => {
         onClose={() => setIsLiveGpsModalOpen(false)}
         initialLat={liveGpsCoords.lat}
         initialLon={liveGpsCoords.lon}
+      />
+
+      {/* Google Stitch AI Studio Bridge Modal */}
+      <StitchStudioModal
+        isOpen={isStitchModalOpen}
+        onClose={() => setIsStitchModalOpen(false)}
       />
     </div>
   );

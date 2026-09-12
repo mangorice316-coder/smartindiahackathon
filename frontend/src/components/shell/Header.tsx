@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satellite, Compass, AlertCircle } from 'lucide-react';
+import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satellite, Compass, AlertCircle, Palette } from 'lucide-react';
 import { api } from '../../services/api';
 
 interface HeaderProps {
@@ -11,6 +11,7 @@ interface HeaderProps {
   onSyncLive?: () => void;
   isSyncing?: boolean;
   onOpenAssistant?: () => void;
+  onOpenStitch?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSyncLive,
   isSyncing = false,
   onOpenAssistant,
+  onOpenStitch,
 }) => {
   const [currentRole, setCurrentRole] = useState<string>(() => api.getAuthRole());
   const [isSwitching, setIsSwitching] = useState<boolean>(false);
@@ -137,6 +139,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Bot size={13} className="text-cyan-400" />
             <span className="hidden sm:inline">AI Assistant</span>
+          </button>
+        )}
+
+        {/* Google Stitch Studio Button */}
+        {onOpenStitch && (
+          <button
+            onClick={onOpenStitch}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 hover:text-purple-200 text-xs font-mono font-medium border border-purple-500/30 hover:border-purple-400/50 transition-all shadow-[0_0_12px_rgba(168,85,247,0.15)]"
+            title="Open Google Stitch AI Studio Bridge for Next-Gen UI Generation"
+          >
+            <Palette size={13} className="text-purple-400" />
+            <span className="hidden sm:inline">Stitch Studio</span>
           </button>
         )}
 

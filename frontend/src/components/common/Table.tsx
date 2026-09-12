@@ -101,9 +101,9 @@ export function Table<T extends Record<string, any>>({
                         <span className="text-slate-500">
                           {isSorted ? (
                             sortDirection === 'asc' ? (
-                              <ChevronUp size={12} className="text-cyan-400 animate-bounce" />
+                              <ChevronUp size={12} className="text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
                             ) : (
-                              <ChevronDown size={12} className="text-cyan-400 animate-bounce" />
+                              <ChevronDown size={12} className="text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
                             )
                           ) : (
                             <ChevronsUpDown size={11} className="opacity-30" />

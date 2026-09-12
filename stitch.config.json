@@ -1,0 +1,63 @@
+{
+  "project_id": "landslide-risk-intelligence-eoc",
+  "name": "AI-Powered Landslide Risk Intelligence and Early Warning System",
+  "platform": "React 18 + Vite + TailwindCSS",
+  "design_system": "DESIGN.md",
+  "stitch_studio_url": "https://labs.google/stitch",
+  "theme": {
+    "mode": "dark",
+    "canvas": "#06080e",
+    "surface": "#090d16",
+    "surface_elevated": "#0e1526",
+    "accent": "#00e5ff",
+    "accent_muted": "#06b6d4",
+    "critical": "#ef4444",
+    "high": "#f97316",
+    "moderate": "#f59e0b",
+    "stable": "#10b981",
+    "fonts": {
+      "display": "Space Grotesk, sans-serif",
+      "sans": "Plus Jakarta Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "card_style": "Double-Bezel concentric glass with 1px hairline border"
+  },
+  "anti_patterns": [
+    "No generic AI purple/neon glow",
+    "No overlapping elements",
+    "No crowded 3-equal-box rows with rainbow borders",
+    "No circular spinner loaders (use tactical skeleton bars)"
+  ],
+  "routes": [
+    {
+      "id": "overview",
+      "title": "Situation Room Overview",
+      "path": "/overview"
+    },
+    {
+      "id": "map",
+      "title": "Geospatial Hazard Map",
+      "path": "/map"
+    },
+    {
+      "id": "conditions",
+      "title": "Atmospheric and Hydrological Telemetry",
+      "path": "/conditions"
+    },
+    {
+      "id": "simulation",
+      "title": "What-If Rainfall Simulator",
+      "path": "/simulation"
+    },
+    {
+      "id": "alerts",
+      "title": "OASIS CAP v1.2 Early Warning Dispatch",
+      "path": "/alerts"
+    },
+    {
+      "id": "inspections",
+      "title": "Field Squad Priority Missions",
+      "path": "/inspections"
+    }
+  ]
+}
