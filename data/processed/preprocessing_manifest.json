@@ -1,0 +1,26 @@
+{
+  "execution_timestamp_utc": "2026-09-12T06:03:45.673342+00:00",
+  "framework": "GSI_NLFC_ISRO_NRSC_v2.1",
+  "total_landslide_inventory_events": 13,
+  "master_training_corpus_records": 6000,
+  "splits": {
+    "training": {
+      "records": 4200,
+      "positive_ratio": 0.4979,
+      "parquet_path": "data\\processed\\training_samples\\training_samples.parquet",
+      "sha256": "549622ca537923cfbf3b4f631018ca300a0de9c2594d2e12543af214feb396f2"
+    },
+    "validation": {
+      "records": 900,
+      "positive_ratio": 0.4944,
+      "parquet_path": "data\\processed\\training_samples\\validation_samples.parquet",
+      "sha256": "7b9c1b2f5617fb0e19489c37edb2f08bb281889427fe90b75bbffbe896af9f2c"
+    },
+    "test": {
+      "records": 900,
+      "positive_ratio": 0.5156,
+      "parquet_path": "data\\processed\\training_samples\\test_samples.parquet",
+      "sha256": "96a8e481c1eab36d087cc044a9a9a5d5d8aeb244c292d5aa6c75df6acb5f6530"
+    }
+  }
+}
