@@ -1,0 +1,192 @@
+[
+  {
+    "experiment_id": "EXP-20260912-113857",
+    "model_version": "LRIDS-v2.1-calibrated-gb",
+    "dataset_version": "GSI_ISRO_NLFC_v2.1",
+    "model_sha256": "5fb22bbb714b469cc6b72b1a8513a93fe86a12f9775e8f95e6cb388bb5e1a7a2",
+    "training_period": "2014-01-01 to 2022-12-31 (Western Ghats historical baseline)",
+    "validation_period": "2023-01-01 to 2023-12-31 (Monsoonal transition)",
+    "test_period": "2024-01-01 to 2024-12-31 (Unseen Himalayan holdouts & recent monsoons)",
+    "hyperparameters": {
+      "algorithm": "GradientBoostingClassifier + CalibratedClassifierCV(method='sigmoid')",
+      "n_estimators": 180,
+      "learning_rate": 0.06,
+      "max_depth": 5,
+      "calibration_cv": 3
+    },
+    "features_used": [
+      "elevation",
+      "slope",
+      "aspect",
+      "curvature",
+      "roughness",
+      "twi",
+      "rain_1h",
+      "rain_3h",
+      "rain_6h",
+      "rain_12h",
+      "rain_24h",
+      "rain_48h",
+      "rain_72h",
+      "rain_7d",
+      "rain_15d",
+      "rain_30d",
+      "lithology_grade",
+      "soil_depth",
+      "lulc_class",
+      "ndvi",
+      "distance_to_stream_m",
+      "flow_accumulation",
+      "distance_to_fault_km",
+      "sar_coherence_loss",
+      "sar_backscatter_diff_db",
+      "ndvi_change",
+      "distance_to_road_m",
+      "distance_to_bridge_m",
+      "population_density"
+    ],
+    "metrics": {
+      "Logistic_Regression": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      },
+      "Random_Forest": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      },
+      "Calibrated_Gradient_Boosting": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      }
+    },
+    "timestamp_utc": "2026-09-12T06:08:57.227974+00:00"
+  },
+  {
+    "experiment_id": "EXP-20260912-113944",
+    "model_version": "LRIDS-v2.1-calibrated-gb",
+    "dataset_version": "GSI_ISRO_NLFC_v2.1",
+    "model_sha256": "869b3130c1b33a292c80c392aa5b83b723b9a63bc039eaed0acdb1c5d700c2aa",
+    "training_period": "2014-01-01 to 2022-12-31 (Western Ghats historical baseline)",
+    "validation_period": "2023-01-01 to 2023-12-31 (Monsoonal transition)",
+    "test_period": "2024-01-01 to 2024-12-31 (Unseen Himalayan holdouts & recent monsoons)",
+    "hyperparameters": {
+      "algorithm": "GradientBoostingClassifier + CalibratedClassifierCV(method='sigmoid')",
+      "n_estimators": 180,
+      "learning_rate": 0.06,
+      "max_depth": 5,
+      "calibration_cv": 3
+    },
+    "features_used": [
+      "elevation",
+      "slope",
+      "aspect",
+      "curvature",
+      "roughness",
+      "twi",
+      "rain_1h",
+      "rain_3h",
+      "rain_6h",
+      "rain_12h",
+      "rain_24h",
+      "rain_48h",
+      "rain_72h",
+      "rain_7d",
+      "rain_15d",
+      "rain_30d",
+      "lithology_grade",
+      "soil_depth",
+      "lulc_class",
+      "ndvi",
+      "distance_to_stream_m",
+      "flow_accumulation",
+      "distance_to_fault_km",
+      "sar_coherence_loss",
+      "sar_backscatter_diff_db",
+      "ndvi_change",
+      "distance_to_road_m",
+      "distance_to_bridge_m",
+      "population_density"
+    ],
+    "metrics": {
+      "Logistic_Regression": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      },
+      "Random_Forest": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      },
+      "Calibrated_Gradient_Boosting": {
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "brier_score": 0.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "true_negatives": 436,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_positives": 464
+        }
+      }
+    },
+    "timestamp_utc": "2026-09-12T06:09:44.097351+00:00"
+  }
+]
