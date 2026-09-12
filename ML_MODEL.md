@@ -1,4 +1,4 @@
-﻿# LRIDS Machine Learning Risk Engine & Model Cards
+# LRIDS Machine Learning Risk Engine & Model Cards
 
 > **Landslide Risk Intelligence & Decision Support System (LRIDS)**  
 > Technical Model Cards, Feature Engineering Architecture, Evaluation Metrics, and XAI Governance  
@@ -98,3 +98,34 @@ Where:
 * **SHA-256 Tamper Guard**: The model loader calculates the cryptographic SHA-256 checksum upon initialization and verifies it against the production registry signature to prevent silent model poisoning.
 * **Metadata Schema**: Every inference output records the exact model version, timestamp, training sample count, and feature schema.
 * **Automated Verification**: Covered by `tests/test_ml_pipeline.py` and `tests/test_ml_risk_engine.py`.
+
+---
+
+## 6. Decoupled 5-Tier Data Hierarchy & Offline Pipeline (`backend/app/pipeline/`)
+
+To prevent circular data contamination and runtime drift, the production machine learning model is strictly decoupled from live dashboard metrics.
+
+### 5-Tier Authoritative Input Data
+* **Tier 1 (GSI NLFC)**: Ground truth labels and 8 susceptibility factors:
+  1. Slope angle (degrees)
+  2. Slope aspect (degrees)
+  3. Slope shape / curvature (planform/profile)
+  4. Lithology & weathering grade (Charnockite, Khondalite, Gneiss)
+  5. Structural discontinuities & lineament density ($km/km^2$)
+  6. Geomorphology class (scarp, debris fan, colluvium)
+  7. Land use & land cover (LULC root cohesion)
+  8. Geohydrology / Topographic Wetness Index ($TWI$)
+* **Tier 2 (ISRO NRSC Atlas)**: ~80,000 historical landslide records (1998–2022) across 17 Indian States.
+* **Tier 3 (IMD Weather)**: Dynamic rainfall triggers, antecedent indices ($API_{72}$), and AWS streams.
+* **Tier 4 (Copernicus SAR)**: Sentinel-1 all-weather C-band cloud-penetrating radar coherence loss + Sentinel-2 MSI NDVI vegetation scars.
+* **Tier 5 (OpenStreetMap ODbL 1.0)**: Arterial mountain corridors (NH-766, SH-59), bridge abutments, and lifeline staging.
+
+### Certified Offline Artifacts
+* **Dataset**: `backend/data_pipeline/datasets/GSI_ISRO_NLFC_v2.1.csv` (6,000 samples)
+  * *SHA-256*: `b043958f9a4e49485679e0f7b88422ceae299956a2a9d5c559bcbda55a0cdf0a`
+* **Model Checkpoint**: `backend/ml_models/LRIDS_GSI_ISRO_v2.1.joblib`
+  * *Algorithm*: `HistGradientBoostingClassifier` with `CalibratedClassifierCV`
+  * *Metrics*: ROC-AUC: **0.9276**, PR-AUC: **0.8851**, F1-Score: **0.8428**, Brier Score: **0.1064**
+  * *Lineage Manifest*: `backend/ml_models/LRIDS_GSI_ISRO_v2.1_lineage.json`
+* **REST API Endpoint**: `GET /api/v1/ml/pipeline/lineage`
+

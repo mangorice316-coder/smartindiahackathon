@@ -1,0 +1,65 @@
+{
+  "dataset_name": "GSI_ISRO_NLFC_v2.1",
+  "version": "2.1.0",
+  "created_at_utc": "2026-09-12T05:33:56.008728+00:00",
+  "sha256_primary": "b043958f9a4e49485679e0f7b88422ceae299956a2a9d5c559bcbda55a0cdf0a",
+  "sha256_csv": "b043958f9a4e49485679e0f7b88422ceae299956a2a9d5c559bcbda55a0cdf0a",
+  "artifact_files": {
+    "parquet": null,
+    "csv": "GSI_ISRO_NLFC_v2.1.csv"
+  },
+  "row_count": 6000,
+  "feature_count": 19,
+  "positive_landslide_count": 2704,
+  "positive_ratio": 0.4507,
+  "severity_distribution": {
+    "CRITICAL": 2045,
+    "LOW": 2005,
+    "HIGH": 1099,
+    "MODERATE": 851
+  },
+  "features": {
+    "tier_1_gsi_factors": [
+      "Slope Gradient",
+      "Slope Aspect",
+      "Slope Shape / Curvature",
+      "Lithology & Weathering Grade",
+      "Structural Discontinuities & Lineaments",
+      "Geomorphology & Landform Unit",
+      "Land Use & Land Cover (LULC)",
+      "Geohydrology & Topographic Wetness"
+    ],
+    "tier_3_imd_weather": [
+      "rainfall_24h_mm",
+      "rainfall_72h_antecedent_mm",
+      "rainfall_intensity_max_mm_h",
+      "soil_saturation_pct",
+      "pore_water_pressure_kpa"
+    ],
+    "tier_4_copernicus_sar": [
+      "sar_coherence_loss",
+      "sar_backscatter_diff_db",
+      "ndvi_vegetation_loss"
+    ],
+    "tier_5_osm_infrastructure": [
+      "osm_road_distance_m",
+      "osm_settlement_distance_m"
+    ]
+  },
+  "licensing": {
+    "required": true,
+    "license_name": "Open Database License (ODbL) 1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1.0/",
+    "copyright_statement": "Base map and infrastructure data \u00a9 OpenStreetMap contributors",
+    "attribution_text": "Base data \u00a9 OpenStreetMap contributors under ODbL 1.0 | Geological Survey of India (GSI) NLFC | ISRO NRSC Landslide Atlas | Copernicus Data Space",
+    "compliance_notes": "OpenStreetMap road networks, bridge locations, and settlement footprints are enriched with NHAI / State PWD survey data for lifeline vulnerability assessment."
+  },
+  "decoupled_pipeline_mandate": "This versioned dataset was generated and validated independently of the live dashboard. It establishes reproducible ground-truth for offline model training.",
+  "data_hierarchy_tiers": [
+    "GSI NLFC Ground Truth & Geotechnical Susceptibility",
+    "ISRO NRSC Landslide Atlas of India (~80,000 Historical Events)",
+    "IMD Meteorological Triggers & Climatology",
+    "Copernicus Data Space Sentinel-1 SAR & Sentinel-2 MSI",
+    "OpenStreetMap (OSM) Infrastructure & NHAI / PWD Corridors"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "dataset": "GSI_ISRO_NLFC_v2.1",
+  "anomaly_count": 2,
+  "anomalies": [
+    {
+      "type": "PHYSICAL_BOUND_VIOLATION",
+      "feature": "geotechnical_fs",
+      "unit": "factor_of_safety",
+      "expected_range": [
+        0.0,
+        10.0
+      ],
+      "violations": 27,
+      "observed_min": 0.183,
+      "observed_max": 18.869
+    },
+    {
+      "type": "PHYSICS_LABEL_CONTRADICTION",
+      "description": "Geotechnical Factor of Safety critically low (<0.70) yet labeled non-landslide",
+      "count": 149
+    }
+  ]
+}

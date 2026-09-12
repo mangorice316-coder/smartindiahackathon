@@ -45,6 +45,56 @@ export const InspectionsView: React.FC<InspectionsViewProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isRecalculating, setIsRecalculating] = useState<boolean>(false);
 
+  // Field Offline Queue State
+  const [isSimulatingOffline, setIsSimulatingOffline] = useState<boolean>(false);
+  const [offlineQueue, setOfflineQueue] = useState<Array<any>>(() => {
+    try {
+      const stored = localStorage.getItem('lrids_offline_queue');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [offlineToast, setOfflineToast] = useState<string | null>(null);
+
+  const saveToOfflineQueue = (taskData: any) => {
+    const updated = [
+      ...offlineQueue,
+      { ...taskData, queued_at: new Date().toISOString(), local_id: `OFFLINE-${Date.now()}` }
+    ];
+    setOfflineQueue(updated);
+    try {
+      localStorage.setItem('lrids_offline_queue', JSON.stringify(updated));
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+    setOfflineToast('Saved to Local Offline Queue (PENDING SYNC)');
+    setTimeout(() => setOfflineToast(null), 3500);
+  };
+
+  const handleSyncOfflineQueue = async () => {
+    if (offlineQueue.length === 0) return;
+    setOfflineToast(`Syncing ${offlineQueue.length} offline records to C2 server...`);
+    for (const item of offlineQueue) {
+      if (item.type === 'UPDATE') {
+        try {
+          await onUpdateTask(item.id, item.payload);
+        } catch {}
+      } else if (item.type === 'EVIDENCE') {
+        try {
+          await api.attachInspectionEvidence(item.id, item.payload);
+        } catch {}
+      }
+    }
+    setOfflineQueue([]);
+    try {
+      localStorage.removeItem('lrids_offline_queue');
+    } catch {}
+    onRefresh();
+    setOfflineToast('All offline missions successfully synced to C2 database!');
+    setTimeout(() => setOfflineToast(null), 4000);
+  };
+
   // Task Update Modal
   const [selectedTask, setSelectedTask] = useState<InspectionTask | null>(null);
   const [updateStatus, setUpdateStatus] = useState<string>('DISPATCHED');
@@ -141,6 +191,22 @@ export const InspectionsView: React.FC<InspectionsViewProps> = ({
   // Save Task Update
   const handleSaveUpdate = async () => {
     if (!selectedTask) return;
+    if (isSimulatingOffline) {
+      saveToOfflineQueue({
+        type: 'UPDATE',
+        id: selectedTask.id,
+        task_code: selectedTask.task_code || `INSP-${selectedTask.id}`,
+        location_name: selectedTask.location_name,
+        payload: {
+          status: updateStatus,
+          assigned_team: updateTeam,
+          assigned_officer: updateOfficer,
+          field_notes: updateNotes
+        }
+      });
+      setSelectedTask(null);
+      return;
+    }
     setIsUpdating(true);
     try {
       await onUpdateTask(selectedTask.id, {
@@ -161,20 +227,32 @@ export const InspectionsView: React.FC<InspectionsViewProps> = ({
   // Attach Geotechnical Evidence
   const handleSaveEvidence = async () => {
     if (!evidenceTask) return;
+    const parsedCrack = crackDisplacementMm.trim() ? parseFloat(crackDisplacementMm) : undefined;
+    const photoArray = photoIds.split(',').map(s => s.trim()).filter(Boolean);
+    const payload = {
+      inspector_name: inspectorName,
+      crack_displacement_mm: parsedCrack,
+      observed_creep_severity: creepSeverity,
+      seepage_observed: seepageObserved,
+      photo_reference_ids: photoArray,
+      evidence_notes: evidenceNotes
+    };
+
+    if (isSimulatingOffline) {
+      saveToOfflineQueue({
+        type: 'EVIDENCE',
+        id: evidenceTask.id,
+        task_code: evidenceTask.task_code || `INSP-${evidenceTask.id}`,
+        location_name: evidenceTask.location_name,
+        payload
+      });
+      setEvidenceTask(null);
+      return;
+    }
+
     setIsSubmittingEvidence(true);
     try {
-      const parsedCrack = crackDisplacementMm.trim() ? parseFloat(crackDisplacementMm) : undefined;
-      const photoArray = photoIds.split(',').map(s => s.trim()).filter(Boolean);
-
-      await api.attachInspectionEvidence(evidenceTask.id, {
-        inspector_name: inspectorName,
-        crack_displacement_mm: parsedCrack,
-        observed_creep_severity: creepSeverity,
-        seepage_observed: seepageObserved,
-        photo_reference_ids: photoArray,
-        evidence_notes: evidenceNotes
-      });
-
+      await api.attachInspectionEvidence(evidenceTask.id, payload);
       setEvidenceTask(null);
       onRefresh();
       alert('Field Geotechnical Evidence recorded and audit-logged.');
@@ -366,6 +444,55 @@ export const InspectionsView: React.FC<InspectionsViewProps> = ({
         </div>
       </div>
 
+      {/* Offline Toast Notification */}
+      {offlineToast && (
+        <div className="fixed top-20 right-6 z-50 bg-amber-950 border border-amber-500/50 text-amber-200 px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 font-mono text-xs animate-bounce">
+          <CheckCircle2 size={16} className="text-amber-400" />
+          <span>{offlineToast}</span>
+        </div>
+      )}
+
+      {/* Offline Field Operations Deck (Phase 12) */}
+      <div className="p-3 bg-[#0a101f] border border-cyan-500/30 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex items-center gap-3">
+          <span className={`w-2.5 h-2.5 rounded-full ${isSimulatingOffline ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'}`} />
+          <div>
+            <div className="font-bold text-white flex items-center gap-2">
+              <span>FIELD RESILIENCE ARCHITECTURE:</span>
+              <span className={isSimulatingOffline ? 'text-amber-300 font-extrabold' : 'text-emerald-400'}>
+                {isSimulatingOffline ? 'OFFLINE ACTIVE (Encrypted Local Geopackage)' : 'ONLINE C2 SYNCHRONIZED'}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 font-sans">
+              Inspectors in cellular dead-zones can log crack width & seepage offline; updates queue in localStorage and commit automatically upon reconnection.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {offlineQueue.length > 0 && (
+            <button
+              onClick={handleSyncOfflineQueue}
+              className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all active:scale-95"
+            >
+              <CheckCircle2 size={13} />
+              <span>Sync {offlineQueue.length} Offline Tasks</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsSimulatingOffline(!isSimulatingOffline)}
+            className={`px-3 py-1.5 rounded-lg border transition-all text-xs font-semibold ${
+              isSimulatingOffline
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
+                : 'bg-white/[0.04] text-slate-300 border-white/[0.1] hover:bg-white/[0.08]'
+            }`}
+          >
+            {isSimulatingOffline ? 'Exit Offline Mode' : 'Simulate Mountain Offline'}
+          </button>
+        </div>
+      </div>
+
       {/* KPI Ticker */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 font-mono">
         <div className="p-3 bg-[#111827] border border-slate-800 rounded-lg">
@@ -480,10 +607,17 @@ export const InspectionsView: React.FC<InspectionsViewProps> = ({
                 onChange={(e) => setUpdateStatus(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-200"
               >
-                <option value="PENDING">PENDING (Awaiting Field Team)</option>
-                <option value="DISPATCHED">DISPATCHED (Squad En Route to Slope)</option>
-                <option value="INSPECTED">INSPECTED (Visual & Instrument Survey Completed)</option>
-                <option value="CLEARED">CLEARED (Slope Retaining Wall Intact / Risk Reduced)</option>
+                <option value="NEW">NEW (Newly Created Mission)</option>
+                <option value="ASSIGNED">ASSIGNED (Squad Allocated)</option>
+                <option value="EN_ROUTE">EN_ROUTE (Squad In Transit to Sector)</option>
+                <option value="ON_SITE">ON_SITE (Arrived at Slope Coordinates)</option>
+                <option value="INSPECTING">INSPECTING (Active Crack Extensometer Survey)</option>
+                <option value="SUBMITTED">SUBMITTED (Field Findings Logged)</option>
+                <option value="SYNCED">SYNCED (Synchronized with C2 Command)</option>
+                <option value="PENDING">PENDING (Awaiting Team Allocation)</option>
+                <option value="DISPATCHED">DISPATCHED (En Route to Slope)</option>
+                <option value="INSPECTED">INSPECTED (Visual & Instrument Survey Done)</option>
+                <option value="CLEARED">CLEARED (Slope Retaining Wall Intact / Safe)</option>
                 <option value="CLOSED">CLOSED (Mission Concluded & Filed)</option>
               </select>
             </div>

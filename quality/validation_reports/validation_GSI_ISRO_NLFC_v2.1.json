@@ -1,0 +1,42 @@
+{
+  "dataset_name": "GSI_ISRO_NLFC_v2.1",
+  "evaluated_at_utc": "2026-09-12T05:32:59.470297+00:00",
+  "total_records": 6000,
+  "composite_score": 99.05,
+  "status": "VALID",
+  "dimension_scores": {
+    "completeness": 100.0,
+    "accuracy": 99.98,
+    "consistency": 97.52,
+    "timeliness": 96.5,
+    "relevance": 98.0,
+    "traceability": 100.0
+  },
+  "anomaly_count": 2,
+  "anomalies": [
+    {
+      "type": "PHYSICAL_BOUND_VIOLATION",
+      "feature": "geotechnical_fs",
+      "unit": "factor_of_safety",
+      "expected_range": [
+        0.0,
+        10.0
+      ],
+      "violations": 27,
+      "observed_min": 0.183,
+      "observed_max": 18.869
+    },
+    {
+      "type": "PHYSICS_LABEL_CONTRADICTION",
+      "description": "Geotechnical Factor of Safety critically low (<0.70) yet labeled non-landslide",
+      "count": 149
+    }
+  ],
+  "data_hierarchy_compliance": {
+    "tier_1_gsi_factors": true,
+    "tier_2_isro_scars": true,
+    "tier_3_imd_weather": true,
+    "tier_4_copernicus_sar": true,
+    "tier_5_osm_lifelines": true
+  }
+}

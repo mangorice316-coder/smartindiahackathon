@@ -71,6 +71,8 @@ export const RiskMapCanvas: React.FC<RiskMapCanvasProps> = ({
 
   const [showLayerPanel, setShowLayerPanel] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
+  const [activeBaseMap, setActiveBaseMap] = useState<'dark' | 'satellite' | 'terrain' | 'street'>('dark');
+  const activeBaseMapLayerRef = useRef<L.TileLayer | null>(null);
 
   // Initialize Map
   useEffect(() => {
@@ -82,13 +84,6 @@ export const RiskMapCanvas: React.FC<RiskMapCanvasProps> = ({
       zoom: 9,
       zoomControl: false,
     });
-
-    // Dark Matter Tactical Base Tiles
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO | NDMA Tactical Risk GIS',
-      subdomains: 'abcd',
-      maxZoom: 18,
-    }).addTo(map);
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     mapInstanceRef.current = map;
@@ -128,6 +123,46 @@ export const RiskMapCanvas: React.FC<RiskMapCanvasProps> = ({
       mapInstanceRef.current = null;
     };
   }, []);
+
+  // Reactive Multi-Basemap Tile Switching
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    if (activeBaseMapLayerRef.current) {
+      map.removeLayer(activeBaseMapLayerRef.current);
+    }
+
+    let tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    let attribution = '&copy; OpenStreetMap &copy; CARTO | Tactical Dark GIS';
+    let maxZoom = 19;
+
+    if (activeBaseMap === 'satellite') {
+      tileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+      attribution = 'Tiles &copy; Esri &mdash; High-Resolution Satellite Aerial View';
+      maxZoom = 19;
+    } else if (activeBaseMap === 'terrain') {
+      tileUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+      attribution = 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap';
+      maxZoom = 17;
+    } else if (activeBaseMap === 'street') {
+      tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+      attribution = '&copy; OpenStreetMap &copy; CARTO Positron';
+      maxZoom = 19;
+    }
+
+    const baseLayer = L.tileLayer(tileUrl, {
+      attribution,
+      subdomains: 'abcd',
+      maxZoom,
+    }).addTo(map);
+
+    if (typeof (baseLayer as any).bringToBack === 'function') {
+      (baseLayer as any).bringToBack();
+    }
+
+    activeBaseMapLayerRef.current = baseLayer;
+  }, [activeBaseMap]);
 
   // Handle explicit flyTo
   useEffect(() => {
@@ -520,6 +555,58 @@ export const RiskMapCanvas: React.FC<RiskMapCanvasProps> = ({
       {/* Map Container */}
       <div ref={mapContainerRef} className="w-full h-full" />
 
+      {/* Floating Multi-Basemap Selector Toolbar */}
+      <div className="absolute top-3 left-3 z-[400] flex items-center bg-[#090e1a]/90 backdrop-blur-md border border-white/[0.1] rounded-xl p-1 shadow-2xl font-mono text-xs gap-1">
+        <button
+          onClick={() => setActiveBaseMap('dark')}
+          className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-semibold flex items-center gap-1.5 ${
+            activeBaseMap === 'dark'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+              : 'text-slate-400 hover:text-white'
+          }`}
+          title="Tactical Dark Matter Basemap (CartoDB)"
+        >
+          <span>🌑</span>
+          <span className="hidden sm:inline">Dark</span>
+        </button>
+        <button
+          onClick={() => setActiveBaseMap('satellite')}
+          className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-semibold flex items-center gap-1.5 ${
+            activeBaseMap === 'satellite'
+              ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-[0_0_10px_rgba(168,85,247,0.2)]'
+              : 'text-slate-400 hover:text-white'
+          }`}
+          title="High-Resolution Satellite Aerial View (Esri World Imagery)"
+        >
+          <span>🛰️</span>
+          <span className="hidden sm:inline">Satellite</span>
+        </button>
+        <button
+          onClick={() => setActiveBaseMap('terrain')}
+          className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-semibold flex items-center gap-1.5 ${
+            activeBaseMap === 'terrain'
+              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+              : 'text-slate-400 hover:text-white'
+          }`}
+          title="Topographic Relief & Elevation Contours (OpenTopoMap)"
+        >
+          <span>🏔️</span>
+          <span className="hidden sm:inline">Topo</span>
+        </button>
+        <button
+          onClick={() => setActiveBaseMap('street')}
+          className={`px-2.5 py-1 rounded-lg transition-all text-[11px] font-semibold flex items-center gap-1.5 ${
+            activeBaseMap === 'street'
+              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+              : 'text-slate-400 hover:text-white'
+          }`}
+          title="Civilian Streets & Arterial Networks (CartoDB Positron)"
+        >
+          <span>🗺️</span>
+          <span className="hidden sm:inline">Street</span>
+        </button>
+      </div>
+
       {/* Floating Tactical Layer Switcher */}
       <div className="absolute top-3 right-3 z-[400] max-w-xs">
         <div className="bg-[#111827]/95 backdrop-blur-md border border-slate-700/80 rounded-lg p-2.5 shadow-2xl text-xs font-mono">
@@ -728,6 +815,27 @@ export const RiskMapCanvas: React.FC<RiskMapCanvasProps> = ({
           )}
         </div>
       </div>
+
+      {/* ODbL 1.0 & Multi-Agency Authoritative Attribution */}
+      <div className="absolute bottom-2 left-2 z-[400] px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/10 text-[9px] font-mono text-slate-300 flex items-center gap-1.5 shadow-lg pointer-events-auto">
+        <span className="text-slate-400">Base data ©</span>
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noreferrer"
+          className="text-cyan-400 hover:underline"
+        >
+          OpenStreetMap contributors
+        </a>
+        <span className="text-amber-400 font-bold">ODbL 1.0</span>
+        <span className="text-white/20">•</span>
+        <span className="text-slate-300 font-semibold">GSI NLFC</span>
+        <span className="text-white/20">•</span>
+        <span className="text-slate-300 font-semibold">ISRO NRSC Atlas</span>
+        <span className="text-white/20">•</span>
+        <span className="text-purple-300 font-semibold">Copernicus SAR</span>
+      </div>
     </div>
   );
 };
+

@@ -1,0 +1,44 @@
+{
+  "created_at_utc": "2026-09-12T05:33:56.154620+00:00",
+  "random_seed": 42,
+  "total_records": 6000,
+  "splits": {
+    "training": {
+      "filename": "training.csv",
+      "records": 4200,
+      "ratio": 0.7,
+      "positive_count": 1867,
+      "positive_ratio": 0.4445,
+      "sha256": "bca228fdfcad091a85ea55b68b0befd53cde635ee4b35aa11b1d3aa12d58d2ee",
+      "geographic_focus": "Western Ghats (Wayanad, Idukki) & Baseline Catchments",
+      "temporal_range": "2018 - 2021 Historical Monsoons"
+    },
+    "validation": {
+      "filename": "validation.csv",
+      "records": 900,
+      "ratio": 0.15,
+      "positive_count": 424,
+      "positive_ratio": 0.4711,
+      "sha256": "1417a2577ee5e39fc438dfa827b15c603eeee31f7ae3c630d6032f9a25817ea6",
+      "geographic_focus": "Transition Catchments",
+      "temporal_range": "2022 Monsoon Validation Anchor"
+    },
+    "test": {
+      "filename": "test.csv",
+      "records": 900,
+      "ratio": 0.15,
+      "positive_count": 413,
+      "positive_ratio": 0.4589,
+      "sha256": "8c2abcf957ebe1d1bccad9d26a46beef59045a684fc5bff0d47f53df72acc0bc",
+      "geographic_focus": "Himalayan Spatial Holdouts (Rudraprayag, Shimla)",
+      "temporal_range": "2023 - 2024 Recent Unseen Monsoons"
+    }
+  },
+  "negative_sampling_criteria": {
+    "slope_threshold": "< 10.0 degrees",
+    "lithology": "Grade 1 Fresh Charnockite / Crystalline basement",
+    "slope_curvature": "|curvature| < 0.1 (Planar)",
+    "exclusion_buffer_m": 1000.0,
+    "verified_absence_count": 23
+  }
+}

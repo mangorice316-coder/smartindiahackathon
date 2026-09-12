@@ -325,3 +325,33 @@ def retrain_model_compat(
     req = MLTrainRequest(algorithm=algorithm, n_samples=n_samples)
     return train_model(req, current_user, db)
 
+
+@router.get("/pipeline/lineage")
+def get_pipeline_lineage():
+    """Retrieve complete 5-Tier Data Hierarchy, active dataset checksum, and decoupled pipeline lineage."""
+    import os
+    import json
+    from app.pipeline.hierarchy import get_data_hierarchy_specification
+    from app.pipeline.train_versioned_model import MODELS_DIR
+
+    lineage_path = os.path.join(MODELS_DIR, "LRIDS_GSI_ISRO_v2.1_lineage.json")
+    spec = get_data_hierarchy_specification()
+
+    if os.path.exists(lineage_path):
+        try:
+            with open(lineage_path, "r", encoding="utf-8") as f:
+                lineage_data = json.load(f)
+            return {
+                "status": "ACTIVE_VERSIONED_PIPELINE",
+                "lineage": lineage_data,
+                "hierarchy_specification": spec
+            }
+        except Exception:
+            pass
+
+    return {
+        "status": "DEFAULT_HIERARCHY_READY",
+        "hierarchy_specification": spec
+    }
+
+

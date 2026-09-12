@@ -1,0 +1,163 @@
+{
+  "pipeline_version": "LRIDS-DATA-PIPELINE-v2.1",
+  "architecture_mandate": "Strict decoupling: Model parameters are trained offline from versioned data. Dashboard strictly consumes frozen artifacts.",
+  "lineage_graph": {
+    "Model_1_Susceptibility": {
+      "description": "Static spatial failure propensity model (0 to 1)",
+      "target": "landslide_occurrence (verified GSI/ISRO scars vs non-landslide slopes)",
+      "feature_traces": [
+        {
+          "feature": "slope",
+          "derived_from": "DS-NASA-DEM-008",
+          "script": "pipelines/geospatial/dem_derivatives.py v2.0",
+          "validation": "BIS 14496-Part 2 (0-90 deg)"
+        },
+        {
+          "feature": "aspect_sin_cos",
+          "derived_from": "DS-NASA-DEM-008",
+          "script": "pipelines/geospatial/dem_derivatives.py v2.0",
+          "validation": "Continuous sin/cos projection"
+        },
+        {
+          "feature": "slope_shape",
+          "derived_from": "DS-GSI-NLSM-002",
+          "script": "pipelines/geospatial/curvature.py v1.4",
+          "validation": "GSI Geomorphic Classification"
+        },
+        {
+          "feature": "lithology_grade",
+          "derived_from": "DS-GSI-NLSM-002",
+          "script": "pipelines/cleaning/lithology_standardize.py v1.2",
+          "validation": "GSI 1:50k Litho-Maps"
+        },
+        {
+          "feature": "fault_distance_km",
+          "derived_from": "DS-GSI-NLSM-002",
+          "script": "pipelines/geospatial/structural_buffers.py v1.1",
+          "validation": "GSI Seismotectonic Atlas"
+        },
+        {
+          "feature": "lineament_density",
+          "derived_from": "DS-GSI-NLSM-002",
+          "script": "pipelines/geospatial/structural_buffers.py v1.1",
+          "validation": "km lineament per km2"
+        },
+        {
+          "feature": "geomorphology_unit",
+          "derived_from": "DS-GSI-NLSM-002",
+          "script": "pipelines/cleaning/geomorph_standardize.py v1.0",
+          "validation": "GSI 4-class morphogenetic unit"
+        },
+        {
+          "feature": "lulc_class",
+          "derived_from": "DS-ISRO-ATLAS-003",
+          "script": "pipelines/cleaning/lulc_harmonize.py v1.3",
+          "validation": "Bhuvan 1:50k LULC classification"
+        },
+        {
+          "feature": "twi",
+          "derived_from": "DS-NASA-DEM-008",
+          "script": "pipelines/geospatial/twi_calculator.py v2.1",
+          "validation": "Hydro-conditioned DEM TWI range 2.5-18.0"
+        }
+      ]
+    },
+    "Model_2_Near_Realtime_Risk": {
+      "description": "Dynamic multi-temporal landslide risk estimator (0-100)",
+      "target": "risk_severity (LOW, MODERATE, HIGH, CRITICAL)",
+      "feature_traces": [
+        {
+          "feature": "Model_1_Susceptibility_Score",
+          "derived_from": "Model 1 Checkpoint",
+          "script": "ml/evaluation/susceptibility_infer.py v2.1",
+          "validation": "Score range 0.0 - 1.0"
+        },
+        {
+          "feature": "rainfall_24h_mm",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/aggregate_rainfall.py v2.4",
+          "validation": "Hourly AWS sum, physical check 0-650mm"
+        },
+        {
+          "feature": "rainfall_72h_antecedent_mm",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/antecedent_api.py v2.0",
+          "validation": "Decaying API formulation k=0.85"
+        },
+        {
+          "feature": "soil_saturation_pct",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/soil_water_balance.py v1.8",
+          "validation": "Volumetric bounds 20-100%"
+        },
+        {
+          "feature": "pore_water_pressure_kpa",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/pore_pressure_physics.py v2.2",
+          "validation": "Hydrostatic limit u <= gamma_w * h_w"
+        }
+      ]
+    },
+    "Model_3_Rainfall_Trigger_Probability": {
+      "description": "Precipitation threshold exceedance probability",
+      "target": "rainfall_triggered_event (0 or 1)",
+      "feature_traces": [
+        {
+          "feature": "rainfall_intensity_max_mm_h",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/intensity_duration.py v1.5",
+          "validation": "Sub-daily peak burst (0-150mm/h)"
+        },
+        {
+          "feature": "cumulative_monsoon_anomaly",
+          "derived_from": "DS-IMD-GRID-004",
+          "script": "pipelines/rainfall/climatology_anomaly.py v1.2",
+          "validation": "IMD 30-year normal deviation"
+        }
+      ]
+    },
+    "Model_5_Satellite_Change_Detection": {
+      "description": "Scar segmentation & coherence loss classification",
+      "target": "change_detected (0 or 1)",
+      "feature_traces": [
+        {
+          "feature": "sar_coherence_loss",
+          "derived_from": "DS-ESA-S1-SAR-005",
+          "script": "pipelines/satellite/insar_coherence.py v2.0",
+          "validation": "Day/night all-weather C-band 5.405 GHz"
+        },
+        {
+          "feature": "sar_backscatter_diff_db",
+          "derived_from": "DS-ESA-S1-SAR-005",
+          "script": "pipelines/satellite/sar_radiometric.py v1.8",
+          "validation": "VV/VH temporal difference"
+        },
+        {
+          "feature": "ndvi_vegetation_loss",
+          "derived_from": "DS-ESA-S2-MSI-006",
+          "script": "pipelines/satellite/optical_ndvi.py v2.1",
+          "validation": "Pre/Post cloud-masked Sentinel-2 MSI"
+        }
+      ]
+    },
+    "Model_6_Infrastructure_Consequence": {
+      "description": "Lifeline network vulnerability & consequence estimation",
+      "target": "infrastructure_exposed (0 or 1)",
+      "feature_traces": [
+        {
+          "feature": "osm_road_distance_m",
+          "derived_from": "DS-OSM-INFRA-007",
+          "script": "pipelines/geospatial/network_proximity.py v1.6",
+          "validation": "ODbL 1.0 license compliance"
+        },
+        {
+          "feature": "osm_settlement_distance_m",
+          "derived_from": "DS-OSM-INFRA-007",
+          "script": "pipelines/geospatial/network_proximity.py v1.6",
+          "validation": "ODbL 1.0 license compliance"
+        }
+      ]
+    }
+  },
+  "generated_at_utc": "2026-09-12T05:30:37.274773+00:00"
+}

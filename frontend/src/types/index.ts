@@ -363,6 +363,66 @@ export interface SimulationTimeSeriesResponse {
   disclaimer: string;
 }
 
+export interface OperationalDirective {
+  id: string;
+  action_type: 'EVACUATION' | 'ROAD_CLOSURE' | 'FIELD_DISPATCH' | 'SHELTER_ACTIVATION' | string;
+  title: string;
+  target: string;
+  urgency: 'P1_IMMEDIATE' | 'P2_HIGH' | 'P3_MEDIUM' | string;
+  rationale: string;
+  status: 'PENDING_DISPATCH' | 'ISSUED' | 'ACTIVE_CLOSURE' | 'DISPATCHED' | 'ACKNOWLEDGED' | string;
+}
+
+export interface OperationalBriefing {
+  primary_incident: string;
+  current_severity: 'CRITICAL' | 'HIGH' | 'MODERATE' | 'LOW';
+  risk_trend: 'ESCALATING' | 'STABLE' | 'SUBSIDING';
+  trend_pct: number;
+  time_horizon: string;
+  primary_trigger_summary: string;
+  geological_mechanics: string;
+  top_threat_sector: string;
+  recommended_immediate_actions: OperationalDirective[];
+  data_freshness: Record<string, string>;
+  confidence_score: number;
+}
+
+export interface DataProvenance {
+  source_name: string;
+  last_updated: string;
+  status: 'LIVE' | 'CACHED' | 'SIMULATED';
+  confidence_pct: number;
+  citation_url?: string;
+}
+
+export type BaseMapTileType = 'dark' | 'satellite' | 'terrain' | 'street';
+
+export type FieldInspectionWorkflowStatus =
+  | 'NEW'
+  | 'ASSIGNED'
+  | 'EN_ROUTE'
+  | 'ON_SITE'
+  | 'INSPECTING'
+  | 'SUBMITTED'
+  | 'SYNCED'
+  | 'PENDING'
+  | 'DISPATCHED'
+  | 'INSPECTED'
+  | 'CLEARED'
+  | 'CLOSED';
+
+export interface OfflineSyncState {
+  is_offline: boolean;
+  last_sync_time: string;
+  cached_counts: {
+    catchments: number;
+    scars: number;
+    lifelines: number;
+    alerts: number;
+  };
+  pending_inspections_queue: Array<Partial<InspectionTask> & { local_id: string; queued_at: string }>;
+}
+
 export interface DashboardOverview {
   timestamp: string;
   data_mode: 'DEMO' | 'REAL';
@@ -379,6 +439,7 @@ export interface DashboardOverview {
   highest_risk_locations: RiskAssessment[];
   critical_alerts: AlertItem[];
   top_inspections: InspectionTask[];
+  operational_briefing?: OperationalBriefing;
 }
 
 export interface DataSourceHealth {

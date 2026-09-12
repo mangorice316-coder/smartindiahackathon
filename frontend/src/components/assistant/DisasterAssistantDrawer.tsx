@@ -10,7 +10,12 @@ import {
   Database,
   Layers,
   HelpCircle,
-  Activity
+  Activity,
+  ShieldCheck,
+  Target,
+  Clock,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { NavView } from '../shell/Sidebar';
@@ -25,17 +30,22 @@ interface AssistantMessage {
   id: string;
   sender: 'user' | 'assistant';
   text: string;
+  evidence?: Array<{ metric: string; value: string; status: string }>;
+  confidence?: number;
+  dataTimestamp?: string;
+  recommendedAction?: string;
   citations?: string[];
   recommendedView?: string;
   timestamp: string;
 }
 
 const PRESET_QUESTIONS = [
-  'Which catchments currently have the highest risk?',
+  'Which zones became more dangerous in the last 6 hours?',
   'Why is Chooralmala in a critical failure state?',
-  'Which bridges and roads are in the danger runout zone?',
+  'Which bridges and roads are in the 1km hazard zone?',
+  'Which field squads should be dispatched first?',
   'What happens if rainfall surges by +50%?',
-  'Show historical landslide activity in this region'
+  'Generate executive district emergency briefing (SitRep)'
 ];
 
 export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = ({
@@ -77,6 +87,10 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
         id: `assistant-${Date.now()}`,
         sender: 'assistant',
         text: response.answer,
+        evidence: response.evidence,
+        confidence: response.confidence,
+        dataTimestamp: response.data_timestamp,
+        recommendedAction: response.recommended_action,
         citations: response.citations,
         recommendedView: response.recommended_view,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -125,7 +139,7 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
       <div className="p-3.5 border-b border-white/[0.06] bg-white/[0.015]">
         <div className="text-[10px] font-mono text-slate-400 mb-2 flex items-center gap-1.5 font-bold uppercase tracking-wider">
           <Sparkles size={11} className="text-amber-400" />
-          <span>SUGGESTED EVALUATION QUERIES:</span>
+          <span>SUGGESTED OPERATIONAL INQUIRIES:</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {PRESET_QUESTIONS.map((q, idx) => (
@@ -149,20 +163,92 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
             className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
           >
             <div
-              className={`max-w-[92%] rounded-lg p-3.5 ${
+              className={`max-w-[94%] rounded-xl p-3.5 transition-all ${
                 msg.sender === 'user'
-                  ? 'bg-red-600 text-white font-mono'
-                  : 'bg-slate-900 border border-slate-800 text-slate-200 shadow-sm'
+                  ? 'bg-rose-600 text-white font-mono shadow-lg shadow-rose-950/40'
+                  : 'bg-[#0c121e] border border-white/[0.08] text-slate-200 shadow-xl'
               }`}
             >
+              {/* Header for assistant message */}
+              {msg.sender === 'assistant' && (
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-cyan-400">
+                    <ShieldCheck size={12} className="text-cyan-400" />
+                    <span>LRIDS GEO-ASSISTANT</span>
+                  </div>
+                  {msg.confidence && (
+                    <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40">
+                      {msg.confidence.toFixed(1)}% GROUNDED CONFIDENCE
+                    </span>
+                  )}
+                </div>
+              )}
+
               {/* Message Content */}
               <div className="prose prose-invert prose-xs max-w-none space-y-2 whitespace-pre-wrap leading-relaxed">
                 {msg.text}
               </div>
 
+              {/* Structured Operational Evidence Deck */}
+              {msg.evidence && msg.evidence.length > 0 && (
+                <div className="mt-3 pt-2.5 border-t border-white/[0.08]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-mono font-bold text-slate-300 flex items-center gap-1.5 tracking-wider uppercase">
+                      <Layers size={11} className="text-cyan-400" />
+                      OPERATIONAL EVIDENCE GROUNDING:
+                    </span>
+                    {msg.dataTimestamp && (
+                      <span className="text-[9px] font-mono text-slate-500 flex items-center gap-1">
+                        <Clock size={10} />
+                        {new Date(msg.dataTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} UTC
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {msg.evidence.map((item, eIdx) => {
+                      const isCrit = ['CRITICAL', 'FAILURE', 'EXTREME', 'SHEAR_FAILURE'].includes(item.status);
+                      const isWarn = ['SATURATED', 'WARNING', 'ACCELERATING', 'STEEP'].includes(item.status);
+                      const isGood = ['AVAILABLE', 'READY', 'SECURE', 'VERIFIED'].includes(item.status);
+                      const badgeClass = isCrit
+                        ? 'bg-rose-950/70 text-rose-300 border-rose-500/40'
+                        : isWarn
+                        ? 'bg-amber-950/70 text-amber-300 border-amber-500/40'
+                        : isGood
+                        ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40'
+                        : 'bg-cyan-950/70 text-cyan-300 border-cyan-500/40';
+
+                      return (
+                        <div key={eIdx} className="p-2 rounded-lg bg-black/40 border border-white/[0.06] flex flex-col justify-between">
+                          <div className="text-[9px] font-mono text-slate-400 uppercase truncate">{item.metric}</div>
+                          <div className="flex items-center justify-between mt-1 gap-1">
+                            <span className="text-[11px] font-mono font-bold text-slate-100 truncate">{item.value}</span>
+                            <span className={`px-1 py-0.2 rounded text-[8px] font-mono font-bold border shrink-0 ${badgeClass}`}>
+                              {item.status}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Recommended Command Directive Callout */}
+              {msg.recommendedAction && (
+                <div className="mt-3 p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/40 text-amber-200">
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono font-extrabold text-amber-400 uppercase tracking-wide">
+                    <Target size={12} className="text-amber-400" />
+                    <span>RECOMMENDED COMMAND DIRECTIVE</span>
+                  </div>
+                  <p className="text-[11px] font-sans mt-1 leading-snug text-amber-100 font-medium">
+                    {msg.recommendedAction}
+                  </p>
+                </div>
+              )}
+
               {/* Citations & Verified Provenance */}
               {msg.citations && msg.citations.length > 0 && (
-                <div className="mt-3 pt-2.5 border-t border-slate-800/80 font-mono text-[10px]">
+                <div className="mt-3 pt-2.5 border-t border-white/[0.08] font-mono text-[10px]">
                   <div className="flex items-center gap-1 text-slate-400 mb-1">
                     <Database size={10} className="text-cyan-400" />
                     <span>REFERENCED DATABASE ENTITIES:</span>
@@ -171,7 +257,7 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
                     {msg.citations.map((c, cIdx) => (
                       <span
                         key={cIdx}
-                        className="px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700"
+                        className="px-1.5 py-0.5 rounded bg-white/[0.04] text-cyan-300 border border-cyan-500/30 text-[10px]"
                       >
                         {c}
                       </span>
@@ -188,10 +274,10 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
                       onNavigateView(msg.recommendedView as NavView);
                       onClose();
                     }}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-mono border border-slate-700 transition-colors"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyan-950/70 hover:bg-cyan-900 text-cyan-300 text-[11px] font-mono font-bold border border-cyan-500/40 shadow-sm transition-all hover:scale-105 active:scale-95"
                   >
-                    <span>Inspect in {msg.recommendedView.toUpperCase()} View</span>
-                    <ArrowRight size={11} />
+                    <span>Execute &amp; Inspect in {msg.recommendedView.toUpperCase()}</span>
+                    <ArrowRight size={12} />
                   </button>
                 </div>
               )}
@@ -201,8 +287,8 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400 p-3 bg-slate-900 rounded border border-slate-800">
-            <Activity size={14} className="text-red-400 animate-spin" />
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-400 p-3 bg-slate-900/90 rounded-xl border border-white/[0.08]">
+            <Activity size={14} className="text-rose-400 animate-spin" />
             <span>Querying live database state and geotechnical physics equations...</span>
           </div>
         )}

@@ -523,6 +523,30 @@ class AuditEventResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OperationalDirectiveSchema(BaseModel):
+    id: str
+    action_type: str
+    title: str
+    target: str
+    urgency: str
+    rationale: str
+    status: str
+
+
+class OperationalBriefingSchema(BaseModel):
+    primary_incident: str
+    current_severity: str
+    risk_trend: str
+    trend_pct: float
+    time_horizon: str
+    primary_trigger_summary: str
+    geological_mechanics: str
+    top_threat_sector: str
+    recommended_immediate_actions: List[OperationalDirectiveSchema]
+    data_freshness: Dict[str, Any]
+    confidence_score: float
+
+
 # --- System Overview / Dashboard KPI ---
 class DashboardOverviewResponse(BaseModel):
     timestamp: datetime
@@ -540,6 +564,7 @@ class DashboardOverviewResponse(BaseModel):
     highest_risk_locations: List[RiskAssessmentResponse]
     critical_alerts: List[AlertResponse]
     top_inspections: List[InspectionTaskResponse]
+    operational_briefing: Optional[OperationalBriefingSchema] = None
 
 
 # --- Machine Learning Risk Engine Schemas ---

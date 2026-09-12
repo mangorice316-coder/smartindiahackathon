@@ -4,7 +4,7 @@ import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight } fro
 export interface Column<T> {
   key: string;
   header: string;
-  render?: (item: T) => React.ReactNode;
+  render?: (item: T, index?: number) => React.ReactNode;
   className?: string;
   sortable?: boolean;
 }
@@ -129,7 +129,7 @@ export function Table<T extends Record<string, any>>({
               >
                 {columns.map((col) => (
                   <td key={col.key} className={`py-2.5 px-3.5 text-slate-200 ${col.className || ''}`}>
-                    {col.render ? col.render(item) : (item as any)[col.key]}
+                    {col.render ? col.render(item, idx) : (item as any)[col.key]}
                   </td>
                 ))}
               </tr>

@@ -163,6 +163,42 @@ export const ModelDataView: React.FC<ModelDataViewProps> = ({
         </div>
       </div>
 
+      {/* 1b. Decoupled 5-Tier Data Pipeline & Provenance Lineage Card */}
+      <div className="p-3.5 bg-[#0a0f1d] border border-cyan-500/30 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-lg">
+        <div className="space-y-1.5 max-w-2xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              DECOUPLED DATA &amp; ML PIPELINE
+            </span>
+            <span className="font-mono text-white font-bold">GSI_ISRO_NLFC_v2.1</span>
+            <span className="text-slate-500">•</span>
+            <span className="font-mono text-[10px] text-slate-400">
+              SHA-256: <span className="text-emerald-400">b043958f9a4e4948...0cdf0a</span>
+            </span>
+          </div>
+          <p className="text-slate-300 text-[11px] leading-relaxed">
+            The machine learning model is strictly trained offline using versioned datasets (Tier 1 GSI NLFC Ground Truth + Tier 2 ISRO NRSC Atlas + Tier 3 IMD + Tier 4 Sentinel-1/2 SAR). The operational dashboard strictly consumes frozen model checkpoints.
+          </p>
+          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <span className="text-[10px] font-mono text-slate-400 font-semibold">GSI 8 Factors:</span>
+            {['Slope', 'Aspect', 'Curvature', 'Lithology', 'Structure', 'Geomorphology', 'LULC', 'Geohydrology'].map((factor) => (
+              <span key={factor} className="px-1.5 py-0.2 rounded bg-white/[0.05] border border-white/10 text-[10px] font-mono text-slate-300">
+                {factor}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('open-data-hierarchy-modal'))}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold transition-all shadow-[0_0_12px_rgba(6,182,212,0.15)] active:scale-95"
+        >
+          <Layers size={14} className="text-cyan-400" />
+          <span>Inspect 5-Tier Data Hierarchy</span>
+        </button>
+      </div>
+
+
       {/* 2. Model Performance Telemetry Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
         <StatCard

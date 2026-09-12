@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satellite, Compass, AlertCircle, Palette } from 'lucide-react';
+import { Activity, RefreshCw, Radio, UserCheck, Play, Bot, AlertTriangle, Satellite, Compass, AlertCircle, Palette, Layers } from 'lucide-react';
 import { api } from '../../services/api';
 
 interface HeaderProps {
@@ -68,25 +68,67 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center Operational Mode Badge (100% Real-Time Live) */}
-      <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-        <span className="font-bold text-white tracking-wide text-[11px]">100% REAL-TIME TELEMETRY</span>
-        <span className="text-white/20">•</span>
-        <span className="text-slate-400 text-[10px]">Open-Meteo REST Stream (ECMWF/GFS)</span>
+      {/* Center Operational Incident Banner & Telemetry Strip */}
+      <div className="hidden xl:flex items-center gap-3">
+        {/* Active Incident Pill */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs font-mono text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]">
+          <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+          <span className="font-bold text-white tracking-wide text-[11px]">INCIDENT: WAYANAD MONSOON SURGE</span>
+          <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-red-500/20 text-red-300 border border-red-500/40">CRITICAL</span>
+        </div>
+
+        {/* Compact Telemetry Badges */}
+        <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-white/[0.03] border border-white/[0.07] text-[10px] font-mono text-slate-300">
+          <span className="flex items-center gap-1 text-emerald-400" title="Open-Meteo REST Weather Stream">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Rain: LIVE
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="text-purple-300" title="Sentinel-1 SAR / Sentinel-2 MSI Multi-Spectral pass today">
+            Satellite: READY
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="text-cyan-300" title="In-situ piezometer, tiltmeter, and acoustic emission sensor nodes">
+            Sensors: 8/8
+          </span>
+          <span className="text-white/20">•</span>
+          <span className="text-amber-300" title="12 Arterial Lifeline road and bridge corridors monitored">
+            Roads: 12
+          </span>
+        </div>
       </div>
 
       {/* Right Command Actions Dock */}
       <div className="flex items-center gap-2">
+        {/* 1-Click Guided Scenario Button (Judge Evaluation Tour) */}
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('start-disaster-scenario'))}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/10 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 hover:border-amber-400/60 text-xs font-mono font-bold transition-all shadow-[0_0_16px_rgba(245,158,11,0.2)] active:scale-95"
+          title="Run 12-Step Guided Disaster Demonstration Scenario for Hackathon Judges"
+        >
+          <Play size={11} className="text-amber-400 fill-amber-400" />
+          <span className="hidden sm:inline">Scenario Tour</span>
+        </button>
+
+        {/* Data Hierarchy & Decoupled Pipeline Modal Button */}
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('open-data-hierarchy-modal'))}
+          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-teal-500/10 hover:from-blue-500/30 hover:to-cyan-500/30 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400/60 text-xs font-mono font-bold transition-all shadow-[0_0_16px_rgba(6,182,212,0.2)] active:scale-95"
+          title="Open Authoritative 5-Tier Data Hierarchy & Pipeline Lineage Modal (GSI NLFC, ISRO NRSC Atlas, IMD, Sentinel-1/2, OSM ODbL 1.0)"
+        >
+          <Layers size={12} className="text-cyan-400" />
+          <span className="hidden lg:inline">Hierarchy & Lineage</span>
+          <span className="px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/30 text-cyan-200 border border-cyan-400/40 font-mono">v2.1</span>
+        </button>
+
         {/* Quick Geospatial & Intelligence Tool Island */}
-        <div className="hidden xl:flex items-center rounded-xl bg-white/[0.03] border border-white/[0.08] p-0.5 shadow-sm">
+        <div className="hidden md:flex items-center rounded-xl bg-white/[0.03] border border-white/[0.08] p-0.5 shadow-sm">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-live-gps-modal'))}
             className="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-white/[0.06] text-slate-300 hover:text-cyan-300 text-xs font-mono rounded-lg transition-all"
             title="Inspect real-time weather and run landslide model on ANY GPS coordinates"
           >
             <Compass size={12} className="text-cyan-400" />
-            <span>GPS Inspector</span>
+            <span>GPS</span>
           </button>
           <span className="w-[1px] h-3.5 bg-white/[0.08]" />
           <button
@@ -95,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Open Sentinel-1/2 Satellite Change Detection"
           >
             <Satellite size={12} className="text-purple-400" />
-            <span>Satellite AI</span>
+            <span>Satellite</span>
           </button>
           <span className="w-[1px] h-3.5 bg-white/[0.08]" />
           <button
@@ -104,7 +146,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Open Road & Arterial Lifeline Vulnerability Assessment"
           >
             <Radio size={12} className="text-amber-400" />
-            <span>Road Risk</span>
+            <span>Roads</span>
           </button>
           <span className="w-[1px] h-3.5 bg-white/[0.08]" />
           <button
@@ -113,7 +155,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Record Citizen / Field Patrol Ground Crack Tension Fissure"
           >
             <AlertCircle size={12} className="text-emerald-400" />
-            <span>Report Crack</span>
+            <span>Crack</span>
           </button>
         </div>
 

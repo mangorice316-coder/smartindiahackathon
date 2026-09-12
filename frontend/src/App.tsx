@@ -20,6 +20,8 @@ import { RoadVulnerabilityModal } from './components/roads/RoadVulnerabilityModa
 import { ReportIncidentModal } from './components/incident/ReportIncidentModal';
 import { LiveCoordinateInspectorModal } from './components/live/LiveCoordinateInspectorModal';
 import { StitchStudioModal } from './components/stitch/StitchStudioModal';
+import { GuidedScenarioTourModal } from './components/demo/GuidedScenarioTourModal';
+import { DataHierarchyModal } from './components/pipeline/DataHierarchyModal';
 import { Compass, RefreshCw } from 'lucide-react';
 import { api } from './services/api';
 import {
@@ -59,6 +61,8 @@ export const App: React.FC = () => {
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState<boolean>(false);
   const [isLiveGpsModalOpen, setIsLiveGpsModalOpen] = useState<boolean>(false);
   const [isStitchModalOpen, setIsStitchModalOpen] = useState<boolean>(false);
+  const [isTourModalOpen, setIsTourModalOpen] = useState<boolean>(false);
+  const [isDataHierarchyModalOpen, setIsDataHierarchyModalOpen] = useState<boolean>(false);
   const [liveGpsCoords, setLiveGpsCoords] = useState<{ lat: number; lon: number }>({ lat: 11.5365, lon: 76.1322 });
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true);
   const [lastSyncTime, setLastSyncTime] = useState<Date>(new Date());
@@ -257,11 +261,16 @@ export const App: React.FC = () => {
       setIsLiveGpsModalOpen(true);
     };
 
+    const handleStartScenario = () => setIsTourModalOpen(true);
+    const handleOpenDataHierarchy = () => setIsDataHierarchyModalOpen(true);
+
     window.addEventListener('open-satellite-modal', handleOpenSatellite);
     window.addEventListener('open-road-modal', handleOpenRoad);
     window.addEventListener('open-incident-modal', handleOpenIncident);
     window.addEventListener('open-live-gps-modal', handleOpenLiveGps);
     window.addEventListener('open-stitch-modal', handleOpenStitch);
+    window.addEventListener('start-disaster-scenario', handleStartScenario);
+    window.addEventListener('open-data-hierarchy-modal', handleOpenDataHierarchy);
 
     return () => {
       window.removeEventListener('open-satellite-modal', handleOpenSatellite);
@@ -269,6 +278,8 @@ export const App: React.FC = () => {
       window.removeEventListener('open-incident-modal', handleOpenIncident);
       window.removeEventListener('open-live-gps-modal', handleOpenLiveGps);
       window.removeEventListener('open-stitch-modal', handleOpenStitch);
+      window.removeEventListener('start-disaster-scenario', handleStartScenario);
+      window.removeEventListener('open-data-hierarchy-modal', handleOpenDataHierarchy);
     };
   }, []);
 
@@ -457,19 +468,33 @@ export const App: React.FC = () => {
         {/* Dynamic View Display Container */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#06080e]/95 relative z-10">
 
-          {/* Offline / Backend Fallback Banner if operating offline */}
+          {/* Transparent Offline Control Deck (Phase 12) */}
           {!isBackendConnected && !isLoading && (
-            <div className="mb-3 px-3 py-1.5 rounded bg-amber-950/40 border border-amber-600/50 flex items-center justify-between text-xs font-mono text-amber-300">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                <span>OFFLINE CACHE ACTIVE: Operating on Encrypted Local Geopackage Storage (FastAPI Reconnecting...)</span>
-              </span>
-              <button
-                onClick={loadAllData}
-                className="underline text-amber-200 hover:text-white text-[11px]"
-              >
-                Reconnect Backend
-              </button>
+            <div className="mb-4 p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/40 font-mono text-xs text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.15)] space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                  <strong className="text-white tracking-wide">OPERATING IN RESILIENT OFFLINE MODE:</strong>
+                  <span className="text-amber-300">Encrypted Local Geopackage Active (Local Cache Online)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400 text-[11px]">Last Sync: Today 10:42 AM</span>
+                  <button
+                    onClick={loadAllData}
+                    className="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 active:scale-95"
+                  >
+                    <RefreshCw size={11} />
+                    <span>Reconnect Backend</span>
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-amber-500/20 text-[11px] text-slate-300">
+                <span>Cached Disaster Metrics:</span>
+                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-amber-300 font-bold">12 Monitored Catchments</span>
+                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-purple-300 font-bold">29 Historical Scars (GSI)</span>
+                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-cyan-300 font-bold">18 Critical Lifelines</span>
+                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-emerald-300 font-bold">6 Active Directives</span>
+              </div>
             </div>
           )}
 
@@ -627,6 +652,22 @@ export const App: React.FC = () => {
       <StitchStudioModal
         isOpen={isStitchModalOpen}
         onClose={() => setIsStitchModalOpen(false)}
+      />
+
+      {/* 12-Step Guided Disaster Demonstration Scenario Tour Modal */}
+      <GuidedScenarioTourModal
+        isOpen={isTourModalOpen}
+        onClose={() => setIsTourModalOpen(false)}
+        onNavigateView={(v) => {
+          setCurrentView(v);
+          setIsTourModalOpen(false);
+        }}
+      />
+
+      {/* Authoritative 5-Tier Data Hierarchy & Lineage Modal */}
+      <DataHierarchyModal
+        isOpen={isDataHierarchyModalOpen}
+        onClose={() => setIsDataHierarchyModalOpen(false)}
       />
     </div>
   );

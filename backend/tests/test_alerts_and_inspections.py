@@ -92,6 +92,10 @@ def test_alert_generation_and_deduplication(db):
     loc = db.query(Location).first()
     assert loc is not None
 
+    # Isolate test by removing any prior seeded alerts for this location
+    db.query(Alert).filter(Alert.location_id == loc.id).delete()
+    db.commit()
+
     assessment_1 = {
         "overall_risk_score": 75.0,
         "risk_category": "CRITICAL",

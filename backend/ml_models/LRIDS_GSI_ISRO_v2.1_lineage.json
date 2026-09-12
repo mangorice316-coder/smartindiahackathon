@@ -1,0 +1,249 @@
+{
+  "model_version_tag": "LRIDS_GSI_ISRO_v2.1",
+  "algorithm": "HistGradientBoostingClassifier",
+  "trained_at_utc": "2026-09-12T05:24:05.896476+00:00",
+  "training_dataset": {
+    "name": "GSI_ISRO_NLFC_v2.1",
+    "version": "2.1.0",
+    "sha256": "b043958f9a4e49485679e0f7b88422ceae299956a2a9d5c559bcbda55a0cdf0a",
+    "row_count": 6000,
+    "positive_ratio": 0.4507
+  },
+  "metrics": {
+    "roc_auc": 0.9276,
+    "pr_auc": 0.8851,
+    "brier_score": 0.1064,
+    "accuracy": 0.8567,
+    "precision": 0.8336,
+    "recall": 0.8521,
+    "f1_score": 0.8428,
+    "confusion_matrix": [
+      [
+        567,
+        92
+      ],
+      [
+        80,
+        461
+      ]
+    ],
+    "test_samples": 1200
+  },
+  "feature_importances": {
+    "slope": 0.22,
+    "pore_water_pressure_kpa": 0.18,
+    "soil_saturation_pct": 0.14,
+    "rainfall_24h_mm": 0.13,
+    "rainfall_72h_antecedent_mm": 0.11,
+    "sar_coherence_loss": 0.07,
+    "twi": 0.05,
+    "lithology_grade": 0.04,
+    "slope_shape": 0.03,
+    "fault_distance_km": 0.03
+  },
+  "hierarchy_spec": {
+    "framework_version": "5-TIER-GSI-ISRO-v2.1",
+    "description": "Authoritative Multi-Agency Landslide Risk Data Hierarchy & Decoupled Pipeline",
+    "tiers": [
+      {
+        "tier": "TIER_1_GSI_NLFC",
+        "tier_number": 1,
+        "name": "GSI NLFC Ground Truth & Geotechnical Susceptibility",
+        "lead_agency": "Geological Survey of India (GSI) - National Landslide Forecasting Centre (NLFC)",
+        "operational_role": "Primary ground-truth labels and static susceptibility baseline",
+        "update_cadence": "Pre-Monsoon & Post-Monsoon Ground Validation Audits",
+        "primary_dataset": "National Landslide Susceptibility Mapping (NLSM) 1:50,000 & Field Inventory",
+        "coverage": "Pan-India Hilly Tracts (Western Ghats, Eastern Ghats, Himalayas, North-East)",
+        "key_features": [
+          "GSI 8 Core Susceptibility Factors (Slope, Aspect, Shape, Lithology, Structure, Geomorphology, LULC, Geohydrology)",
+          "Field-validated crown-crack dilatancy and shear slip records",
+          "Geotechnical laboratory shear strength parameters (cohesion c', internal friction phi', unit soil weight gamma)"
+        ],
+        "citation": "Geological Survey of India, National Landslide Susceptibility Mapping (NLSM) Programme, Kolkata, India.",
+        "license_type": "Government of India Open Data / GSI NLFC Official Scientific Portal",
+        "special_capability": "Ground-truth calibration benchmark preventing model hallucination"
+      },
+      {
+        "tier": "TIER_2_ISRO_NRSC",
+        "tier_number": 2,
+        "name": "ISRO NRSC Landslide Atlas of India (~80,000 Historical Events)",
+        "lead_agency": "National Remote Sensing Centre (NRSC) / Indian Space Research Organisation (ISRO)",
+        "operational_role": "Historical spatial-temporal training corpus and regional risk exposure catalog",
+        "update_cadence": "Multi-decadal historical catalog (1998-2022) with annual post-event satellite supplements",
+        "primary_dataset": "Landslide Atlas of India (1998-2022) Database (80,000+ Mapped Landslides)",
+        "coverage": "17 Indian States and 2 Union Territories across Western Ghats and Himalayas",
+        "key_features": [
+          "Seasonal, event-based, and route-wise landslide inventories",
+          "Spatially mapped historical polygons and scar coordinates",
+          "Socio-economic exposure indices, damage intensity classifications, and runout zones"
+        ],
+        "citation": "NRSC/ISRO (2023). Landslide Atlas of India: Spatial database of landslides in India (1998-2022). National Remote Sensing Centre, Hyderabad.",
+        "license_type": "ISRO Bhuvan Geo-Platform Public Scientific License",
+        "special_capability": "Enables high-sample-volume offline training across 80,000+ ground-validated historical disaster events"
+      },
+      {
+        "tier": "TIER_3_IMD_WEATHER",
+        "tier_number": 3,
+        "name": "IMD Meteorological Triggers & Climatology",
+        "lead_agency": "India Meteorological Department (IMD) & Open Government Data (data.gov.in)",
+        "operational_role": "Dynamic triggering variables, antecedent rainfall indices, and live precipitation telemetry",
+        "update_cadence": "15-Minute AWS Telemetry, 3-Hourly Synoptic, and Daily Rainfall Grids",
+        "primary_dataset": "IMD 0.25\u00b0 x 0.25\u00b0 Daily Gridded Rainfall & Real-Time Automatic Weather Station (AWS) Streams",
+        "coverage": "National Coverage with High-Density AWS Mesonets in Western Ghats / Nilgiris",
+        "key_features": [
+          "24h, 48h, and 72h Antecedent Precipitation Indices (API)",
+          "Rainfall Intensity-Duration (I-D) dynamic threshold exceedance",
+          "Localized convective cloudburst tracking and monsoon climatology baselines"
+        ],
+        "citation": "India Meteorological Department, Ministry of Earth Sciences, New Delhi & data.gov.in.",
+        "license_type": "National Data Sharing and Accessibility Policy (NDSAP) / Open Government Data License India",
+        "special_capability": "Powers hydrodynamic pore-pressure elevation calculations in real-time"
+      },
+      {
+        "tier": "TIER_4_COPERNICUS_SAR",
+        "tier_number": 4,
+        "name": "Copernicus Data Space Sentinel-1 SAR & Sentinel-2 MSI",
+        "lead_agency": "European Space Agency (ESA) / Copernicus Data Space Ecosystem",
+        "operational_role": "All-weather cloud-penetrating radar deformation & multispectral vegetation scar analysis",
+        "update_cadence": "Sentinel-1 SAR 6-to-12 day repeat pass; Sentinel-2 MSI 5-day repeat pass",
+        "primary_dataset": "Sentinel-1 C-band SAR GRD/SLC & Sentinel-2 Level-2A BOA Surface Reflectance",
+        "coverage": "Global / Sub-Continental Repeat Passes over Peninsular India",
+        "key_features": [
+          "Sentinel-1 C-band SAR backscatter (VV/VH) & interferometric coherence (InSAR) surface displacement",
+          "All-weather day/night cloud penetration during heavy monsoon storms when optical cameras are blinded",
+          "Sentinel-2 MSI Normalized Difference Vegetation Index (NDVI) drop and barren scar demarcation"
+        ],
+        "citation": "European Space Agency (ESA) Copernicus Sentinel Data (2024), Copernicus Data Space Ecosystem.",
+        "license_type": "Creative Commons BY-SA 4.0 / Copernicus Open Access Policy",
+        "special_capability": "Cloudburst Penetration: C-band microwave radar penetrates 100% cloud cover to detect slope movement while torrential rains rage"
+      },
+      {
+        "tier": "TIER_5_OSM_INFRASTRUCTURE",
+        "tier_number": 5,
+        "name": "OpenStreetMap (OSM) Infrastructure & NHAI / PWD Corridors",
+        "lead_agency": "OpenStreetMap Contributors & State Public Works Departments (PWD / NHAI)",
+        "operational_role": "Lifeline network vulnerability, road corridor disruptions, and evacuation routing constraints",
+        "update_cadence": "Continuous community and municipal cadastral updates",
+        "primary_dataset": "OpenStreetMap Planet Extract (Roads, Bridges, Culverts, Buildings, Settlements)",
+        "coverage": "High-detail geographic feature topology across Wayanad, Idukki, Nilgiris, and Ghat passes",
+        "key_features": [
+          "Primary arterial highways (NH-766, SH-59) and mountain pass hairpin roads",
+          "Bridges, culverts, river crossings, and vulnerable toe-scour abutments",
+          "Hospital, shelter, and school evacuation staging zones"
+        ],
+        "citation": "OpenStreetMap contributors (2024). Open Database License (ODbL) 1.0.",
+        "license_type": "Open Database License (ODbL) 1.0",
+        "special_capability": "Enables real-time arterial evacuation pathing and critical lifeline disruption warning under ODbL 1.0"
+      }
+    ],
+    "gsi_8_factors": [
+      {
+        "id": "slope",
+        "name": "Slope Gradient",
+        "standard_name": "Slope Angle (degrees)",
+        "category": "Morphometric",
+        "unit": "degrees",
+        "agency_standard": "GSI NLFC Macro-Zonation (BIS 14496-Part 2)",
+        "description": "Topographic inclination derived from 12.5m/30m high-resolution Digital Elevation Models (DEM). Slopes > 35\u00b0 represent acute shear stress zones.",
+        "typical_range": "0\u00b0 - 75\u00b0",
+        "weight_in_lhsz": 0.25
+      },
+      {
+        "id": "aspect",
+        "name": "Slope Aspect",
+        "standard_name": "Compass Orientation",
+        "category": "Morphometric",
+        "unit": "azimuth degrees (0-360\u00b0)",
+        "agency_standard": "GSI NLFC Terrain Modeling Specification",
+        "description": "Compass facing direction of the hillside. Controls solar insolation, evapotranspiration rates, and prevailing monsoon windward precipitation interception (e.g., SW monsoon in Western Ghats).",
+        "typical_range": "0\u00b0 - 360\u00b0 (N, NE, E, SE, S, SW, W, NW)",
+        "weight_in_lhsz": 0.08
+      },
+      {
+        "id": "slope_shape",
+        "name": "Slope Shape / Curvature",
+        "standard_name": "Planform & Profile Curvature",
+        "category": "Morphometric",
+        "unit": "curvature index (1/m)",
+        "agency_standard": "GSI NLFC Geomorphic Classification",
+        "description": "Profile and planform curvature characterizing convergent vs. divergent hydrology. Concave hollows concentrate subsurface pore-water pressure and initiate debris flows.",
+        "typical_range": "Concave (-1.0 to -0.1), Planar (-0.1 to 0.1), Convex (0.1 to 1.0)",
+        "weight_in_lhsz": 0.1
+      },
+      {
+        "id": "lithology",
+        "name": "Lithology & Weathering Grade",
+        "standard_name": "Rock / Soil Geotechnical Classification",
+        "category": "Geological",
+        "unit": "GSI Litho-Group & Grade (I-VI)",
+        "agency_standard": "Geological Survey of India 1:50k Lithological Maps",
+        "description": "Subsurface bedrock lithology (e.g., Charnockite, Khondalite, Hornblende-biotite gneiss) and residual saprolite/colluvium depth. Highly weathered rocks exhibit severe cohesion decay when saturated.",
+        "typical_range": "Sound Bedrock (Grade I) to Completely Decomposed Saprolite (Grade V/VI)",
+        "weight_in_lhsz": 0.2
+      },
+      {
+        "id": "structure",
+        "name": "Structural Discontinuities & Lineaments",
+        "standard_name": "Fault Proximity & Fracture Density",
+        "category": "Geological",
+        "unit": "km to fault / km/km\u00b2 lineament density",
+        "agency_standard": "GSI Seismotectonic & Structural Lineament Atlas",
+        "description": "Proximity to tectonic faults, thrusts, shear zones, and high-density fracture lineaments. Daylighted dipping joints dipping parallel to slope create catastrophic planar slip surfaces.",
+        "typical_range": "0.0 - 15.0 km fault buffer; 0.0 - 4.5 km/km\u00b2 lineament density",
+        "weight_in_lhsz": 0.12
+      },
+      {
+        "id": "geomorphology",
+        "name": "Geomorphology & Landform Unit",
+        "standard_name": "Landform Morphogenetic Class",
+        "category": "Geomorphic",
+        "unit": "Categorical Unit",
+        "agency_standard": "GSI / NRSC Geomorphic Landform Mapping",
+        "description": "Quaternary landforms including escarpment faces, paleo-landslide scars, debris fans, talus cones, and entrenched river valleys prone to lateral toe-scour.",
+        "typical_range": "Ridge Crest, Upper Slope, Escarpment, Colluvial Fan, Valley Floor",
+        "weight_in_lhsz": 0.1
+      },
+      {
+        "id": "land_use_cover",
+        "name": "Land Use & Land Cover (LULC)",
+        "standard_name": "LULC Classification",
+        "category": "Anthropogenic & Environmental",
+        "unit": "Categorical / Root Cohesion Factor",
+        "agency_standard": "NRSC Bhuvan National LULC 1:50,000",
+        "description": "Vegetation root-binding cohesion vs. anthropogenic destabilization. Deep-rooted evergreen canopy reinforces slope stability, whereas monoculture plantations (tea/rubber) or slope-toe road excavations elevate failure risk.",
+        "typical_range": "Dense Forest (high root cohesion) to Open Quarry / Road Cut (extreme vulnerability)",
+        "weight_in_lhsz": 0.08
+      },
+      {
+        "id": "geohydrology",
+        "name": "Geohydrology & Topographic Wetness",
+        "standard_name": "Topographic Wetness Index (TWI) & Drainage Density",
+        "category": "Hydrological",
+        "unit": "ln(a / tan(beta)) dimensionless",
+        "agency_standard": "GSI NLFC Hydro-Meteorological Guidelines",
+        "description": "Steady-state wetness index quantifying topographic control on hydrological processes and saturation overland flow zones, integrated with perennial drainage line density.",
+        "typical_range": "2.5 (arid crest) to 18.0 (saturated valley trough)",
+        "weight_in_lhsz": 0.07
+      }
+    ],
+    "licensing": {
+      "odbl": {
+        "required": true,
+        "license_name": "Open Database License (ODbL) 1.0",
+        "license_url": "https://opendatacommons.org/licenses/odbl/1.0/",
+        "copyright_statement": "Base map and infrastructure data \u00a9 OpenStreetMap contributors",
+        "attribution_text": "Base data \u00a9 OpenStreetMap contributors under ODbL 1.0 | Geological Survey of India (GSI) NLFC | ISRO NRSC Landslide Atlas | Copernicus Data Space",
+        "compliance_notes": "OpenStreetMap road networks, bridge locations, and settlement footprints are enriched with NHAI / State PWD survey data for lifeline vulnerability assessment."
+      },
+      "attribution_banner": "Base data \u00a9 OpenStreetMap contributors under ODbL 1.0 | Geological Survey of India (GSI) NLFC | ISRO NRSC Landslide Atlas | Copernicus Data Space"
+    },
+    "offline_decoupling_mandate": "Machine learning models are strictly trained offline using versioned datasets (Tier 1 GSI + Tier 2 ISRO NRSC Atlas + Tier 3 IMD Climatology + Tier 4 Sentinel SAR). The operational dashboard consumes frozen, validated model checkpoints and does NOT retrain or contaminate model weights with live transient telemetry."
+  },
+  "decoupled_architecture": {
+    "is_decoupled": true,
+    "training_source": "OFFLINE_MULTI_TIER_DATA_PIPELINE",
+    "live_dashboard_dependency": false,
+    "mandate": "Model parameters are permanently decoupled from runtime dashboard telemetry."
+  },
+  "model_sha256": "9d76a68467dcb8a1f224cd0b36f3a5d5379d13dec0ad82944a14f4bf350a28e2"
+}

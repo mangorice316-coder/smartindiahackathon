@@ -523,6 +523,10 @@ export const api = {
   async queryDisasterAssistant(query: string): Promise<{
     query: string;
     answer: string;
+    evidence?: Array<{ metric: string; value: string; status: string }>;
+    confidence?: number;
+    data_timestamp?: string;
+    recommended_action?: string;
     citations: string[];
     recommended_view: string;
     timestamp: string;
@@ -861,7 +865,15 @@ export const api = {
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to record ground incident report`);
     return res.json();
+  },
+
+  // 5-Tier Data Hierarchy & Offline Pipeline Lineage
+  async getPipelineLineage(): Promise<any> {
+    const res = await fetchWithTimeout(`${API_BASE}/ml/pipeline/lineage`);
+    if (!res.ok) throw new Error(`HTTP_${res.status}: Failed to load pipeline lineage`);
+    return res.json();
   }
 };
+
 
 
