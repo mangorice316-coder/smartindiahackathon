@@ -73,4 +73,7 @@ paperclip/
 the-delegation/
 the_well/
 skills-lock.json
+cloudflared.exe
+*.exe
+
 
