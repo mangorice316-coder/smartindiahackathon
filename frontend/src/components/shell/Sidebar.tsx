@@ -12,7 +12,12 @@ import {
   Database,
   FileText,
   Settings,
-  ShieldCheck
+  ShieldCheck,
+  Users,
+  Radio,
+  FileCheck,
+  Search,
+  Lock
 } from 'lucide-react';
 
 export type NavView =
@@ -20,13 +25,16 @@ export type NavView =
   | 'map'
   | 'conditions'
   | 'infrastructure'
+  | 'exposure'
   | 'alerts'
   | 'simulation'
   | 'history'
   | 'inspections'
+  | 'sensors'
   | 'model_data'
   | 'data_engine'
   | 'reports'
+  | 'audit_logs'
   | 'settings';
 
 interface SidebarProps {
@@ -34,6 +42,7 @@ interface SidebarProps {
   onSelectView: (view: NavView) => void;
   alertBadgeCount?: number;
   inspectionBadgeCount?: number;
+  onOpenCommandPalette?: () => void;
 }
 
 interface NavSection {
@@ -46,6 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectView,
   alertBadgeCount = 0,
   inspectionBadgeCount = 0,
+  onOpenCommandPalette,
 }) => {
   const sections: NavSection[] = [
     {
@@ -54,13 +64,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={15} /> },
         { id: 'map', label: 'Risk Map', icon: <Map size={15} /> },
         { id: 'conditions', label: 'Live Conditions', icon: <CloudRain size={15} /> },
+        { id: 'alerts', label: 'Alerts & Orders', icon: <AlertTriangle size={15} />, badge: alertBadgeCount },
       ],
     },
     {
       title: 'PHYSICS & IMPACT',
       items: [
         { id: 'infrastructure', label: 'Infrastructure', icon: <Building2 size={15} /> },
-        { id: 'alerts', label: 'Alerts', icon: <AlertTriangle size={15} />, badge: alertBadgeCount },
+        { id: 'exposure', label: 'Exposure & Vuln', icon: <Users size={15} /> },
         { id: 'simulation', label: 'Simulation', icon: <PlaySquare size={15} /> },
         { id: 'history', label: 'Historical Analysis', icon: <History size={15} /> },
       ],
@@ -69,19 +80,42 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: 'FIELD & ENGINE',
       items: [
         { id: 'inspections', label: 'Inspections', icon: <ClipboardList size={15} />, badge: inspectionBadgeCount },
+        { id: 'sensors', label: 'Sensing Fabric', icon: <Radio size={15} /> },
         { id: 'model_data', label: 'Model & ML', icon: <Cpu size={15} /> },
         { id: 'data_engine', label: 'Data Engine', icon: <Database size={15} /> },
         { id: 'reports', label: 'Reports', icon: <FileText size={15} /> },
+      ],
+    },
+    {
+      title: 'SYSTEM',
+      items: [
+        { id: 'audit_logs', label: 'Audit Register', icon: <FileCheck size={15} /> },
         { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
       ],
     },
   ];
 
   return (
-    <aside className="w-64 bg-[#06080e]/95 backdrop-blur-2xl border-r border-white/[0.07] flex flex-col justify-between shrink-0 p-3.5 select-none shadow-2xl relative z-20">
-      <div className="space-y-5 overflow-y-auto pr-1">
+    <aside className="w-64 bg-[#070B12]/95 backdrop-blur-2xl border-r border-[#253042] flex flex-col justify-between shrink-0 p-3 select-none shadow-2xl relative z-20">
+      <div className="space-y-4 overflow-y-auto pr-1">
+        {/* Quick Search Shortcut Trigger */}
+        {onOpenCommandPalette && (
+          <button
+            onClick={onOpenCommandPalette}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-black/40 hover:bg-black/60 border border-[#253042] text-xs font-mono text-slate-400 hover:text-white transition-all group"
+          >
+            <div className="flex items-center gap-2">
+              <Search size={13} className="text-cyan-400" />
+              <span>Search C2...</span>
+            </div>
+            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/[0.08] text-[10px] text-slate-400 group-hover:text-cyan-300">
+              Ctrl+K
+            </kbd>
+          </button>
+        )}
+
         {sections.map((section, idx) => (
-          <div key={idx} className="space-y-1.5">
+          <div key={idx} className="space-y-1">
             <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-[0.2em] text-slate-500 font-bold">
               {section.title}
             </div>
@@ -93,16 +127,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => onSelectView(item.id)}
-                    className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-mono transition-all duration-200 ${
+                    className={`group w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-mono transition-all duration-200 ${
                       isActive
-                        ? 'bg-gradient-to-r from-cyan-500/15 via-cyan-500/5 to-transparent text-cyan-300 font-semibold border-l-2 border-cyan-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
+                        ? 'bg-gradient-to-r from-cyan-500/20 via-cyan-500/10 to-transparent text-cyan-300 font-semibold border-l-2 border-cyan-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
                         : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] border-l-2 border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
                       <span
                         className={`transition-colors ${
-                          isActive ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' : 'text-slate-500 group-hover:text-slate-300'
+                          isActive ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(37,199,232,0.6)]' : 'text-slate-500 group-hover:text-slate-300'
                         }`}
                       >
                         {item.icon}
@@ -114,7 +148,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono tracking-wider ${
                           item.id === 'alerts'
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-[0_0_10px_rgba(239,68,68,0.3)]'
+                            ? 'bg-red-500/20 text-red-300 border border-red-500/40 shadow-[0_0_10px_rgba(255,59,77,0.3)]'
                             : 'bg-white/[0.06] text-slate-300 border border-white/[0.1]'
                         }`}
                       >
@@ -130,11 +164,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Aerospace C2 Subsystems Telemetry Footer */}
-      <div className="mt-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.07] text-[10px] font-mono text-slate-400 space-y-2 shadow-inner">
-        <div className="font-bold text-white uppercase text-[9px] tracking-wider flex items-center justify-between border-b border-white/[0.06] pb-1.5">
+      <div className="mt-3 p-3 rounded-xl bg-black/40 border border-[#253042] text-[10px] font-mono text-slate-400 space-y-1.5 shadow-inner">
+        <div className="font-bold text-white uppercase text-[9px] tracking-wider flex items-center justify-between border-b border-white/[0.06] pb-1">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>SUBSYSTEM STATUS</span>
+            <span>C2 SUBSYSTEMS</span>
           </span>
           <ShieldCheck size={12} className="text-emerald-400" />
         </div>
@@ -145,11 +179,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div className="flex items-center justify-between text-slate-400">
             <span>AI ENGINE</span>
-            <span className="text-cyan-400 font-bold">GBDT (0.912 AUC)</span>
+            <span className="text-cyan-400 font-bold">HIST-GBDT (0.928 AUC)</span>
           </div>
           <div className="flex items-center justify-between text-slate-400">
-            <span>WEATHER STREAM</span>
-            <span className="text-emerald-400 font-bold">OPEN-METEO LIVE</span>
+            <span>RADAR SAR</span>
+            <span className="text-purple-400 font-bold">SENTINEL-1 PASS</span>
+          </div>
+          <div className="flex items-center justify-between text-slate-400">
+            <span>INTEGRITY</span>
+            <span className="text-amber-300 font-bold">SHA-256 VALIDATED</span>
           </div>
         </div>
       </div>

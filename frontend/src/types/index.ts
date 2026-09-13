@@ -363,15 +363,24 @@ export interface SimulationTimeSeriesResponse {
   disclaimer: string;
 }
 
+export type DirectiveActionType = 'EVACUATION' | 'ROAD_CLOSURE' | 'FIELD_DISPATCH' | 'RELIEF_SHELTER' | 'SENSOR_CALIBRATION' | 'CUSTOM' | string;
+export type DirectiveUrgency = 'P1_IMMEDIATE' | 'P2_HIGH' | 'P3_MEDIUM' | 'P4_LOW' | string;
+export type DirectiveStatus = 'PENDING_DISPATCH' | 'ISSUED' | 'ACTIVE' | 'ACTIVE_CLOSURE' | 'DISPATCHED' | 'ACKNOWLEDGED' | 'EXECUTED' | 'DISMISSED' | 'ESCALATED' | string;
+
 export interface OperationalDirective {
   id: string;
-  action_type: 'EVACUATION' | 'ROAD_CLOSURE' | 'FIELD_DISPATCH' | 'SHELTER_ACTIVATION' | string;
+  action_type: DirectiveActionType;
   title: string;
   target: string;
-  urgency: 'P1_IMMEDIATE' | 'P2_HIGH' | 'P3_MEDIUM' | string;
+  urgency: DirectiveUrgency;
   rationale: string;
-  status: 'PENDING_DISPATCH' | 'ISSUED' | 'ACTIVE_CLOSURE' | 'DISPATCHED' | 'ACKNOWLEDGED' | string;
+  status: DirectiveStatus;
+  affected_population?: number;
+  evidence_metric?: string;
+  dispatched_at?: string;
+  dispatched_by?: string;
 }
+
 
 export interface OperationalBriefing {
   primary_incident: string;
@@ -944,4 +953,34 @@ export interface AnalyticsFilterOptions {
 }
 
 
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  user_role: string;
+  action_type: string;
+  action_title: string;
+  target: string;
+  rationale: string;
+  previous_state: string;
+  new_state: string;
+  authorized_by: string;
+  status: 'COMMITTED' | 'QUEUED_OFFLINE' | 'SYNCED' | 'REJECTED';
+}
 
+export interface FilterConditions {
+  region: string;
+  district: string;
+  riskLevel: string;
+  minRainfall: number;
+  minSlope: number;
+  soilSaturation: string;
+  sensorStatus: string;
+  timeRange: string;
+  searchQuery: string;
+}
+
+export interface BreadcrumbItem {
+  id: string;
+  label: string;
+  level: 'country' | 'state' | 'district' | 'taluk' | 'village' | 'zone';
+}

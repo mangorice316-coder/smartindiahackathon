@@ -5,13 +5,16 @@ import { OverviewView } from './views/OverviewView';
 import { RiskMapView } from './views/RiskMapView';
 import { LiveConditionsView } from './views/LiveConditionsView';
 import { InfrastructureView } from './views/InfrastructureView';
+import { ExposureView } from './views/ExposureView';
 import { AlertsView } from './views/AlertsView';
 import { SimulationView } from './views/SimulationView';
 import { HistoricalAnalysisView } from './views/HistoricalAnalysisView';
 import { InspectionsView } from './views/InspectionsView';
+import { SensorsView } from './views/SensorsView';
 import { ModelDataView } from './views/ModelDataView';
 import { DataEngineView } from './views/DataEngineView';
 import { ReportsView } from './views/ReportsView';
+import { AuditLogsView } from './views/AuditLogsView';
 import { SettingsView } from './views/SettingsView';
 import { LoadingState, ErrorState } from './components/common/LoadingState';
 import { DisasterAssistantDrawer } from './components/assistant/DisasterAssistantDrawer';
@@ -22,6 +25,11 @@ import { LiveCoordinateInspectorModal } from './components/live/LiveCoordinateIn
 import { StitchStudioModal } from './components/stitch/StitchStudioModal';
 import { GuidedScenarioTourModal } from './components/demo/GuidedScenarioTourModal';
 import { DataHierarchyModal } from './components/pipeline/DataHierarchyModal';
+import { StatusBanner } from './components/common/StatusBanner';
+import { CommandPalette } from './components/common/CommandPalette';
+import { NotificationCenter, C2Notification } from './components/common/NotificationCenter';
+import { FilterPanel } from './components/common/FilterPanel';
+import { MobileNav } from './components/common/MobileNav';
 import { Compass, RefreshCw } from 'lucide-react';
 import { api } from './services/api';
 import {
@@ -34,6 +42,7 @@ import {
   HistoricalLandslide,
   DataSourceHealth,
   SimulationResponse,
+  FilterConditions,
 } from './types';
 import {
   fallbackLocations,
@@ -68,6 +77,69 @@ export const App: React.FC = () => {
   const [lastSyncTime, setLastSyncTime] = useState<Date>(new Date());
   const [secondsSinceSync, setSecondsSinceSync] = useState<number>(0);
 
+  // New C2 Dialog & Drawer States
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState<boolean>(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
+
+  // Notifications State
+  const [notifications, setNotifications] = useState<C2Notification[]>([
+    {
+      id: 'NOTIF-01',
+      timestamp: '10:42 AM',
+      severity: 'CRITICAL',
+      title: 'Pore Pressure Exceeded at Chooralmala',
+      message: 'Sensor PZ-01 recorded 68.4 kPa. Factor of Safety dropped to 0.88.',
+      source: 'In-Situ Telemetry',
+      isRead: false,
+      actionView: 'overview',
+      locationId: 1,
+    },
+    {
+      id: 'NOTIF-02',
+      timestamp: '10:35 AM',
+      severity: 'CRITICAL',
+      title: 'Tier-1 Evacuation Directive Dispatched',
+      message: 'Mandatory evacuation order issued for 1,420 residents in Chooralmala Basin.',
+      source: 'District Magistrate',
+      isRead: false,
+      actionView: 'alerts',
+    },
+    {
+      id: 'NOTIF-03',
+      timestamp: '10:15 AM',
+      severity: 'WARNING',
+      title: 'Meppadi Bridge Scour Risk High',
+      message: 'Arterial bridge abutment threatened by high debris volume on SH-59.',
+      source: 'PWD Lifeline Monitor',
+      isRead: true,
+      actionView: 'infrastructure',
+    },
+    {
+      id: 'NOTIF-04',
+      timestamp: '09:50 AM',
+      severity: 'SUCCESS',
+      title: 'Encrypted Geopackage Synchronized',
+      message: 'Offline SQLite database cache updated with GSI NLFC & ISRO NRSC v2.1.',
+      source: 'Offline Cache Engine',
+      isRead: true,
+    },
+  ]);
+
+  // Multi-Condition Filter State
+  const [filterConditions, setFilterConditions] = useState<FilterConditions>({
+    region: 'ALL',
+    district: 'ALL',
+    riskLevel: 'ALL',
+    minRainfall: 0,
+    minSlope: 0,
+    soilSaturation: 'ALL',
+    sensorStatus: 'ALL',
+    timeRange: 'REALTIME',
+    searchQuery: '',
+  });
+
   // Core Datasets
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [locations, setLocations] = useState<LocationSummary[]>([]);
@@ -88,6 +160,21 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
+
+  // Global Keyboard Shortcuts (Ctrl+K or / opens command palette)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      } else if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Unified Data Fetcher
   const loadAllData = useCallback(async () => {
@@ -142,50 +229,11 @@ export const App: React.FC = () => {
         } else {
           setSourcesHealth(fallbackSourcesHealth);
         }
-
-        // Extract flattened infrastructure and historical lists from GeoJSON
-        if (infraGeo?.features) {
-          const mappedInfra: InfrastructureAsset[] = infraGeo.features.map((f: any) => ({
-            id: f.properties.id,
-            name: f.properties.name,
-            asset_type: f.properties.asset_type,
-            latitude: f.geometry.coordinates[1],
-            longitude: f.geometry.coordinates[0],
-            location_id: f.properties.location_id,
-            location_name: f.properties.location_name,
-            district: f.properties.district,
-            lifeline_tier: f.properties.lifeline_tier,
-            capacity: f.properties.capacity,
-            exposure_weight: f.properties.exposure_weight,
-            is_demo: f.properties.is_demo,
-          }));
-          setInfrastructure(mappedInfra);
-        } else {
-          setInfrastructure(fallbackInfrastructure);
-        }
-
-        if (histGeo?.features) {
-          const mappedHist: HistoricalLandslide[] = histGeo.features.map((f: any) => ({
-            id: f.properties.id,
-            event_date: f.properties.event_date,
-            latitude: f.geometry.coordinates[1],
-            longitude: f.geometry.coordinates[0],
-            trigger_type: f.properties.trigger_type,
-            estimated_volume_m3: f.properties.estimated_volume_m3,
-            casualties: f.properties.casualties,
-            damage_rating: f.properties.damage_rating,
-            notes: f.properties.notes,
-            location_name: f.properties.location_name,
-            is_demo: f.properties.is_demo,
-          }));
-          setHistoricalLandslides(mappedHist);
-        } else {
-          setHistoricalLandslides(fallbackHistoricalLandslides);
-        }
       } else {
-        // Backend offline or starting up: load high-fidelity calibrated demo fallback
+        // Fallback to local mock data
         setIsBackendConnected(false);
         setOverview(fallbackOverview);
+        setDataMode('DEMO');
         setLocations(fallbackLocations);
         setAssessments(fallbackAssessments);
         setAlerts(fallbackAlerts);
@@ -198,8 +246,9 @@ export const App: React.FC = () => {
         setSourcesHealth(fallbackSourcesHealth);
         setSitRep(fallbackSitRep);
       }
+      setLastSyncTime(new Date());
     } catch (err: any) {
-      console.warn('Backend connection failed, falling back to calibrated dataset:', err);
+      console.warn('Backend unavailable, using encrypted local fallback geopackage:', err);
       setIsBackendConnected(false);
       setOverview(fallbackOverview);
       setLocations(fallbackLocations);
@@ -213,6 +262,7 @@ export const App: React.FC = () => {
       setHistoricalLandslidesGeoJSON(fallbackGeoJSON.historicalLandslides);
       setSourcesHealth(fallbackSourcesHealth);
       setSitRep(fallbackSitRep);
+      setLastSyncTime(new Date());
     } finally {
       setIsLoading(false);
     }
@@ -222,144 +272,46 @@ export const App: React.FC = () => {
     loadAllData();
   }, [loadAllData]);
 
-  // Real-time ticking interval for seconds since last sync
-  useEffect(() => {
-    const ticker = setInterval(() => {
-      setSecondsSinceSync(Math.floor((Date.now() - lastSyncTime.getTime()) / 1000));
-    }, 1000);
-    return () => clearInterval(ticker);
-  }, [lastSyncTime]);
+  // Live Sync Trigger
+  const handleSyncLive = async () => {
+    setIsSyncingLive(true);
+    await loadAllData();
+    setIsSyncingLive(false);
+  };
 
-  // Real-Time Background Live Telemetry Polling Loop (every 30 seconds in REAL mode)
-  useEffect(() => {
-    if (!isLiveStreaming || dataMode !== 'REAL') return;
-    const interval = setInterval(async () => {
-      try {
-        if (isBackendConnected) {
-          await api.syncLiveWeather();
-          await loadAllData();
-          setLastSyncTime(new Date());
-          setSecondsSinceSync(0);
-        }
-      } catch (e) {
-        console.warn('Background live telemetry auto-sync notice:', e);
-      }
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [isLiveStreaming, dataMode, isBackendConnected, loadAllData]);
+  // Toggle Demo / Real Mode
+  const handleToggleMode = async () => {
+    setDataMode((prev) => (prev === 'REAL' ? 'DEMO' : 'REAL'));
+  };
 
-  // Window Custom Event Listeners for 90-Second Demo & Feature Modals
-  useEffect(() => {
-    const handleOpenSatellite = () => setIsSatelliteModalOpen(true);
-    const handleOpenRoad = () => setIsRoadModalOpen(true);
-    const handleOpenIncident = () => setIsIncidentModalOpen(true);
-    const handleOpenStitch = () => setIsStitchModalOpen(true);
-    const handleOpenLiveGps = (e: any) => {
-      if (e.detail?.lat && e.detail?.lon) {
-        setLiveGpsCoords({ lat: e.detail.lat, lon: e.detail.lon });
-      }
-      setIsLiveGpsModalOpen(true);
-    };
+  const handleResetDemo = async () => {
+    await loadAllData();
+  };
 
-    const handleStartScenario = () => setIsTourModalOpen(true);
-    const handleOpenDataHierarchy = () => setIsDataHierarchyModalOpen(true);
-
-    window.addEventListener('open-satellite-modal', handleOpenSatellite);
-    window.addEventListener('open-road-modal', handleOpenRoad);
-    window.addEventListener('open-incident-modal', handleOpenIncident);
-    window.addEventListener('open-live-gps-modal', handleOpenLiveGps);
-    window.addEventListener('open-stitch-modal', handleOpenStitch);
-    window.addEventListener('start-disaster-scenario', handleStartScenario);
-    window.addEventListener('open-data-hierarchy-modal', handleOpenDataHierarchy);
-
-    return () => {
-      window.removeEventListener('open-satellite-modal', handleOpenSatellite);
-      window.removeEventListener('open-road-modal', handleOpenRoad);
-      window.removeEventListener('open-incident-modal', handleOpenIncident);
-      window.removeEventListener('open-live-gps-modal', handleOpenLiveGps);
-      window.removeEventListener('open-stitch-modal', handleOpenStitch);
-      window.removeEventListener('start-disaster-scenario', handleStartScenario);
-      window.removeEventListener('open-data-hierarchy-modal', handleOpenDataHierarchy);
-    };
-  }, []);
-
-  // Action Handlers
-  const handleAcknowledgeAlert = async (id: number, acknowledged_by: string, notes?: string) => {
+  const handleAcknowledgeAlert = async (id: number) => {
     try {
-      if (isBackendConnected) {
-        await api.acknowledgeAlert(id, acknowledged_by, notes);
-      }
+      await api.acknowledgeAlert(id, 'Incident Commander (C2)');
       setAlerts((prev) =>
-        prev.map((a) =>
-          a.id === id
-            ? { ...a, status: 'ACKNOWLEDGED', acknowledged_by, acknowledged_at: new Date().toISOString() }
-            : a
-        )
+        prev.map((a) => (a.id === id ? { ...a, status: 'ACKNOWLEDGED' } : a))
       );
-    } catch (e) {
-      console.error('Failed acknowledging alert:', e);
-      throw e;
+    } catch (err) {
+      setAlerts((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status: 'ACKNOWLEDGED' } : a))
+      );
     }
   };
 
-  const handleRunSimulation = async (payload: {
-    scenario_name: string;
-    rainfall_multiplier: number;
-    additional_rainfall_mm: number;
-    duration_hours: number;
-  }): Promise<SimulationResponse> => {
-    if (isBackendConnected) {
-      return await api.runSimulation(payload);
-    }
-
-    // Local simulation physics logic when testing frontend standalone
-    const simulatedResults = assessments.map((ass) => {
-      const addedRain = payload.additional_rainfall_mm * (payload.rainfall_multiplier - 1.0);
-      const newScore = Math.min(100, Number((ass.overall_risk_score + addedRain * 0.18).toFixed(1)));
-      const newFs = Math.max(0.4, Number((ass.geotechnical_fs - (payload.rainfall_multiplier - 1.0) * 0.35).toFixed(2)));
-      let newCat: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL' = 'LOW';
-      if (newScore > 70) newCat = 'CRITICAL';
-      else if (newScore > 50) newCat = 'HIGH';
-      else if (newScore > 30) newCat = 'MODERATE';
-
-      return {
-        location_id: ass.location_id,
-        location_name: ass.location_name,
-        baseline_risk_score: ass.overall_risk_score,
-        simulated_risk_score: newScore,
-        risk_score_delta: Number((newScore - ass.overall_risk_score).toFixed(1)),
-        baseline_category: ass.risk_category,
-        simulated_category: newCat,
-        category_escalated: newCat !== ass.risk_category,
-        baseline_fs: ass.geotechnical_fs,
-        simulated_fs: newFs,
-        newly_exposed_infrastructure_count: newCat === 'CRITICAL' ? 2 : 0,
-        affected_infrastructure_names: newCat === 'CRITICAL' ? ['Access Road', 'Drainage Culvert'] : [],
-      };
-    });
-
-    return {
-      scenario_name: payload.scenario_name,
-      timestamp: new Date().toISOString(),
-      executed_by: 'Incident Commander (Duty Desk)',
-      parameters: payload,
-      locations_evaluated: simulatedResults.length,
-      escalated_zones_count: simulatedResults.filter((r) => r.category_escalated).length,
-      newly_critical_count: simulatedResults.filter((r) => r.simulated_category === 'CRITICAL').length,
-      total_additional_population_exposed: 18500,
-      results: simulatedResults,
-      disclaimer:
-        'PHYSICS SIMULATION ESTIMATE ONLY: Infinite slope limit equilibrium response to modeled precipitation surge. Does not guarantee physical landslide initiation or timing.',
-    };
+  const handleRunSimulation = async (params: any): Promise<SimulationResponse> => {
+    return api.runSimulation(params);
   };
 
   const handleRecalculateInspections = async () => {
-    if (isBackendConnected) {
-      const updated = await api.recalculateInspections();
+    try {
+      await api.recalculateInspections();
+      const updated = await api.getInspections();
       setInspections(updated);
-    } else {
-      // Re-sort fallback inspections
-      setInspections((prev) => [...prev].sort((a, b) => b.priority_score - a.priority_score));
+    } catch (err) {
+      console.error('Failed to recalculate inspections:', err);
     }
   };
 
@@ -367,84 +319,44 @@ export const App: React.FC = () => {
     id: number,
     update: { status?: string; assigned_team?: string; assigned_officer?: string; field_notes?: string }
   ) => {
-    if (isBackendConnected) {
-      await api.updateInspection(id, update);
-    }
-    setInspections((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              status: (update.status as any) || t.status,
-              assigned_team: update.assigned_team || t.assigned_team,
-              assigned_officer: update.assigned_officer || t.assigned_officer,
-              field_notes: update.field_notes || t.field_notes,
-              updated_at: new Date().toISOString(),
-            }
-          : t
-      )
-    );
-  };
-
-  const handleRetrainModel = async (algo: string) => {
-    if (isBackendConnected) {
-      const res = await api.retrainModel(algo);
-      setModelInfo(res);
-    } else {
-      alert(`Model retraining simulation: ${algo} trained with 1,500 synthetic geotechnical profiles.`);
-    }
-  };
-
-  const handleToggleMode = async () => {
-    const nextMode = dataMode === 'DEMO' ? 'REAL' : 'DEMO';
-    setDataMode(nextMode);
-    if (isBackendConnected) {
-      try {
-        await api.switchMode(nextMode);
-        await loadAllData();
-      } catch (e) {
-        console.error('Mode switch error:', e);
-      }
-    }
-  };
-
-  const handleResetDemo = async () => {
-    if (isBackendConnected) {
-      await api.resetDemoData();
-      await loadAllData();
-    } else {
-      setAlerts(fallbackAlerts);
-      setInspections(fallbackInspections);
-      alert('Demo data re-initialized to initial calibrated baseline.');
-    }
-  };
-
-  const handleUpdateThresholds = async (newThresholds: Record<string, number>) => {
-    if (isBackendConnected) {
-      await api.updateRiskThresholds(newThresholds);
-    }
-    setThresholds(newThresholds);
-  };
-
-  const handleSyncLive = async () => {
-    setIsSyncingLive(true);
     try {
-      if (isBackendConnected) {
-        await api.syncLiveWeather();
-        await loadAllData();
-      }
+      await api.updateInspection(id, update);
+      setInspections((prev) =>
+        prev.map((t) => (t.id === id ? ({ ...t, ...update } as any) : t))
+      );
     } catch (err) {
-      console.error('Failed to sync live weather:', err);
-    } finally {
-      setIsSyncingLive(false);
+      setInspections((prev) =>
+        prev.map((t) => (t.id === id ? ({ ...t, ...update } as any) : t))
+      );
+    }
+  };
+
+  const handleRetrainModel = async () => {
+    try {
+      const res = await api.retrainModel('HIST_GBDT', 0.2);
+      await loadAllData();
+      return res;
+    } catch (err) {
+      console.error('Retrain error:', err);
+      throw err;
+    }
+  };
+
+  const handleUpdateThresholds = async (newThresholds: any) => {
+    try {
+      await api.updateRiskThresholds(newThresholds);
+      setThresholds(newThresholds);
+    } catch (err) {
+      setThresholds(newThresholds);
     }
   };
 
   const activeAlertCount = alerts.filter((a) => a.status === 'ACTIVE').length;
   const pendingInspectionCount = inspections.filter((i) => i.status === 'PENDING' || i.status === 'DISPATCHED').length;
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#090d16] text-[#f8fafc]">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#070B12] text-[#F5F7FA]">
       {/* Top EOC Emergency Header */}
       <Header
         activeAlertCount={activeAlertCount}
@@ -453,50 +365,41 @@ export const App: React.FC = () => {
         isSyncing={isSyncingLive}
         onOpenAssistant={() => setIsAssistantOpen(true)}
         onOpenStitch={() => setIsStitchModalOpen(true)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        onOpenNotifications={() => setIsNotificationsOpen(true)}
+        unreadNotificationsCount={unreadCount}
+        onOpenFilterPanel={() => setIsFilterPanelOpen(true)}
+        isOffline={!isBackendConnected}
       />
 
       {/* Main EOC Work Area */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Navigation Sidebar */}
-        <Sidebar
-          currentView={currentView}
-          onSelectView={(v) => setCurrentView(v)}
-          alertBadgeCount={activeAlertCount}
-          inspectionBadgeCount={pendingInspectionCount}
-        />
+        {/* Navigation Sidebar (Desktop) */}
+        <div className="hidden md:flex">
+          <Sidebar
+            currentView={currentView}
+            onSelectView={(v) => setCurrentView(v)}
+            alertBadgeCount={activeAlertCount}
+            inspectionBadgeCount={pendingInspectionCount}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          />
+        </div>
 
         {/* Dynamic View Display Container */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#06080e]/95 relative z-10">
-
-          {/* Transparent Offline Control Deck (Phase 12) */}
-          {!isBackendConnected && !isLoading && (
-            <div className="mb-4 p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/40 font-mono text-xs text-amber-200 shadow-[0_4px_20px_rgba(245,158,11,0.15)] space-y-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                  <strong className="text-white tracking-wide">OPERATING IN RESILIENT OFFLINE MODE:</strong>
-                  <span className="text-amber-300">Encrypted Local Geopackage Active (Local Cache Online)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400 text-[11px]">Last Sync: Today 10:42 AM</span>
-                  <button
-                    onClick={loadAllData}
-                    className="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 active:scale-95"
-                  >
-                    <RefreshCw size={11} />
-                    <span>Reconnect Backend</span>
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-amber-500/20 text-[11px] text-slate-300">
-                <span>Cached Disaster Metrics:</span>
-                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-amber-300 font-bold">12 Monitored Catchments</span>
-                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-purple-300 font-bold">29 Historical Scars (GSI)</span>
-                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-cyan-300 font-bold">18 Critical Lifelines</span>
-                <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] text-emerald-300 font-bold">6 Active Directives</span>
-              </div>
-            </div>
-          )}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#070B12]/95 relative z-10 pb-20 md:pb-6">
+          {/* Persistent Global Status Banner */}
+          <div className="mb-4">
+            <StatusBanner
+              statusLevel={!isBackendConnected ? 'OFFLINE' : 'SUCCESS'}
+              isOffline={!isBackendConnected}
+              lastSyncTime={lastSyncTime}
+              onReconnect={loadAllData}
+              catchmentsCount={locations.length || 12}
+              scarsCount={historicalLandslides.length || 29}
+              lifelinesCount={infrastructure.length || 18}
+              directivesCount={4}
+            />
+          </div>
 
           {isLoading ? (
             <LoadingState
@@ -555,6 +458,17 @@ export const App: React.FC = () => {
                 />
               )}
 
+              {currentView === 'exposure' && (
+                <ExposureView
+                  infrastructure={infrastructure}
+                  locations={locations}
+                  onSelectLocation={(locId) => {
+                    setSelectedLocationId(locId);
+                    setCurrentView('map');
+                  }}
+                />
+              )}
+
               {currentView === 'alerts' && (
                 <AlertsView
                   alerts={alerts}
@@ -580,6 +494,10 @@ export const App: React.FC = () => {
                 />
               )}
 
+              {currentView === 'sensors' && (
+                <SensorsView />
+              )}
+
               {currentView === 'model_data' && (
                 <ModelDataView
                   modelInfo={modelInfo}
@@ -597,6 +515,10 @@ export const App: React.FC = () => {
                 <ReportsView sitRep={sitRep} onRefresh={loadAllData} />
               )}
 
+              {currentView === 'audit_logs' && (
+                <AuditLogsView />
+              )}
+
               {currentView === 'settings' && (
                 <SettingsView
                   dataMode={dataMode}
@@ -611,6 +533,63 @@ export const App: React.FC = () => {
         </main>
       </div>
 
+      {/* Mobile Bottom Navigation Bar (< 768px) */}
+      <MobileNav
+        currentView={currentView}
+        onSelectView={(v) => setCurrentView(v)}
+        onToggleSidebar={() => setIsCommandPaletteOpen(true)}
+        alertBadgeCount={activeAlertCount}
+        inspectionBadgeCount={pendingInspectionCount}
+      />
+
+      {/* C2 Command Palette (Ctrl+K or /) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigateView={(v) => setCurrentView(v)}
+        onSelectLocation={(locId) => {
+          setSelectedLocationId(locId);
+          setCurrentView('map');
+        }}
+        onToggleOffline={() => setIsBackendConnected(prev => !prev)}
+      />
+
+      {/* C2 Notification Center Drawer */}
+      <NotificationCenter
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+        notifications={notifications}
+        onMarkAsRead={(id) => {
+          setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        }}
+        onMarkAllAsRead={() => {
+          setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        }}
+        onNavigateToAlert={(view, locId) => {
+          if (locId) setSelectedLocationId(locId);
+          setCurrentView(view as NavView);
+        }}
+      />
+
+      {/* C2 Multi-Parameter Filter Panel Drawer */}
+      <FilterPanel
+        isOpen={isFilterPanelOpen}
+        onClose={() => setIsFilterPanelOpen(false)}
+        conditions={filterConditions}
+        onApply={(conds) => setFilterConditions(conds)}
+        onReset={() => setFilterConditions({
+          region: 'ALL',
+          district: 'ALL',
+          riskLevel: 'ALL',
+          minRainfall: 0,
+          minSlope: 0,
+          soilSaturation: 'ALL',
+          sensorStatus: 'ALL',
+          timeRange: 'REALTIME',
+          searchQuery: '',
+        })}
+        totalMatchesCount={locations.length || 12}
+      />
 
       {/* Grounded AI Disaster Intelligence Assistant Drawer */}
       <DisasterAssistantDrawer
