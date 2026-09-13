@@ -140,3 +140,6 @@ export class AuditLogger {
     URL.revokeObjectURL(url);
   }
 }
+
+export const auditLogger = AuditLogger;
+
