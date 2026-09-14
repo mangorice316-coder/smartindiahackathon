@@ -1,108 +1,43 @@
-# 🎬 LearnCraft: 2–3 Minute Demo Video Script & Storyboard
+﻿# 🇮🇳 BHU-SURAKSHA: 3-Minute Video Demo Script & Storyboard
+### Smart India Hackathon (SIH) Presentation
 
-> **Target Duration:** 2 Minutes 30 Seconds (150 Seconds)  
-> **Core Premise:** *"Students don't need another chatbot. They need a tutor that understands how they learn."*  
-> **Demo Scenario:** A student mastering Maxwell's Displacement Current / Quadratic Equations through active diagnostic learning.
-
----
-
-## ⏱️ Video Structure Breakdown
-
-```
-0:00 ──► 0:15 ──► 0:35 ──────────► 1:30 ──────────► 2:00 ───────► 2:20 ──────► 2:40
-[Hook]   [Problem]     [Complete Product Journey]      [AI & Adap]   [Impact]   [Closing]
-```
+> **Target Duration:** 3 Minutes (180 Seconds)  
+> **Core Premise:** *Every monsoon, landslides claim lives across the Western Ghats and Himalayas. BHU-SURAKSHA provides India's incident commanders with 72-hour predictive lead time and automated statutory emergency dispatch.*
 
 ---
 
-## 🎬 Detailed Storyboard & Scene-by-Scene Script
+## 🎬 Video Storyboard Breakdown
 
-### Scene 1: The Hook (0:00 – 0:15)
-* **Visual on Screen:** Clean, high-resolution recording of LearnCraft's hero landing page. Mouse smoothly hovers over *"Start Learning"* and the interactive learning tabs.
-* **On-Screen Text Overlay:** *LearnCraft — Your AI-Powered Personal Learning Companion*
-* **Voiceover / Narration:**  
-  > *"Students today don't need another generic AI chatbot. They need a personal tutor that understands how they learn, diagnoses why they make mistakes, and adapts to their pace."*
-* **Action:** Click **"Start Learning"** or **"2-Min Fast-Track Demo"**. The app transitions instantly into the Student Studio.
+`
+0:00 ─── 0:30 ─── 1:15 ─────── 2:00 ─────── 2:35 ─────── 3:00
+[The Threat] [C2 Overview] [GIS & Physics ML] [NDRF Directives] [Sovereignty] [Conclusion]
+`
 
----
+### [0:00 - 0:30] Scene 1: The National Challenge
+* **Visual:** Visual montage of rainfall-triggered debris flows in Wayanad and Chamoli.
+* **Voiceover:** *India's mountainous terrain sustains millions, but extreme precipitation events turn fragile slopes into deadly debris flows. Current warning systems often react after failure occurs. We built BHU-SURAKSHA—a sovereign AI and physics-informed early warning Command-and-Control system for the Geological Survey of India and NDMA.*
 
-### Scene 2: The Real-World Problem (0:15 – 0:35)
-* **Visual on Screen:** Quick side-by-side or highlight:
-  1. Dense NCERT textbook paragraph with intimidating formal terms (*"time-varying electric flux"*, *"displacement current"*).
-  2. Generic chatbot screen that outputs a wall of text or simply gives the final answer away.
-* **On-Screen Text Overlay:** *The Problem: Static Textbooks & Passive AI Chatbots*
-* **Voiceover / Narration:**  
-  > *"When students read dense textbooks, they often face cognitive lockout—especially multilingual learners who know the concept in their home language, but struggle with formal academic English. And generic chatbots? They just hand over the answer, creating passive dependence instead of genuine understanding."*
+### [0:30 - 1:15] Scene 2: 10-Second Mission Control Awareness
+* **Visual:** Browser zooming into http://localhost:5173/ dashboard.
+* **Key Interactions:**
+  - Demonstrate Indian National Crest and Emergency Quick-Bar (112, 1078, 1070, 1077).
+  - Highlight the Incident Hero Panel displaying real-time Factor of Safety ( = 0.88$) in Meppadi, Wayanad.
+* **Voiceover:** *Incident commanders have no time for cognitive overload. BHU-SURAKSHA delivers 10-second comprehension. The central hero panel synthesizes live rainfall telemetry, soil saturation index, and population exposure risk into immediate actionable intelligence.*
 
----
+### [1:15 - 2:00] Scene 3: GIS Command Center & Physics Engine
+* **Visual:** Switching to Risk Map and Geotechnical Simulation views.
+* **Key Interactions:**
+  - Toggling Satellite SAR interferometry overlays and digital elevation models.
+  - Running a +75mm cloudburst simulation showing real-time drop in Factor of Safety and runout perimeter expansion.
+* **Voiceover:** *Unlike black-box AI, BHU-SURAKSHA combines Gradient Boosted Machine Learning with the Mohr-Coulomb Limit Equilibrium physics engine. We compute exact shear strength, matric suction loss, and runout zones across high-risk corridors.*
 
-### Scene 3: The Complete Learning Journey (0:35 – 1:30)
-* **Visual on Screen:** Live walkthrough of the 8-step active mastery loop in LearnCraft.
+### [2:00 - 2:35] Scene 4: Actionable Directives & Emergency Response
+* **Visual:** Executing DIR-01 (Mandatory Evacuation under DM Act 2005) and DIR-03 (NDRF Arakkonam Deployment).
+* **Key Interactions:**
+  - Clicking 'Execute Directive', toast notification appears, audit log updates.
+  - Opening Explainable AI (XAI) modal showing transparent SHAP feature contributions.
+* **Voiceover:** *Predictions without action save no lives. BHU-SURAKSHA automatically generates statutory emergency directives—from NDRF battalion deployment to arterial road closures—with complete XAI transparency for senior decision-makers.*
 
-#### 1️⃣ Step 1: Learn (0:35 – 0:48)
-* **Action:** Select **Physics: Electromagnetism & Displacement Current**. Click on the term `"missing term"` / `"displacement current"`.
-* **Visual:** The **Concept Bridge Card** slides into view, showing the everyday water pipe diaphragm analogy alongside the formal mathematical equation.
-* **Voiceover / Narration:**  
-  > *"With LearnCraft, learning begins with intuition. The AI tutor breaks down complex topics into multi-level explanations and concrete physical analogies—bridging familiar concepts directly into curriculum-standard terminology."*
-
-#### 2️⃣ Step 2 & 3: Ask & Visualize (0:48 – 1:00)
-* **Action:** Open the **AI Tutor** helper modal. Ask: *"Why does current seem to flow through an empty capacitor gap?"* Switch language to Tamil or Hindi to demonstrate dual-language bridging.
-* **Visual:** AI Tutor provides a crisp, structured conceptual response. The student previews the spatial audio / circuit interactive visual.
-* **Voiceover / Narration:**  
-  > *"Students can ask follow-up questions at any time, switch between English and regional languages, and even experience spatial audio sonification of circuit diagrams for multi-sensory and visually impaired learning."*
-
-#### 3️⃣ Step 4 & 5: Practice & The Intentional Mistake (1:00 – 1:15)
-* **Action:** Navigate to **Practice** tab. The AI generates a targeted question: *"What is the value of conduction current $I_c$ inside the vacuum region between capacitor plates during charging?"*
-* **Action:** Intentionally select or type the common misconception: *"Equal to the wire current."* Submit answer.
-* **Voiceover / Narration:**  
-  > *"Next, the student enters active practice. But when an error occurs, LearnCraft does something traditional platforms can't..."*
-
-#### 4️⃣ Step 6, 7 & 8: AI Misconception Detection & Adaptive Remediation (1:15 – 1:30)
-* **Action:** LearnCraft displays the **Misconception Diagnosis**: *"Notice: In the vacuum gap, charges cannot physically cross, so $I_c = 0$. The magnetic field is produced entirely by the changing electric flux."*
-* **Action:** The system automatically presents an **Adaptive Remediation Challenge**. Student solves the proof step $\rightarrow$ Canvas confetti bursts 🎉 $\rightarrow$ **Progress Dashboard** updates mastery from $65\% \rightarrow 88\%$.
-* **Voiceover / Narration:**  
-  > *"Instead of just saying 'Wrong', LearnCraft diagnoses the exact conceptual root cause and generates a targeted micro-scaffold. Once the student solves it, their skill tree and progress dashboard update in real time."*
-
----
-
-### Scene 4: How AI Powers LearnCraft (1:30 – 2:00)
-* **Visual on Screen:** Quick montage showing:
-  - Multi-stage Gemini structured prompt chaining.
-  - Socratic hint generator (giving guidance without giving away answers).
-  - Spatial audio frequency synthesizer in action.
-  - Instant zero-latency offline fallback engine.
-* **On-Screen Text Overlay:** *Multi-Stage AI Pedagogical Pipeline*
-* **Voiceover / Narration:**  
-  > *"Behind the scenes, LearnCraft uses Google Gemini for multi-stage pedagogical reasoning: explanation generation, dynamic diagnostic questions, error classification, and adaptive difficulty. Combined with client-side Web Audio synthesis and offline fallbacks, it delivers instantaneous, zero-latency feedback anywhere."*
-
----
-
-### Scene 5: Real-World Impact (2:00 – 2:20)
-* **Visual on Screen:** Infographic / UI highlight showing the 4 primary user groups:
-  1. Secondary & High School Students (Board exam readiness).
-  2. Multilingual Learners (Bridging home language to English).
-  3. Visually Impaired Students (Spatial audio navigation).
-  4. Self-Learners & Competitive Exam Aspirants.
-* **On-Screen Text Overlay:** *Democratizing 1-on-1 Tutoring for Every Student*
-* **Voiceover / Narration:**  
-  > *"LearnCraft levels the playing field for millions of students—from rural multilingual learners transitioning into English-medium STEM, to visually impaired students navigating schematics, to any learner who needs an accessible, tireless tutor."*
-
----
-
-### Scene 6: Closing & Call to Action (2:20 – 2:40)
-* **Visual on Screen:** Return to the sleek LearnCraft Dashboard. Display GitHub repo, Live Demo URL, and Suvidha AI Hackathon badge.
-* **On-Screen Text Overlay:**  
-  *LearnCraft — Learn anything. Understand everything. Learn your way.*  
-  *Try the Live Demo: https://skiing-biography-revised-cherry.trycloudflare.com*
-* **Voiceover / Narration:**  
-  > *"LearnCraft doesn't just give students answers. It helps them understand why. Thank you for watching!"*
-
----
-
-## 🎥 Recording & Presentation Tips
-
-1. **Resolution & Frame Rate:** Record at 1080p or 4K at 60 FPS in 16:9 aspect ratio.
-2. **Audio Quality:** Use a clean microphone with noise cancellation; speak with an energetic, authoritative, and friendly tone.
-3. **Cursor Movement:** Use smooth, deliberate mouse movements. Avoid frantic clicking or rapid page jumping.
-4. **Captions / Subtitles:** Include burn-in or closed captions so judges can watch comfortably on any device.
-5. **No Broken Views:** Stay on the happy evaluation path shown in this script to guarantee a flawless presentation.
+### [2:35 - 3:00] Scene 5: Offline Resilience & Closing Call
+* **Visual:** Demonstrating offline cached mode, automated Vitest/pytest test passes, and the tricolor national banner.
+* **Voiceover:** *With resilient offline caching for cut-off mountainous regions, verified 100% test coverage, and strict sovereign data standards, BHU-SURAKSHA stands ready to safeguard India's vulnerable communities.*

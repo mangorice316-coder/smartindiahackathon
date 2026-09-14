@@ -7,16 +7,26 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from typing import Generator
 from app.config import settings
 
-# For SQLite, check_same_thread needs to be False for multithreading
+from sqlalchemy import event
+
+# For SQLite, check_same_thread needs to be False for multithreading, and timeout prevents locking
 connect_args = {}
 if settings.DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
+    connect_args = {"check_same_thread": False, "timeout": 60}
 
 engine = create_engine(
     settings.DATABASE_URL,
     connect_args=connect_args,
     echo=False
 )
+
+if settings.DATABASE_URL.startswith("sqlite"):
+    @event.listens_for(engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute("PRAGMA busy_timeout=60000")
+        cursor.close()
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
