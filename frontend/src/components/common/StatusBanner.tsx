@@ -30,7 +30,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   const isHealthy = !isOffline && (statusLevel === 'SUCCESS' || statusLevel === 'CRITICAL');
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return `${date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })} IST`;
   };
 
   return (
@@ -58,7 +58,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
                 ● OFFLINE
               </span>
               <strong className="text-white tracking-wide text-xs">RESILIENT OFFLINE MODE:</strong>
-              <span className="text-amber-300 text-xs hidden sm:inline">Encrypted Local Geopackage Active</span>
+              <span className="text-amber-300 text-xs hidden sm:inline">Western Ghats &amp; Himalayan Geopackage Active</span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -69,8 +69,8 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
               <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px] tracking-wider border border-emerald-500/30">
                 ● LIVE
               </span>
-              <span className="font-semibold text-white tracking-wide text-xs">C2 DISASTER OPERATIONS CENTER:</span>
-              <span className="text-emerald-400 text-xs hidden sm:inline">Telemetry & Physics Stream Synchronized</span>
+              <span className="font-semibold text-white tracking-wide text-xs">BHARAT C2 OPERATIONS (NDMA &amp; GSI):</span>
+              <span className="text-emerald-400 text-xs hidden sm:inline">IMD AWS • ISRO Bhuvan InSAR • GSI NLSM Telemetry Synced</span>
             </div>
           )}
 

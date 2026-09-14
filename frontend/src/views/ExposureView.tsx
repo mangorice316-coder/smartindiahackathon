@@ -192,7 +192,7 @@ export const ExposureView: React.FC<ExposureViewProps> = ({
         data={filteredAssets}
         searchPlaceholder="Filter assets (e.g., 'Bridge', 'Highway', 'Hospital')..."
         searchKey="name"
-        exportFileName="LRIDS_Exposure_Register"
+        exportFileName="BHU_SURAKSHA_Exposure_Register"
       />
     </div>
   );

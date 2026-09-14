@@ -260,7 +260,7 @@ export const SensorsView: React.FC = () => {
         data={sensors}
         searchPlaceholder="Search sensor nodes by name or location..."
         searchKey="name"
-        exportFileName="LRIDS_Sensor_Nodes"
+        exportFileName="BHU_SURAKSHA_Sensor_Nodes"
       />
     </div>
   );

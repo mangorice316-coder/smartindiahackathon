@@ -170,7 +170,7 @@ export const AuditLogsView: React.FC = () => {
         data={logs}
         searchPlaceholder="Search audit logs by ID, action, or target..."
         searchKey="action_title"
-        exportFileName="LRIDS_Audit_Register"
+        exportFileName="BHU_SURAKSHA_Audit_Register"
       />
     </div>
   );

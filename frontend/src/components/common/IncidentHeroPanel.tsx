@@ -15,8 +15,8 @@ interface IncidentHeroPanelProps {
 }
 
 export const IncidentHeroPanel: React.FC<IncidentHeroPanelProps> = ({
-  title = 'MONSOON CLOUDBURST SURGE',
-  location = 'Wayanad Foothills (Chooralmala — Meppadi Corridor)',
+  title = 'MONSOON CLOUDBURST SURGE (IMD RED ALERT)',
+  location = 'Wayanad Foothills (Chooralmala — Mundakkai — Meppadi Corridor, Kerala)',
   severity = 'CRITICAL',
   confidence = 96.5,
   trendPct = 14.8,
@@ -24,7 +24,7 @@ export const IncidentHeroPanel: React.FC<IncidentHeroPanelProps> = ({
   onSelectHorizon,
   onFocusMap,
   onExportReport,
-  triggerSummary = 'Antecedent rainfall of 442.5mm has driven saprolite colluvium past pore-pressure failure threshold; Factor of Safety dropped to Fs 0.88 with active crown tension crack progression.',
+  triggerSummary = 'Antecedent rainfall of 442.5mm (IMD Extremely Heavy Rainfall Category) has driven saprolite colluvium past pore-pressure failure threshold; Factor of Safety dropped to Fs 0.88 with active crown tension crack progression. High-velocity debris runout threatens 1,420 citizens along Iruvanjippuzha river corridor.',
 }) => {
   const [horizon, setHorizon] = useState<'0-6h' | '24h' | '72h'>(activeHorizon);
 
@@ -52,6 +52,11 @@ export const IncidentHeroPanel: React.FC<IncidentHeroPanelProps> = ({
               <span>{severity} DISASTER STATE</span>
             </div>
 
+            {/* IMD Alert Level */}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-600/20 border border-red-500/50 text-red-200 font-mono text-xs font-bold">
+              <span>IMD RED ALERT</span>
+            </div>
+
             {/* Trend Indicator */}
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs font-semibold">
               <TrendingUp size={13} className="text-amber-400" />
@@ -61,7 +66,7 @@ export const IncidentHeroPanel: React.FC<IncidentHeroPanelProps> = ({
             {/* System Confidence */}
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-              <span>Model Confidence: {confidence}%</span>
+              <span>GSI &amp; AI Confidence: {confidence}%</span>
             </div>
           </div>
 
@@ -69,11 +74,14 @@ export const IncidentHeroPanel: React.FC<IncidentHeroPanelProps> = ({
             <h1 className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-white flex items-center gap-2">
               <span>{title}</span>
             </h1>
-            <p className="text-xs sm:text-sm font-mono text-slate-300 flex items-center gap-1.5 mt-0.5">
-              <Compass size={13} className="text-cyan-400 shrink-0" />
-              <span className="text-white font-medium">{location}</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm font-mono text-slate-300 mt-0.5">
+              <span className="flex items-center gap-1.5 text-white font-medium">
+                <Compass size={13} className="text-cyan-400 shrink-0" />
+                {location}
+              </span>
               <span className="text-slate-500 hidden sm:inline">• 11.5365° N, 76.1322° E</span>
-            </p>
+              <span className="text-amber-400/90 text-[11px] font-bold">• KSDMA SEOC / DEOC Wayanad</span>
+            </div>
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans border-l-2 border-red-500/40 pl-3 py-0.5 bg-white/[0.01]">

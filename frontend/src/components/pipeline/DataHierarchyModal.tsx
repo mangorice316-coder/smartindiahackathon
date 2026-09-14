@@ -388,7 +388,7 @@ export const DataHierarchyModal: React.FC<DataHierarchyModalProps> = ({ isOpen, 
                   </div>
                   <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
                     <div className="font-bold mb-1">4. Artifact</div>
-                    <div className="text-[10px] text-slate-400">LRIDS_v2.1.joblib + JSON Lineage</div>
+                    <div className="text-[10px] text-slate-400">BHU_SURAKSHA_v2.1.joblib + JSON Lineage</div>
                   </div>
                   <div className="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
                     <div className="font-bold mb-1">5. Dashboard</div>

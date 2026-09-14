@@ -98,10 +98,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       icon: <FileText size={14} className="text-slate-300" />,
       action: () => { onNavigateView('reports'); onClose(); },
     },
-    // Priority Locations
+    // Pan-India Priority Sectors (Western Ghats & Himalayas)
     {
       id: 'loc-chooralmala',
-      title: 'Focus Sector: Chooralmala (Fs 0.88 - Critical)',
+      title: 'Focus Sector: Chooralmala, Wayanad (Fs 0.88 - Critical)',
       category: 'SECTOR',
       icon: <ShieldAlert size={14} className="text-red-400" />,
       action: () => {
@@ -111,8 +111,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
-      id: 'loc-mundakkai',
-      title: 'Focus Sector: Mundakkai Catchment (High Risk)',
+      id: 'loc-pettimudi',
+      title: 'Focus Sector: Pettimudi - Munnar Valley, Idukki (High Risk)',
       category: 'SECTOR',
       icon: <AlertTriangle size={14} className="text-orange-400" />,
       action: () => {
@@ -122,20 +122,52 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
-      id: 'loc-meppadi',
-      title: 'Focus Sector: Meppadi Arterial Bridge Corridor',
+      id: 'loc-joshimath',
+      title: 'Focus Sector: Joshimath - Helang Slope, Chamoli (Subsidence/Critical)',
       category: 'SECTOR',
-      icon: <Compass size={14} className="text-amber-400" />,
+      icon: <ShieldAlert size={14} className="text-red-400" />,
       action: () => {
         if (onSelectLocation) onSelectLocation(3);
         onNavigateView('map');
         onClose();
       },
     },
-    // Quick Actions
+    {
+      id: 'loc-shimla',
+      title: 'Focus Sector: Summer Hill - Shiv Bawdi Ridge, Shimla (Himalayan)',
+      category: 'SECTOR',
+      icon: <Compass size={14} className="text-amber-400" />,
+      action: () => {
+        if (onSelectLocation) onSelectLocation(4);
+        onNavigateView('map');
+        onClose();
+      },
+    },
+    {
+      id: 'loc-irshalwadi',
+      title: 'Focus Sector: Irshalwadi Escarpment, Raigad (Western Ghats)',
+      category: 'SECTOR',
+      icon: <AlertTriangle size={14} className="text-amber-400" />,
+      action: () => {
+        if (onSelectLocation) onSelectLocation(6);
+        onNavigateView('map');
+        onClose();
+      },
+    },
+    // Quick Indian Operational Actions
+    {
+      id: 'action-sachet',
+      title: 'Broadcast NDMA Sachet CAP-CP Geofence Alert',
+      category: 'ACTION',
+      icon: <ShieldAlert size={14} className="text-red-400" />,
+      action: () => {
+        onNavigateView('alerts');
+        onClose();
+      },
+    },
     {
       id: 'action-export',
-      title: 'Generate Instant SitRep Briefing (PDF/CSV)',
+      title: 'Generate Instant NDMA/GSI SitRep Briefing (PDF/CSV)',
       category: 'ACTION',
       icon: <FileText size={14} className="text-cyan-300" />,
       action: () => {
@@ -145,7 +177,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: 'action-offline',
-      title: 'Toggle Resilient Offline Mode (Local Geopackage)',
+      title: 'Toggle Resilient Offline Mode (Western Ghats Geopackage)',
       category: 'ACTION',
       icon: <Database size={14} className="text-amber-400" />,
       action: () => {

@@ -380,7 +380,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         data={overview.highest_risk_locations}
         searchPlaceholder="Filter catchments by name or district..."
         searchKey="location_name"
-        exportFileName="LRIDS_Catchment_Risk_Index"
+        exportFileName="BHU_SURAKSHA_Catchment_Risk_Index"
       />
 
       {/* Saabas Shapley XAI Explainability Modal */}

@@ -36,7 +36,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-cyan-400 font-extrabold">CARD 1 / DIAGNOSIS</span>
           </div>
           <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono text-[10px] font-bold border border-cyan-500/30">
-            METEOROLOGICAL
+            IMD AWS DELUGE
           </span>
         </div>
 
@@ -47,7 +47,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-xs font-mono text-slate-400">mm / 24h</span>
           </div>
           <p className="text-xs text-slate-300 mt-1 font-sans line-clamp-2">
-            Catastrophic cloudburst deluge exceeding 300-year recurrence interval. Regolith saprolite saturation at 98.4%.
+            IMD Extremely Heavy Rainfall (&gt; 204.4mm). Saprolite regolith saturation at 98.4% with cloudburst trigger.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-amber-400 font-extrabold">CARD 2 / SPATIAL</span>
           </div>
           <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
-            CATCHMENT
+            GSI NLSM ZONE
           </span>
         </div>
 
@@ -79,7 +79,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-xl sm:text-2xl font-black font-sans text-white truncate">{primaryLocationName}</span>
           </div>
           <p className="text-xs text-slate-300 mt-1 font-sans line-clamp-2">
-            Upper steep hillslopes (Slope &gt; 34°), Meppadi Taluk. Immediate threat to riverine settlement downstream.
+            Upper steep hillslopes (Slope &gt; 34°), Meppadi Taluk, Wayanad. Immediate threat to Iruvanjippuzha basin.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
               <Eye size={10} />
             </button>
           ) : (
-            <span className="text-slate-400">Elev: 980m</span>
+            <span className="text-slate-400">Elev: 980m (MSL)</span>
           )}
         </div>
       </div>
@@ -110,7 +110,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-red-400 font-extrabold">CARD 3 / SEVERITY</span>
           </div>
           <span className="px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-mono text-[10px] font-black border border-red-500/40">
-            CRITICAL
+            CRITICAL Fs
           </span>
         </div>
 
@@ -121,16 +121,16 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-xs font-mono text-red-300">&lt; 1.0 (Failure)</span>
           </div>
           <p className="text-xs text-slate-300 mt-1 font-sans line-clamp-2">
-            Factor of Safety &lt; 1.0 indicates mathematical shear failure along planar slip surface. 1,420 citizens exposed.
+            Factor of Safety &lt; 1.0 indicates mathematical shear failure. 1,420 citizens and ₹48.5 Cr infrastructure exposed.
           </p>
         </div>
 
         <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
           <div className="flex items-center gap-1.5 text-slate-400">
             <AlertOctagon size={13} className="text-red-400" />
-            <span>Exposed: <strong className="text-red-300">{exposedPopulation.toLocaleString()}</strong></span>
+            <span>Exposed: <strong className="text-red-300">{exposedPopulation.toLocaleString()} citizens</strong></span>
           </div>
-          <span className="text-red-300 font-bold">Bridge Scour Risk</span>
+          <span className="text-red-300 font-bold">₹48.5 Cr Risk</span>
         </div>
       </div>
 
@@ -142,7 +142,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-purple-400 font-extrabold">CARD 4 / MECHANICS</span>
           </div>
           <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 font-mono text-[10px] font-bold border border-purple-500/30">
-            XAI PHYSICS
+            MOHR-COULOMB
           </span>
         </div>
 
@@ -153,7 +153,7 @@ export const CoreAnalyticsCards: React.FC<CoreAnalyticsCardsProps> = ({
             <span className="text-xs font-mono text-slate-400">kPa</span>
           </div>
           <p className="text-xs text-slate-300 mt-1 font-sans line-clamp-2">
-            Pore-water pressure eliminates matric suction along weathered charnockite-colluvium contact interface.
+            Pore-water pressure eliminates matric suction along weathered charnockite-gneiss interface. GSI NLSM Zone-1 slip.
           </p>
         </div>
 

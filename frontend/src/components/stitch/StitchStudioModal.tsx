@@ -25,7 +25,7 @@ export const StitchStudioModal: React.FC<StitchStudioModalProps> = ({ isOpen, on
       id: 'evacuation',
       title: 'Evacuation Route & Shelter Status',
       category: 'Civil Defense',
-      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for LRIDS:
+      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for BHU-SURAKSHA:
 - Canvas: Obsidian (#06080e), Cards: Double-bezel glass (#090d16 with border-white/[0.08])
 - Primary Accent: Cyan (#00e5ff), Critical Alert: Red (#ef4444)
 - Typography: Display Space Grotesk, Body Plus Jakarta Sans, Metrics JetBrains Mono
@@ -39,7 +39,7 @@ Generate a React + Tailwind component for an Evacuation Route & Relief Camp Dash
       id: 'drone',
       title: 'Drone Recon & Crack Telemetry',
       category: 'Field Recon',
-      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for LRIDS:
+      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for BHU-SURAKSHA:
 - Canvas: Obsidian (#06080e), Cards: Double-bezel glass (#090d16)
 - Fonts: Space Grotesk + JetBrains Mono for telemetry
 Generate a React + Tailwind component for Autonomous Drone Reconnaissance & Crown Crack Inspection:
@@ -52,7 +52,7 @@ Generate a React + Tailwind component for Autonomous Drone Reconnaissance & Crow
       id: 'sensor',
       title: 'IoT Piezometer & Pore Pressure Grid',
       category: 'Geotech Hardware',
-      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for LRIDS:
+      prompt: `Act as a senior C2 UI engineer. Using the DESIGN.md rules for BHU-SURAKSHA:
 - Canvas: Obsidian (#06080e), Accent: Cyan (#00e5ff)
 - Fonts: JetBrains Mono for all readings, Space Grotesk for section titles
 Generate a React + Tailwind component for Borehole Piezometer & Soil Moisture In-Situ Telemetry:

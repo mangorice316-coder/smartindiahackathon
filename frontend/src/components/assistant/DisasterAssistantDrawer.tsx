@@ -40,12 +40,12 @@ interface AssistantMessage {
 }
 
 const PRESET_QUESTIONS = [
-  'Which zones became more dangerous in the last 6 hours?',
-  'Why is Chooralmala in a critical failure state?',
-  'Which bridges and roads are in the 1km hazard zone?',
-  'Which field squads should be dispatched first?',
-  'What happens if rainfall surges by +50%?',
-  'Generate executive district emergency briefing (SitRep)'
+  'Which Western Ghats & Himalayan zones crossed critical Fs thresholds?',
+  'Why is Chooralmala in a critical failure state under IMD Red Alert?',
+  'Which bridges and NH corridors are threatened in Wayanad and Chamoli?',
+  'What is the NDRF 4th Battalion and Indian Army Bailey Bridge deployment status?',
+  'What happens if rainfall surges by +50% under monsoon cloudburst?',
+  'Generate executive NDMA & KSDMA SitRep briefing (SOP 2023)'
 ];
 
 export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = ({
@@ -57,9 +57,9 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
     {
       id: 'welcome',
       sender: 'assistant',
-      text: `### 🤖 Landslide Risk Intelligence Assistant\n\nI am connected to the **live operational database**, Open-Meteo telemetry, and Mohr-Coulomb geotechnical physics engine.\n\nAsk any question about current hazard hotspots, Factor of Safety ($F_s$), lifeline exposure, or what-if monsoon cloudburst projections.`,
-      citations: ['Live SQLite Database', 'HistGradientBoosting (ROC-AUC 0.934)', 'Open-Meteo REST API'],
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      text: `### 🇮🇳 BHU-SURAKSHA | भू-सुरक्षा AI Assistant\n\nI am connected to the **National Landslide Early Warning & Risk Intelligence C2**, grounded in:\n- **IMD AWS & Doppler Weather Radar** real-time precipitation feeds\n- **ISRO NRSC Bhuvan** InSAR surface displacement monitoring\n- **GSI NLSM 1:10K** baseline susceptibility atlas & in-situ piezometers\n- **Mohr-Coulomb** limit-equilibrium geotechnical physics engine ($F_s$)\n- **NDMA Standard Operating Procedure (SOP) 2023** directive protocols\n\nAsk any query on slope stability, lifeline vulnerability, or evacuations across Western Ghats and Himalayan sectors.`,
+      citations: ['NDMA National Database', 'GSI NLSM 1:10K Atlas', 'IMD AWS Telemetry', 'ISRO NRSC Bhuvan InSAR'],
+      timestamp: `${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })} IST`
     }
   ]);
   const [inputQuery, setInputQuery] = useState('');
@@ -174,7 +174,7 @@ export const DisasterAssistantDrawer: React.FC<DisasterAssistantDrawerProps> = (
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06]">
                   <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-cyan-400">
                     <ShieldCheck size={12} className="text-cyan-400" />
-                    <span>LRIDS GEO-ASSISTANT</span>
+                    <span>BHU-SURAKSHA AI ASSISTANT</span>
                   </div>
                   {msg.confidence && (
                     <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40">

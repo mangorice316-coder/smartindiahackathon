@@ -32,7 +32,7 @@ export function DataTable<T extends Record<string, any>>({
   subtitle,
   pageSize = 10,
   onRowClick,
-  exportFileName = 'LRIDS_Data_Export',
+  exportFileName = 'BHU_SURAKSHA_Data_Export',
   extraControls,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState<string>('');

@@ -66,17 +66,17 @@ const SCENARIO_STEPS: ScenarioStep[] = [
     view: 'overview',
     icon: Layers,
     summary: 'Planar infinite-slope mechanics prove imminent shear failure (Fs = 0.88) as pore pressure spikes.',
-    details: 'Unlike black-box AI systems, LRIDS couples Mohr-Coulomb limit equilibrium equations with machine learning. Operators can toggle between plain English and technical geotechnical formulas.',
+    details: 'Unlike black-box AI systems, BHU-SURAKSHA couples Mohr-Coulomb limit equilibrium equations with machine learning. Operators can toggle between plain English and technical geotechnical formulas.',
     actionPrompt: 'Inspect the Factor of Safety column in the Sub-Catchment Priority Ranking table.',
     expectedOutcome: 'Fs = 0.88 is flagged as CRITICAL SHEAR FAILURE with explanation of loss of matric suction.'
   },
   {
     stepNumber: 4,
-    title: 'OASIS CAP v1.2 Warning Directive Generated',
-    category: 'CIVIL DEFENSE ALERTS',
+    title: 'NDMA Sachet CAP-CP Warning Directive Generated',
+    category: 'CIVIL DEFENSE ALERTS (NDMA & KSDMA)',
     view: 'alerts',
     icon: Send,
-    summary: 'Standardized Common Alerting Protocol (CAP v1.2) emergency ticket is generated for district broadcast.',
+    summary: 'Standardized Common Alerting Protocol (CAP-CP / Sachet) emergency ticket is generated for district broadcast.',
     details: 'Alerts are not passive rows: each ticket contains physical evidence, exposed population, threatened bridges, and 1-click execution buttons to acknowledge, assign squad, or broadcast.',
     actionPrompt: 'Navigate to Alerts view to inspect the emergency action ticket and broadcast protocol.',
     expectedOutcome: 'CAP ticket specifies 850m hazard buffer and prescribes immediate Tier-1 evacuation.'
@@ -143,7 +143,7 @@ const SCENARIO_STEPS: ScenarioStep[] = [
     view: 'inspections',
     icon: ShieldCheck,
     summary: 'Field teams in cellular dead-zones continue recording inspections via local offline storage.',
-    details: 'When connectivity drops, LRIDS operates seamlessly on local encrypted geopackage data with exact cached counts (12 catchments, 29 historical scars, 18 lifelines), queuing field reports for auto-sync.',
+    details: 'When connectivity drops, BHU-SURAKSHA operates seamlessly on local encrypted geopackage data with exact cached counts (12 catchments, 29 historical scars, 18 lifelines), queuing field reports for auto-sync.',
     actionPrompt: 'Notice the offline sync status badge and local queue counter in the Inspections view.',
     expectedOutcome: 'Transparent offline indicator displays exact cached metrics with 1-click sync capability.'
   },

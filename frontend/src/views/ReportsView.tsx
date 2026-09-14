@@ -24,11 +24,11 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ sitRep, onRefresh }) =
   const handleCopySummary = () => {
     if (!sitRep) return;
     const summary = sitRep.executive_summary || {};
-    const text = `[LRIDS OFFICIAL SITREP]
+    const text = `[BHU-SURAKSHA OFFICIAL SITREP (NDMA & GSI NODAL C2)]
 Title: ${sitRep.report_title || 'Emergency Landslide Situation Report'}
 Report ID: ${sitRep.report_id || 'SITREP-LIVE'}
 Classification: ${sitRep.classification || 'OFFICIAL EOC INCIDENT BRIEFING'}
-Generated: ${sitRep.timestamp || new Date().toISOString()}
+Generated: ${sitRep.timestamp || new Date().toISOString()} (IST)
 
 EXECUTIVE SUMMARY:
 - Monitored Catchments: ${summary.monitored_zones_count || 0}
@@ -37,10 +37,10 @@ EXECUTIVE SUMMARY:
 - Peak 24h Rainfall: ${summary.max_24h_recorded_rainfall_mm || 0} mm
 
 DATA PROVENANCE:
-- Telemetry: LIVE Open-Meteo REST Stream (Real-Time Precipitation & 72h Antecedent)
-- Geotechnical Physics: Mohr-Coulomb Infinite Slope Limit Equilibrium
+- Telemetry: IMD AWS & Doppler Weather Radar (Real-Time Precipitation & 72h Antecedent)
+- Geotechnical Physics: Mohr-Coulomb Infinite Slope Limit Equilibrium (GSI SOP 2023)
 - Machine Learning: ${sitRep.system_provenance?.ml_model_version || 'HistGradientBoosting v2.4 (ROC-AUC 0.934)'}
-- Historical Ground Truth: GSI Bhukosh + 2024 Scrapling Disaster Harvest (420 fatalities benchmark)`;
+- Historical Ground Truth: GSI Bhukosh & NLSM + 2024 Wayanad Disaster Benchmark`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);

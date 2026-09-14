@@ -163,31 +163,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </div>
 
-      {/* Aerospace C2 Subsystems Telemetry Footer */}
+      {/* Bharat C2 Subsystems Telemetry Footer */}
       <div className="mt-3 p-3 rounded-xl bg-black/40 border border-[#253042] text-[10px] font-mono text-slate-400 space-y-1.5 shadow-inner">
         <div className="font-bold text-white uppercase text-[9px] tracking-wider flex items-center justify-between border-b border-white/[0.06] pb-1">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>C2 SUBSYSTEMS</span>
+            <span>BHARAT C2 GRID</span>
           </span>
           <ShieldCheck size={12} className="text-emerald-400" />
         </div>
         <div className="space-y-1 text-[10px]">
           <div className="flex items-center justify-between text-slate-400">
-            <span>PHYSICS</span>
-            <span className="text-emerald-400 font-bold">Fs LIMIT EQUILIBRIUM</span>
+            <span>METEOROLOGY</span>
+            <span className="text-emerald-400 font-bold">IMD AWS &amp; DWR</span>
           </div>
           <div className="flex items-center justify-between text-slate-400">
-            <span>AI ENGINE</span>
-            <span className="text-cyan-400 font-bold">HIST-GBDT (0.928 AUC)</span>
+            <span>EARTH OBS</span>
+            <span className="text-cyan-400 font-bold">ISRO BHUVAN InSAR</span>
           </div>
           <div className="flex items-center justify-between text-slate-400">
-            <span>RADAR SAR</span>
-            <span className="text-purple-400 font-bold">SENTINEL-1 PASS</span>
+            <span>GEOTECHNICAL</span>
+            <span className="text-purple-400 font-bold">GSI 1:10K LIMIT EQ</span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
-            <span>INTEGRITY</span>
-            <span className="text-amber-300 font-bold">SHA-256 VALIDATED</span>
+          <div className="flex items-center justify-between text-slate-400 border-t border-white/[0.06] pt-1">
+            <span>24x7 HELPLINE</span>
+            <span className="text-amber-300 font-bold">1078 (NDMA) / 112</span>
           </div>
         </div>
       </div>

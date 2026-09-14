@@ -74,20 +74,28 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="h-14 bg-[#070B12]/95 backdrop-blur-2xl border-b border-[#253042] flex items-center justify-between px-3 sm:px-6 z-30 shrink-0 shadow-lg relative">
-      {/* Brand & System Title */}
+      {/* Brand & Sovereign System Title */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/20 via-cyan-500/10 to-transparent border border-cyan-500/30 text-cyan-400 flex items-center justify-center shadow-[0_0_16px_rgba(37,199,232,0.2)]">
-          <Activity size={16} />
+        {/* Tricolor Emblem Crest */}
+        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF9933]/20 via-white/10 to-[#138808]/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shadow-[0_0_18px_rgba(255,153,51,0.25)] relative overflow-hidden shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FF9933]/15 via-transparent to-[#138808]/15" />
+          <Activity size={16} className="text-amber-400 relative z-10 animate-pulse" />
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="font-display font-bold text-sm tracking-[0.08em] text-white">
-            LRIDS
-          </span>
-          <span className="text-white/20">/</span>
-          <span className="font-sans font-medium text-xs text-slate-300 hidden md:inline tracking-tight">
-            Disaster Risk Intelligence C2
-          </span>
+        <div className="flex items-center gap-2.5">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="font-display font-black text-sm tracking-[0.08em] text-white">
+                BHU-SURAKSHA
+              </span>
+              <span className="text-[11px] font-bold text-amber-400 font-sans tracking-wide">
+                भू-सुरक्षा
+              </span>
+            </div>
+            <span className="text-[9px] font-mono text-slate-400 hidden sm:block tracking-tight">
+              Govt. of India • NDMA & GSI Nodal C2
+            </span>
+          </div>
           {isOffline ? (
             <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
@@ -102,28 +110,37 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center Operational Incident Banner & Telemetry Strip */}
+      {/* Center Operational Incident Banner & Indian Nodal Telemetry Strip */}
       <div className="hidden xl:flex items-center gap-2.5">
         {/* Active Incident Pill */}
         <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-red-500/10 border border-red-500/30 text-xs font-mono text-red-300 shadow-[0_0_12px_rgba(255,59,77,0.15)]">
           <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse shadow-[0_0_8px_rgba(255,59,77,0.8)]" />
-          <span className="font-bold text-white tracking-wide text-[11px]">INCIDENT: WAYANAD DELUGE</span>
+          <span className="font-bold text-white tracking-wide text-[11px]">INCIDENT: WAYANAD CLOUDBURST</span>
           <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-red-500/20 text-red-300 border border-red-500/40">CRITICAL</span>
         </div>
 
-        {/* Compact Telemetry Badges */}
+        {/* Compact Indian Telemetry Badges */}
         <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-white/[0.03] border border-white/[0.07] text-[10px] font-mono text-slate-300">
-          <span className="flex items-center gap-1 text-emerald-400" title="Open-Meteo REST Weather Stream">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Rain: LIVE
+          <span className="flex items-center gap-1 text-emerald-400" title="India Meteorological Department Radar">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> IMD Radar: LIVE
           </span>
           <span className="text-white/20">•</span>
-          <span className="text-purple-300" title="Sentinel-1 SAR Radar pass">
-            SAR: READY
+          <span className="text-purple-300" title="ISRO NRSC Bhuvan & Cartosat-3 InSAR Stream">
+            ISRO Bhuvan: SYNC
           </span>
           <span className="text-white/20">•</span>
-          <span className="text-cyan-300" title="In-situ piezometer sensor mesh">
-            Sensors: 8/8
+          <span className="text-cyan-300" title="GSI National Landslide Susceptibility Mapping & Sensors">
+            GSI NLSM: 1:10K
           </span>
+        </div>
+
+        {/* 24x7 Emergency Helplines Strip */}
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-gradient-to-r from-red-500/15 via-orange-500/10 to-transparent border border-red-500/30 text-[10px] font-mono font-bold text-red-300">
+          <Radio size={11} className="text-red-400 animate-pulse" />
+          <span className="text-slate-400">EMERGENCY:</span>
+          <span className="text-white px-1.5 py-0.2 rounded bg-red-500/20 border border-red-500/40" title="National Emergency Response Support System">112</span>
+          <span className="text-slate-400">/</span>
+          <span className="text-amber-300 px-1.5 py-0.2 rounded bg-amber-500/20 border border-amber-500/40" title="NDMA National Control Room">1078</span>
         </div>
       </div>
 
@@ -213,10 +230,10 @@ export const Header: React.FC<HeaderProps> = ({
             className="px-2.5 py-1.5 rounded-xl bg-[#10151F] border border-[#253042] text-[11px] font-mono text-slate-300 focus:outline-none focus:border-cyan-400 cursor-pointer"
             title="Switch Operator Role & Permissions"
           >
-            <option value="ADMIN">CMD: Admin</option>
-            <option value="ANALYST">ANL: Geologist</option>
-            <option value="FIELD_OFFICER">FLD: Inspection</option>
-            <option value="READ_ONLY">OBS: Read Only</option>
+            <option value="ADMIN">NDMA Commander (NEOC)</option>
+            <option value="ANALYST">GSI Nodal Geologist</option>
+            <option value="FIELD_OFFICER">DEOC Collector / NDRF</option>
+            <option value="READ_ONLY">Aapda Mitra Observer</option>
           </select>
         </div>
       </div>

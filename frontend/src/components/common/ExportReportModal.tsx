@@ -54,7 +54,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `LRIDS_SitRep_${locationName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.json`;
+    a.download = `BHU_SURAKSHA_SitRep_${locationName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -81,10 +81,10 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
             </div>
             <div>
               <h2 className="text-base font-bold text-white font-sans uppercase tracking-tight">
-                C2 DISASTER SITUATION REPORT (SITREP)
+                BHU-SURAKSHA DISASTER SITUATION REPORT (SITREP)
               </h2>
               <p className="text-xs font-mono text-slate-400">
-                Official Defense-Grade Intelligence Dossier
+                Official NDMA &amp; GSI Nodal Landslide Intelligence Dossier
               </p>
             </div>
           </div>
@@ -102,14 +102,14 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
           {/* Official Letterhead */}
           <div className="p-4 rounded-xl bg-black/40 border border-white/[0.07] flex items-center justify-between">
             <div>
-              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest font-bold">
-                REPUBLIC OF INDIA • STATE DISASTER MANAGEMENT AUTHORITY
+              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold">
+                GOVERNMENT OF INDIA • NATIONAL DISASTER MANAGEMENT AUTHORITY (NDMA) &amp; GSI
               </div>
               <h3 className="text-sm font-bold text-white font-sans mt-0.5">
-                LRIDS OPERATIONAL SITUATION ASSESSMENT
+                BHU-SURAKSHA OPERATIONAL SITUATION ASSESSMENT
               </h3>
               <p className="text-[11px] font-mono text-slate-400">
-                Generated: {new Date(timestamp).toLocaleString()} • Incident ID: INC-WYND-2026
+                Generated: {new Date(timestamp).toLocaleString('en-IN')} IST • Incident ID: INC-WYND-2026
               </p>
             </div>
             <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-300 font-mono text-xs font-black border border-red-500/40">
