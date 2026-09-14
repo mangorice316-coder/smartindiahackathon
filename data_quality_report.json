@@ -1,0 +1,31 @@
+{
+  "report_id": "DQR-20260912-113609",
+  "generated_at_utc": "2026-09-12T06:06:09.325556+00:00",
+  "evaluated_file": "C:\\Users\\tamil\\Downloads\\game\\SMART-INDIA-HACKATHON\\data\\processed\\training_samples\\training_samples.parquet",
+  "total_records": 4200,
+  "total_features": 51,
+  "composite_quality_score": 99.8,
+  "status": "VALID",
+  "validation_checks": {
+    "1_schema_validation": "PASS",
+    "2_crs_validation": "PASS (EPSG:4326 WGS 84, 100% within Indian Geographic Extent)",
+    "3_geometry_validation": "PASS (100% Valid Points, Zero NaN Coordinates)",
+    "4_duplicate_detection": "PASS (0 duplicates detected)",
+    "5_missing_value_analysis": "PASS (0.0% missing values)",
+    "6_outlier_detection": "PASS (0 physical bound violations)",
+    "7_timestamp_validation": "PASS (100% Valid ISO 8601 UTC Timestamps)",
+    "8_spatial_coverage": "PASS (8 Indian mountain states: Kerala, Uttarakhand, Maharashtra, Sikkim, Himachal Pradesh...)",
+    "9_unit_normalization": "PASS (All variables in standard SI units: degrees, mm, m, kPa, dimensionless indices)",
+    "10_resolution_documentation": "PASS (Spatial: 30m gridded DEM/thematic; Temporal: hourly-to-30d rainfall windows)",
+    "11_source_verification": "PASS (Verified against Tier 1 GSI NLFC, Tier 2 ISRO Atlas, Tier 3 IMD, Tier 4 Sentinel-1, Tier 5 OSM)",
+    "12_license_verification": "PASS (ODbL 1.0 attribution for OSM; NDSAP for GSI/IMD; Open Access for Copernicus)"
+  },
+  "dimension_scores": {
+    "completeness": 100.0,
+    "accuracy": 100.0,
+    "consistency": 100.0,
+    "timeliness": 98.0,
+    "relevance": 100.0,
+    "traceability": 100.0
+  }
+}
